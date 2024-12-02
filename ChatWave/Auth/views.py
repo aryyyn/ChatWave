@@ -60,8 +60,8 @@ def loginLogic(request):
         user = authenticate(request, username=username, password=password)  #check if the info is correct, and if it returns any user
 
         if user is not None:
-            login(request, user)
-            return HttpResponse("login success!")
+            login(request, user) #login the user if the info is correct
+            return HttpResponse("login success!")  
         else:
             messages.error(request, "Invalid Login Info")
 
