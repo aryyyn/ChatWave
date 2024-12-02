@@ -1,107 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWave - Login</title>
+    <style>
+      :root {
+        --primary-color: #ff7e7e;
+        --primary-dark: #ff6666;
+        --text-color: #ffd4d4;
+        --background-dark: #1a0f10;
+        --error-color: #ff4646;
+        --input-background: rgba(42, 18, 21, 0.3);
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+        min-height: 100vh;
+        background-color: var(--background-dark);
+        color: var(--text-color);
     }
-
-    .container {
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+    
+    .split-screen {
+        display: flex;
+        height: 100vh;
     }
-
+    
+  
+    .left-side {
+        flex: 1;
+        position: relative;
+        background: url('https://cdn.discordapp.com/attachments/958193242892042261/1312447415588093952/bb606a9d4289f9ac86ed2852789b4807.png?ex=674d3027&is=674bdea7&hm=cfb322b859fa0600b499ee40e48c604a6bee7e5c616e6f973ab64c91767d54a2&');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #2a1215;
+        image-rendering: pixelated;
+    }
+    
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(42, 18, 21, 0.2);
+    }
+    
+    .brand {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1;
+    }
+    
+    .logo {
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--background-dark);
+    }
+    
+    .brand h1 {
+        color: white;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+    
+  
+    .right-side {
+        flex: 1;
+        background-color: var(--background-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+    
+    .form-wrapper {
+        width: 100%;
+        max-width: 400px;
+    }
+    
     h2 {
-      text-align: center;
-      margin-bottom: 20px;
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+        color: #ff7e7e;
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+    
+    .register-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    label {
+        display: block;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid rgba(255, 126, 126, 0.3);
+        border-radius: 0.5rem;
+        background-color: var(--input-background);
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        background-color: rgba(42, 18, 21, 0.5);
+        box-shadow: 0 0 0 2px rgba(255, 126, 126, 0.2);
+    }
+    
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+    
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    
+    .checkbox-container input[type="checkbox"] {
+        width: auto;
+        margin-right: 0.5rem;
+    }
+    
+    .forgot-password {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .forgot-password:hover {
+        opacity: 1;
+    }
+    
+    .login-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .login-btn:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+    
+    
+    @media (max-width: 768px) {
+        .split-screen {
+            flex-direction: column;
+        }
+    
+        .left-side {
+            display: none;
+        }
+    
+        .right-side {
+            padding: 1rem;
+        }
+    
+        .form-wrapper {
+            padding: 1rem;
+        }
+    }
+    
+   
+    @keyframes pressDown {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(2px); }
+        100% { transform: translateY(0); }
+    }
+    
+    .login-btn:active {
+        animation: pressDown 0.2s ease;
     }
 
     .messages {
-      margin-bottom: 20px;
-      color: red;
+        margin-bottom: 1.5rem;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
+    .messages p {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: white;
     }
 
-    input {
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+    .messages .error {
+        background-color: var(--error-color);
     }
 
-    button {
-      padding: 10px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
+    .messages .success {
+        background-color: var(--success-color);
     }
+    </style>
 
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    p {
-      text-align: center;
-    }
-
-    a {
-      color: #28a745;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h2>Login</h2>
-
-    <!-- Display error messages -->
-    {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
+  <div class="split-screen">
+      
+      <div class="left-side">
+          <div class="overlay"></div>
+          <div class="brand">
+              <div class="logo">
+                  <span>CW</span>
+              </div>
+              <h1>CHATWAVE</h1>
+          </div>
       </div>
-    {% endif %}
 
-    <!-- Form with POST method -->
-    <form action="{% url 'login_logic' %}" method="POST">
-      {% csrf_token %}
+   
+      <div class="right-side">
+          <div class="form-wrapper">
+              <h2>Login</h2>
+              <p class="subtitle">Don't Have An Account? <a href="{% url 'register_logic' %}" class="register-link">Register</a></p>
 
-      <!-- Email field -->
-      <input type="username" name="username" placeholder="username" required>
+              {% if messages %}
+              <div class="messages">
+                  {% for message in messages %}
+                      <p class="{{ message.tags }}">{{ message }}</p>
+                  {% endfor %}
+              </div>
+              {% endif %}
 
-      <!-- Password field -->
-      <input type="password" name="password" placeholder="Password" required>
+              <form id="login-form" method="POST" action="{% url 'login_logic' %}" novalidate>
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="username">Username</label>
+                      <input type="text" name="username" id="username" required autocomplete="username">
+                  </div>
 
-      <!-- Submit button -->
-      <button type="submit">Login</button>
+                  <div class="form-group">
+                      <label for="password">Password</label>
+                      <input type="password" name="password" id="password" required autocomplete="current-password">
+                  </div>
 
-      <!-- Link to register page -->
-      <p>Don't have an account? <a href="{% url 'register_logic' %}">Register</a></p>
-    </form>
+                  <div class="form-options">
+                      <label class="checkbox-container">
+                          <input type="checkbox" name="remember-me" id="remember-me">
+                          <span class="checkmark"></span>
+                          Remember me
+                      </label>
+                      <a href="{% url 'register_logic' %}" class="forgot-password">Forgot Password?</a>
+                  </div>
+
+                  <button type="submit" class="login-btn">Login</button>
+                
+  
+              </form>
+          </div>
+      </div>
   </div>
 </body>
+</html>
 </html>

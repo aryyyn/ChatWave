@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Chat Rooms Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 80px 250px 1fr 300px;
+            height: 100vh;
+            gap: 1px;
+            background: #111;
+        }
+
+     
+        .side-nav {
+            background: #0d0d0d;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border-right: 1px solid #ff336622;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #161616;
+            border: 1px solid #ff336633;
+            color: #ff3366;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1);
+            background: #ff33661a;
+            border-color: #ff3366;
+        }
+
+        .profile-button {
+            margin-top: auto;
+            background: #ff3366;
+            color: white;
+        }
+
+    
+        .chat-rooms {
+            background: #0d0d0d;
+            padding: 20px;
+            border-right: 1px solid #ff336622;
+        }
+
+        .chat-rooms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-rooms h2 {
+            color: #ff3366;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .add-room {
+            background: transparent;
+            border: none;
+            color: #ff3366;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .add-room:hover {
+            transform: scale(1.1);
+        }
+
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .room-list a {
+            text-decoration: none; 
+            color: inherit; 
+        }
+
+        .room-item {
+            padding: 12px 15px;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-item .unread {
+            background: #ff3366;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .room-item:hover {
+            background: #1f1f1f;
+            border-color: #ff3366;
+            transform: translateX(5px);
+        }
+
+        .room-item.active {
+            background: #ff33661a;
+            border-color: #ff3366;
+        }
+
+       
+        .chat-section {
+            background: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100vh; /* Ensure full height */
+            overflow: hidden; /* Prevent outer scrolling */
+        }
+
+        .chat-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ff336622;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevent header from shrinking */
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-header-actions button {
+            background: transparent;
+            border: 1px solid #ff336633;
+            color: #ff3366;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-header-actions button:hover {
+            background: #ff33661a;
+            border-color: #ff3366;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+            scroll-behavior: smooth; /* Smooth scrolling */
+            
+    
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #161616;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #ff3366;
+            border-radius: 4px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message .timestamp {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .message .user {
+            color: #ff3366;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .message.sent {
+            margin-left: auto;
+            background: #ff33661a;
+        }
+
+        .input-area {
+            margin-top: auto; 
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 12px;
+            flex-shrink: 0; 
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-actions button {
+            background: transparent;
+            border: none;
+            color: #ff3366;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            padding: 0 5px;
+        }
+
+       
+        .music-player {
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .album-art {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .track-info {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .track-info h3 {
+            color: #ff3366;
+            margin-bottom: 5px;
+        }
+
+        .progress-container {
+            margin: 15px 0;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background: #ff3366;
+            border-radius: 2px;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .player-controls button {
+            background: transparent;
+            border: none;
+            color: #ff3366;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .player-controls button:hover {
+            transform: scale(1.1);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .volume-level {
+            position: absolute;
+            height: 100%;
+            width: 70%;
+            background: #ff3366;
+            border-radius: 2px;
+        }
+
+        /* Users Section */
+        .users-section {
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .online-count {
+            color: #ff3366;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .users-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .users-list li {
+            padding: 8px 12px;
+            background: #1f1f1f;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .users-list li .status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+
+        .users-list li:hover {
+            background: #ff33661a;
+            transform: translateX(5px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="side-nav">
+            <button class="nav-button">🏠</button>
+            <button class="nav-button">🔍</button>
+            <button class="nav-button">⚙️</button>
+            <button class="nav-button profile-button">👤</button>
+        </div>
+        
+        <div class="chat-rooms">
+            <div class="chat-rooms-header">
+                <h2>Chat Rooms</h2>
+                <button class="add-room">+</button>
+            </div>
+            <div class="room-list">
+                
+
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat' %}">General Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}">General Chat 2</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}">Music Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}">Music Chat 2</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}">Game Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}">Game Chat 2</a></div>
+           
+            </div>
+        </div>
+
+        <div class="chat-section">
+            <div class="chat-header">
+                <h2>{{chat_room.room_name}}</h2>
+                <div class="chat-header-actions">
+                    <button>📎</button>
+                    <button>🔔</button>
+                    <button>⋮</button>
+                </div>
+            </div>
+            <div class="chat-messages">
+
+
+                {% for message in chat_messages %}
+                {% if message.sender.username != request.user.username%}
+
+                <div class="message">
+                    <div class="user">{{ message.sender.username }}</div>
+                    {{ message.message }}
+                    <div class="timestamp">12:00 PM</div>
+                </div>
+
+               
+                {% else %}
+                <div class="message sent">
+                    <div class="user">You</div>
+                    {{ message.message }}
+                    <div class="timestamp">12:01 PM</div>
+                </div>
+
+                {% endif %}
+                {% endfor %}
+                
+            </div>
+            <div class="input-area">
+                <input type="text" placeholder="Start typing...">
+                <div class="input-actions">
+                    <button>😊</button>
+                    <button>🎵</button>
+                    <button>📸</button>
+                    <button>▶️</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="music-player">
+                <img src="https://i.pinimg.com/736x/0e/39/91/0e3991a297ab4f0f83d651112b4f5ab7.jpg" alt="Album Art" class="album-art">
+                <div class="track-info">
+                    <h3>Second Chances</h3>
+                    <p>The Weatherman</p>
+                </div>
+                <div class="progress-container">
+                    <div class="time-info">
+                        <span>2:15</span>
+                        <span>3:45</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <button>⏮️</button>
+                    <button>⏪</button>
+                    <button>⏯️</button>
+                    <button>⏩</button>
+                    <button>⏭️</button>
+                </div>
+                <div class="volume-control">
+                    <button>🔊</button>
+                    <div class="volume-slider">
+                        <div class="volume-level"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="users-section">
+                <div class="online-count">
+                    <span>Users Online: 4</span>
+                    <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
+                </div>
+                <ul class="users-list">
+                    <li>
+                        <span>Ako</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Aryn</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Nirbhay</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Pocky</span>
+                        <span class="status"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const roomName = "{{ chat_room.room_name }}";
+            const chatSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+            );
+
+           
+            function scrollToBottom() {
+                const chatMessages = document.querySelector('.chat-messages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+           
+            scrollToBottom();
+
+            function sendMessage() {
+                const messageInput = document.querySelector('.input-area input');
+                const message = messageInput.value.trim();
+                
+                if (message) {
+                    const chatMessages = document.querySelector('.chat-messages');
+                    const newMessage = document.createElement('div');
+                    newMessage.className = 'message sent';
+
+                    chatSocket.send(JSON.stringify({
+                        'message': message
+                    }));
+                    
+                    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    newMessage.innerHTML = `
+                        <div class="user">You</div>
+                        ${message}
+                        <div class="timestamp">${time}</div>
+                    `;
+                    
+                    chatMessages.appendChild(newMessage);
+                    scrollToBottom();
+                    messageInput.value = '';
+                }
+            }
+
+          
+            const sendButton = document.querySelector('.input-area .input-actions button:last-child');
+            const messageInput = document.querySelector('.input-area input');
+            
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+           
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+
+                const message = data.message;
+                const username = data.username;
+                
+                const currentUser = "{{ request.user.username }}";
+                
+                
+                if (username != currentUser) {
+                
+                
+                const chatMessages = document.querySelector('.chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message';
+
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                newMessage.innerHTML = `
+                <div class="user">${username}</div>
+                ${message}
+                <div class="timestamp">${time}</div>
+            `;
+            
+            chatMessages.appendChild(newMessage);
+            scrollToBottom();
+            messageInput.value = '';
+                scrollToBottom(); 
+
+                }
+            };
+            
+        });
+    </script>
+</body>
+</html>

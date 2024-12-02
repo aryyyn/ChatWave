@@ -1,113 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWave - Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff7e7e;
+            --primary-dark: #ff6666;
+            --text-color: #ffd4d4;
+            --background-dark: #1a0f10;
+            --error-color: #ff4646;
+            --input-background: rgba(42, 18, 21, 0.3);
+            --success-color: #4CAF50;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+        body {
+            min-height: 100vh;
+            background-color: var(--background-dark);
+            color: var(--text-color);
+        }
 
-    .messages {
-      margin-bottom: 20px;
-      color: red;
-    }
+        .split-screen {
+            display: flex;
+            min-height: 100vh;
+        }
 
-    form {
-      display: flex;
-      flex-direction: column;
-    }
+        .left-side {
+            flex: 1;
+            position: relative;
+            background: url('https://cdn.discordapp.com/attachments/958193242892042261/1312447415588093952/bb606a9d4289f9ac86ed2852789b4807.png?ex=674d3027&is=674bdea7&hm=cfb322b859fa0600b499ee40e48c604a6bee7e5c616e6f973ab64c91767d54a2&') no-repeat center center;
+            background-size: cover;
+            background-color: #2a1215;
+            image-rendering: pixelated;
+        }
 
-    input {
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(42, 18, 21, 0.2);
+        }
 
-    button {
-      padding: 10px;
-      border: none;
-      background-color: #28a745;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        .brand {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1;
+        }
 
-    button:hover {
-      background-color: #218838;
-    }
+        .logo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--background-dark);
+        }
 
-    p {
-      text-align: center;
-    }
+        .brand h1 {
+            color: white;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
 
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
+        .right-side {
+            flex: 1;
+            background-color: var(--background-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
 
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+        .form-wrapper {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--primary-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 126, 126, 0.3);
+            border-radius: 0.5rem;
+            background-color: var(--input-background);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: rgba(42, 18, 21, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 126, 126, 0.2);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+
+        .messages p {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .messages .error {
+            background-color: var(--error-color);
+        }
+
+        .messages .success {
+            background-color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .split-screen {
+                flex-direction: column;
+            }
+
+            .left-side {
+                display: none;
+            }
+
+            .right-side {
+                padding: 1rem;
+            }
+
+            .form-wrapper {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Register</h2>
+    <div class="split-screen">
+        <div class="left-side">
+            <div class="overlay"></div>
+            <div class="brand">
+                <div class="logo">
+                    <span>CW</span>
+                </div>
+                <h1>CHATWAVE</h1>
+            </div>
+        </div>
 
-    <!-- Display error messages -->
-    {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
+        <div class="right-side">
+            <div class="form-wrapper">
+                <h2>Create Account</h2>
+                <p class="subtitle">Already a member? <a href="{% url 'login_logic' %}" class="login-link">Login</a></p>
 
-    <!-- Form with POST method -->
-    <form action="{% url 'register_logic' %}" method="POST">
-      {% csrf_token %}
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p class="{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-      <!-- Username field -->
-      <input type="text" name="username" placeholder="Username" required>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input 
+                            type="text" 
+                            id="username"
+                            name="username"
+                            value="{{ username|default:'' }}"
+                            placeholder="Enter your username"
+                            required>
+                    </div>
 
-      <!-- Email field -->
-      <input type="email" name="email" placeholder="Email" required>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email"
+                            name="email"
+                            value="{{ email|default:'' }}"
+                            placeholder="Enter your email"
+                            required>
+                    </div>
 
-      <!-- Password field -->
-      <input type="password" name="password" placeholder="Password" required>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required>
+                    </div>
 
-      <!-- Confirm Password field -->
-      <input type="password" name="confirmpassword" placeholder="Confirm Password" required>
+                    <div class="form-group">
+                        <label for="confirmpassword">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            id="confirmpassword"
+                            name="confirmpassword"
+                            placeholder="Confirm your password"
+                            required>
+                    </div>
 
-      <!-- Submit button -->
-      <button type="submit">Register</button>
-
-      <!-- Link to login page -->
-      <p>Already have an account? <a href="{% url 'login_logic' %}">Login</a></p>
-    </form>
-  </div>
+                    <button type="submit" class="register-btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

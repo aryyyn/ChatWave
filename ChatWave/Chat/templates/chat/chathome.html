@@ -3,154 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat View</title>
+    <title>Chat Home Page</title>
     <style>
-        /* Keep your existing styles */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .chat-container {
-            width: 400px;
-            max-height: 600px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
+
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
             overflow: hidden;
         }
-        .chat-header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
+
+        .container {
+            display: grid;
+            grid-template-columns: 80px 250px 1fr 300px;
+            height: 100vh;
+            gap: 1px;
+            background: #111;
         }
-        .chat-messages {
-            flex: 1;
-            padding: 10px;
+
+      
+        .side-nav {
+            background: #0d0d0d;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border-right: 1px solid #ff336622;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #161616;
+            border: 1px solid #ff336633;
+            color: #ff3366;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1);
+            background: #ff33661a;
+            border-color: #ff3366;
+        }
+
+        .profile-button {
+            margin-top: auto;
+            background: #ff3366;
+            color: white;
+        }
+
+     
+        .chat-rooms {
+            background: #0d0d0d;
+            padding: 20px;
+            border-right: 1px solid #ff336622;
+        }
+
+        .chat-rooms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-rooms h2 {
+            color: #ff3366;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .add-room {
+            background: transparent;
+            border: none;
+            color: #ff3366;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .add-room:hover {
+            transform: scale(1.1);
+        }
+
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: calc(100vh - 100px);
             overflow-y: auto;
+        }
+
+        .room-list a {
+            text-decoration: none; 
+            color: inherit; 
+        }
+        
+  
+        
+        .room-item {
+            padding: 12px 15px;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-item .unread {
+            background: #ff3366;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .room-item:hover {
+            background: #1f1f1f;
+            border-color: #ff3366;
+            transform: translateX(5px);
+        }
+
+    
+        .welcome-section {
+            background: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .welcome-content {
+            max-width: 600px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            color: #ff3366;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            color: #ff3366;
+            margin-bottom: 15px;
+        }
+
+        .welcome-text {
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .create-chat-btn {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .create-chat-btn:hover {
+            transform: scale(1.05);
+            background: #ff4777;
+        }
+
+        
+        .right-panel {
+            background: #0d0d0d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+       
+        .users-section {
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .online-count {
+            color: #ff3366;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .users-list {
+            list-style: none;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        .message {
+
+        .users-list li {
             padding: 8px 12px;
-            border-radius: 16px;
-            max-width: 70%;
-            word-wrap: break-word;
-        }
-        .message.sender {
-            background-color: #007bff;
-            color: white;
-            align-self: flex-end;
-        }
-        .message.receiver {
-            background-color: #e0e0e0;
-            align-self: flex-start;
-        }
-        .chat-input {
+            background: #1f1f1f;
+            border-radius: 6px;
             display: flex;
-            border-top: 1px solid #ddd;
-            padding: 10px;
+            justify-content: space-between;
+            align-items: center;
         }
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-right: 10px;
+
+        .users-list li .status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
         }
-        .chat-input button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            Chat Room: {{ chat_room.room_name }}
+    <div class="container">
+        <div class="side-nav">
+            <button class="nav-button">🏠</button>
+            <button class="nav-button">🔍</button>
+            <button class="nav-button">⚙️</button>
+            <button class="nav-button profile-button">👤</button>
         </div>
-        <div class="chat-messages" id="chatMessages">
-            {% for message in chat_messages %}
-                <div class="message {% if message.sender.username == request.user.username %}sender{% else %}receiver{% endif %}">
-                    <strong>{{ message.sender.username }}</strong>: {{ message.message }}
+        
+        <div class="chat-rooms">
+            <div class="chat-rooms-header">
+                <h2>Chat Rooms</h2>
+                <button class="add-room">+</button>
+            </div>
+            <div class="room-list">
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat' %}">General Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}">General Chat 2</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}">Music Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}">Music Chat 2</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}">Game Chat</a></div>
+                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}">Game Chat 2</a></div>
+            </div>
+        </div>
+
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-icon">💭</div>
+                <h1 class="welcome-title">Welcome to ChatWave</h1>
+                <p class="welcome-text">
+                    Join the conversation! Select a chat room from the left to get started
+                   
+                </p>
+                <button class="create-chat-btn">Join A Random ChatRoom</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+         
+            <div class="users-section">
+                <div class="online-count">
+                    <span>Users Online: 4</span>
+                    <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
                 </div>
-            {% endfor %}
-        </div>
-        <div class="chat-input">
-            <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-            <button onclick="sendMessage()">Send</button>
+                <ul class="users-list">
+                    <li>
+                        <span>Test</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Test</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Test</span>
+                        <span class="status"></span>
+                    </li>
+                    <li>
+                        <span>Test</span>
+                        <span class="status"></span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
     <script>
-        const roomName = "{{ chat_room.room_name }}";
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-        );
-    
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);   
-            
-            
+        document.addEventListener('DOMContentLoaded', () => {
+          
+            const roomItems = document.querySelectorAll('.room-item');
+            roomItems.forEach(room => {
+                room.addEventListener('click', () => {
+                    roomItems.forEach(r => r.classList.remove('active'));
+                    room.classList.add('active');
+                });
+            });
 
-            const message = data.message;
-            const username = data.username;
-            const currentUser = "{{ request.user.username }}";
-            
-            console.log(message)
-           
-            const messageDiv = document.createElement('div');
+          
+            const createChatBtn = document.querySelector('.create-chat-btn');
+            createChatBtn.addEventListener('mouseover', () => {
+                createChatBtn.style.transform = 'scale(1.05)';
+            });
+            createChatBtn.addEventListener('mouseout', () => {
+                createChatBtn.style.transform = 'scale(1)';
+            });
 
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(username === currentUser ? 'sender' : 'receiver');
-            messageDiv.innerHTML = `<strong>${username}</strong>: ${message}`;
-            
-           
-            const chatMessages = document.getElementById('chatMessages');
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-
-        function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-            
-            if (message) {
-                
-                chatSocket.send(JSON.stringify({
-                    'message': message
-                }));
-                
-                
-                messageInput.value = '';
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
+          
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('mouseover', () => {
+                    button.style.transform = 'translateY(-2px)';
+                });
+                button.addEventListener('mouseout', () => {
+                    button.style.transform = 'translateY(0)';
+                });
+            });
+        });
     </script>
-    
 </body>
 </html>
