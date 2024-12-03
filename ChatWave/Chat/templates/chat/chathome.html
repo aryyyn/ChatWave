@@ -136,7 +136,7 @@
         .room-item:hover {
             background: #1f1f1f;
             border-color: #ff3366;
-            transform: translateX(5px);
+           
         }
 
     
@@ -247,7 +247,8 @@
 <body>
     <div class="container">
         <div class="side-nav">
-            <button class="nav-button">🏠</button>
+            <a class="nav-button" href="{% url 'homeChatViewLogic' %}">🏠</a>
+
             <button class="nav-button">🔍</button>
             <button class="nav-button">⚙️</button>
             <button class="nav-button profile-button">👤</button>
@@ -259,12 +260,12 @@
                 <button class="add-room">+</button>
             </div>
             <div class="room-list">
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat' %}">General Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}">General Chat 2</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}">Music Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}">Music Chat 2</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}">Game Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}">Game Chat 2</a></div>
+                <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
             </div>
         </div>
 
@@ -284,7 +285,7 @@
          
             <div class="users-section">
                 <div class="online-count">
-                    <span>Users Online: 4</span>
+                    <span>Users Online: {{ chat_room.online_count}}</span>
                     <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
                 </div>
                 <ul class="users-list">

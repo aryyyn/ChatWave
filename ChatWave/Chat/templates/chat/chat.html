@@ -134,7 +134,7 @@
         .room-item:hover {
             background: #1f1f1f;
             border-color: #ff3366;
-            transform: translateX(5px);
+            
         }
 
         .room-item.active {
@@ -426,7 +426,7 @@
 <body>
     <div class="container">
         <div class="side-nav">
-            <button class="nav-button">🏠</button>
+            <a class="nav-button" href="{% url 'homeChatViewLogic' %}">🏠</a>
             <button class="nav-button">🔍</button>
             <button class="nav-button">⚙️</button>
             <button class="nav-button profile-button">👤</button>
@@ -440,12 +440,12 @@
             <div class="room-list">
                 
 
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat' %}">General Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}">General Chat 2</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}">Music Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}">Music Chat 2</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}">Game Chat</a></div>
-                <div class="room-item"><a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}">Game Chat 2</a></div>
+                <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
+                <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
            
             </div>
         </div>
@@ -526,26 +526,20 @@
             </div>
             <div class="users-section">
                 <div class="online-count">
-                    <span>Users Online: 4</span>
+                    <span id='online-count'>Users Online: {{ chat_room.online_count}}</span>
                     <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
                 </div>
                 <ul class="users-list">
+
+                    {%for user in chat_room.online_users%}
+                    {% if user %}
+
                     <li>
-                        <span>Ako</span>
+                        <span> {{user}} </span>
                         <span class="status"></span>
                     </li>
-                    <li>
-                        <span>Aryn</span>
-                        <span class="status"></span>
-                    </li>
-                    <li>
-                        <span>Nirbhay</span>
-                        <span class="status"></span>
-                    </li>
-                    <li>
-                        <span>Pocky</span>
-                        <span class="status"></span>
-                    </li>
+                    {%endif%}
+                    {%endfor%}
                 </ul>
             </div>
         </div>
@@ -608,6 +602,34 @@
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
 
+                if (data.type === "online_count")
+                {
+                    document.getElementById('online-count').textContent = "Users Online: " +  data.online_count;
+
+
+                    const onlineUserList = document.querySelector(".users-list");
+                    onlineUserList.innerHTML = ''; 
+
+                    for (let user of data.online_users) {
+                        const li = document.createElement('li');
+
+                        const spanUser = document.createElement('span');
+                        spanUser.textContent = user;
+                    
+                        const spanStatus = document.createElement('span');
+                        spanStatus.classList.add('status'); 
+                    
+                        li.appendChild(spanUser);
+                        li.appendChild(spanStatus);
+                    
+
+                        onlineUserList.appendChild(li);
+                    }
+                }
+
+                else {
+                
+
                 const message = data.message;
                 const username = data.username;
                 
@@ -636,8 +658,9 @@
 
                 }
             };
-            
+        }
         });
+    
     </script>
 </body>
 </html>
