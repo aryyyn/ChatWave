@@ -148,8 +148,8 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            height: 100vh; /* Ensure full height */
-            overflow: hidden; /* Prevent outer scrolling */
+            height: 100vh; 
+            overflow: hidden;
         }
 
         .chat-header {
@@ -159,7 +159,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0; /* Prevent header from shrinking */
+            flex-shrink: 0; 
         }
 
         .chat-header-actions {
@@ -190,7 +190,7 @@
             flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
-            scroll-behavior: smooth; /* Smooth scrolling */
+            scroll-behavior: smooth; 
             
     
         }
@@ -370,7 +370,7 @@
             border-radius: 2px;
         }
 
-        /* Users Section */
+      
         .users-section {
             background: #161616;
             border: 1px solid #ff336633;
@@ -468,7 +468,7 @@
                 <div class="message">
                     <div class="user">{{ message.sender.username }}</div>
                     {{ message.message }}
-                    <div class="timestamp">12:00 PM</div>
+                    <div class="timestamp">{{ message.created|date:"h:i A" }}</div>
                 </div>
 
                
@@ -476,7 +476,7 @@
                 <div class="message sent">
                     <div class="user">You</div>
                     {{ message.message }}
-                    <div class="timestamp">12:01 PM</div>
+                    <div class="timestamp">{{ message.created|date:"h:i A" }}</div>
                 </div>
 
                 {% endif %}

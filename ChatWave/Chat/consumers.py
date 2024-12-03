@@ -3,6 +3,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import ChatRoom, ChatRoomMessages
+import datetime
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -66,5 +67,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ChatRoomMessages.objects.create(
             room=room,
             sender=self.scope["user"],
-            message=message
+            message=message,
+            # created = datetime.datetime.now() #not needed since models.py already handles it
         )

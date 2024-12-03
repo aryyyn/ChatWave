@@ -55,6 +55,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+TIME_ZONE = 'Asia/Kathmandu'  #for timezone
+USE_TZ = True
+
+
+
+LOGIN_URL = '/auth/login'
+
+
+
 ROOT_URLCONF = 'ChatWave.urls'
 
 TEMPLATES = [

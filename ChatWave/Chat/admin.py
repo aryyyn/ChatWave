@@ -3,4 +3,10 @@ from django.contrib import admin
 from .models import *
 
 admin.site.register(ChatRoom)
-admin.site.register(ChatRoomMessages)
+
+
+
+class ChatRoomMessagesAdmin(admin.ModelAdmin):
+    list_display = ('room', 'sender', 'message', 'created')  # Add the 'created' field here
+
+admin.site.register(ChatRoomMessages, ChatRoomMessagesAdmin)

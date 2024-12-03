@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+import datetime
 
 # Create your models here.
 class ChatRoom(models.Model):
@@ -15,7 +16,7 @@ class ChatRoomMessages(models.Model):
     room = models.ForeignKey(ChatRoom, related_name="chat_messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.CharField(max_length=250)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=datetime.datetime.now())
 
 
     def __str__(self):
