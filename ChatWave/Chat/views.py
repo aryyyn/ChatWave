@@ -20,7 +20,20 @@ def chatView(request, chatroom):
 @login_required
 def chatHomeView(request):
 
-    if request.method == "POST":
-        action = request.POST.get('action')
+    chat_rooms = ChatRoom.objects.all()
+    sum = 0
+    online_users = []
+    for room in chat_rooms:
+        sum = sum + room.online_count
+        online_users += room.online_users
+
+    total_online_users = sum
+    context = {
+        'total_online_users': total_online_users,
+        'online_users': online_users
+    }
+
+    # if request.method == "POST":
+    #     action = request.POST.get('action')
         
-    return render(request, 'chat/chathome.html',)
+    return render(request, 'chat/chathome.html', context)

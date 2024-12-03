@@ -32,7 +32,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'online_count',
                 'online_count': chat_room.online_count,
-                'online_users': chat_room.online_users
+                'online_users': chat_room.online_users,
+                'identifier': 'joined',
+                'recently_joined':self.scope["user"].username 
             }
         )
 
@@ -40,12 +42,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def online_count(self, event):
         online_count = event['online_count']
         online_users = event['online_users']
+        recently_joined = event['recently_joined']
+        identifier = event['identifier']
         
         await self.send(text_data=json.dumps({
 
             'type': 'online_count',
+            'identifier': identifier,
             'online_count': online_count,
-            'online_users': online_users
+            'online_users': online_users,
+            'recently_joined': recently_joined
         }))
 
         
@@ -61,7 +67,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'online_count',
                 'online_count': chat_room.online_count,
-                'online_users': chat_room.online_users
+                'online_users': chat_room.online_users,
+                'identifier': 'left',
+                'recently_joined':self.scope["user"].username 
             }
         )
 

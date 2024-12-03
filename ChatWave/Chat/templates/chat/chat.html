@@ -209,6 +209,50 @@
             border-radius: 4px;
         }
 
+     
+        .system.message {
+            padding: 12px 15px;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 8px;
+            max-width: 60%;
+            margin: 6px auto;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .system.message .user {
+            color: #ff3366;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .system.message .message-content {
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.4;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        
+        .system.message .timestamp {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .message {
             padding: 12px 15px;
             background: #161616;
@@ -481,6 +525,8 @@
 
                 {% endif %}
                 {% endfor %}
+
+          
                 
             </div>
             <div class="input-area">
@@ -598,6 +644,25 @@
                 }
             });
 
+            function userJoinLeaveMessage(message) {
+                const chatMessages = document.querySelector('.chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'system message';
+
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                newMessage.innerHTML = `
+                {% comment %} <div class="user">System</div> {% endcomment %}
+                <div class="message-content">${message}</div>
+                <div class="timestamp">${time}</div>
+            `;
+            
+                
+                chatMessages.appendChild(newMessage);
+                scrollToBottom();
+                messageInput.value = '';
+            }
+
            
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
@@ -605,8 +670,12 @@
                 if (data.type === "online_count")
                 {
                     document.getElementById('online-count').textContent = "Users Online: " +  data.online_count;
-
-
+                    if (data.identifier === 'joined'){
+                    userJoinLeaveMessage(`Welcome to the ChatRoom, ${data.recently_joined}`)
+                    }
+                    if (data.identifier === "left") {
+                        userJoinLeaveMessage(`${data.recently_joined} has left the ChatRoom`)
+                    }
                     const onlineUserList = document.querySelector(".users-list");
                     onlineUserList.innerHTML = ''; 
 

@@ -285,26 +285,20 @@
          
             <div class="users-section">
                 <div class="online-count">
-                    <span>Users Online: {{ chat_room.online_count}}</span>
+                    <span>Users Online: {{ total_online_users}}</span>
                     <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
                 </div>
                 <ul class="users-list">
+                    {%for user in online_users%}
+                    {% if user %}
+
                     <li>
-                        <span>Test</span>
+                        <span> {{user}} </span>
                         <span class="status"></span>
                     </li>
-                    <li>
-                        <span>Test</span>
-                        <span class="status"></span>
-                    </li>
-                    <li>
-                        <span>Test</span>
-                        <span class="status"></span>
-                    </li>
-                    <li>
-                        <span>Test</span>
-                        <span class="status"></span>
-                    </li>
+
+                    {%endif%}
+                    {%endfor%}
                 </ul>
             </div>
         </div>
