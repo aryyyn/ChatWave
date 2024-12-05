@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,581 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Enhanced Chat Rooms Interface</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+   
+    <link rel="stylesheet" href="{% static 'chatstyle.css' %}">
+    <script src="{% static 'chatscript.js' %}" type="text/javascript"></script>
 
-        body {
-            background-color: #0a0a0a;
-            color: #fff;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 80px 250px 1fr 300px;
-            height: 100vh;
-            gap: 1px;
-            background: #111;
-        }
-
-     
-        .side-nav {
-            background: #0d0d0d;
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            border-right: 1px solid #ff336622;
-        }
-
-        .nav-button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #161616;
-            border: 1px solid #ff336633;
-            color: #ff3366;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .nav-button:hover {
-            transform: scale(1.1);
-            background: #ff33661a;
-            border-color: #ff3366;
-        }
-
-        .profile-button {
-            margin-top: auto;
-            background: #ff3366;
-            color: white;
-        }
-
-    
-        .chat-rooms {
-            background: #0d0d0d;
-            padding: 20px;
-            border-right: 1px solid #ff336622;
-        }
-
-        .chat-rooms-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .chat-rooms h2 {
-            color: #ff3366;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-        }
-
-        .add-room {
-            background: transparent;
-            border: none;
-            color: #ff3366;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .add-room:hover {
-            transform: scale(1.1);
-        }
-
-        .room-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-        }
-
-        .room-list a {
-            text-decoration: none; 
-            color: inherit; 
-        }
-
-        .room-item {
-            padding: 12px 15px;
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .room-item .unread {
-            background: #ff3366;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-
-        .room-item:hover {
-            background: #1f1f1f;
-            border-color: #ff3366;
-            
-        }
-
-        .room-item.active {
-            background: #ff33661a;
-            border-color: #ff3366;
-        }
-
-       
-        .chat-section {
-            background: #0d0d0d;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            height: 100vh; 
-            overflow: hidden;
-        }
-
-        .chat-header {
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ff336622;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0; 
-        }
-
-        .chat-header-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-header-actions button {
-            background: transparent;
-            border: 1px solid #ff336633;
-            color: #ff3366;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .chat-header-actions button:hover {
-            background: #ff33661a;
-            border-color: #ff3366;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-            scroll-behavior: smooth; 
-            
-    
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: #161616;
-            border-radius: 4px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #ff3366;
-            border-radius: 4px;
-        }
-
-     
-        .system.message {
-            padding: 12px 15px;
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 8px;
-            max-width: 60%;
-            margin: 6px auto;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .system.message .user {
-            color: #ff3366;
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .system.message .message-content {
-            color: #fff;
-            font-size: 13px;
-            line-height: 1.4;
-            text-align: center;
-            margin-bottom: 4px;
-        }
-        
-        .system.message .timestamp {
-            font-size: 11px;
-            color: #666;
-            margin-top: 4px;
-            font-style: italic;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .message {
-            padding: 12px 15px;
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 8px;
-            max-width: 80%;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .message .timestamp {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .message .user {
-            color: #ff3366;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .message.sent {
-            margin-left: auto;
-            background: #ff33661a;
-        }
-
-        .input-area {
-            margin-top: auto; 
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 12px;
-            flex-shrink: 0; 
-        }
-
-        .input-area input {
-            flex: 1;
-            padding: 10px;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1rem;
-        }
-
-        .input-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-actions button {
-            background: transparent;
-            border: none;
-            color: #ff3366;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-            padding: 0 5px;
-        }
-
-       
-        .music-player {
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .album-art {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        .track-info {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .track-info h3 {
-            color: #ff3366;
-            margin-bottom: 5px;
-        }
-
-        .progress-container {
-            margin: 15px 0;
-        }
-
-        .time-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: #2a2a2a;
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .progress {
-            position: absolute;
-            height: 100%;
-            width: 30%;
-            background: #ff3366;
-            border-radius: 2px;
-        }
-
-        .player-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 15px 0;
-        }
-
-        .player-controls button {
-            background: transparent;
-            border: none;
-            color: #ff3366;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .player-controls button:hover {
-            transform: scale(1.1);
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .volume-control button {
-            background: transparent;
-            border: none;
-            color: #ff3366;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .volume-slider {
-            flex: 1;
-            height: 4px;
-            background: #2a2a2a;
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .volume-level {
-            position: absolute;
-            height: 100%;
-            width: 70%;
-            background: #ff3366;
-            border-radius: 2px;
-        }
-
-      
-        .users-section {
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .online-count {
-            color: #ff3366;
-            margin-bottom: 15px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .users-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .users-list li {
-            padding: 8px 12px;
-            background: #1f1f1f;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .users-list li .status {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4CAF50;
-        }
-
-        .users-list li:hover {
-            background: #ff33661a;
-            transform: translateX(5px);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .emoji-picker {
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            background: #161616;
-            border: 1px solid #ff336633;
-            border-radius: 8px;
-            padding: 10px;
-            display: none;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 5px;
-            max-width: 300px;
-            z-index: 1000;
-        }
-
-        .emoji-picker.active {
-            display: grid;
-        }
-
-        .emoji-picker span {
-            cursor: pointer;
-            padding: 5px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .emoji-picker span:hover {
-            transform: scale(1.2);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #161616;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #ff336633;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: #ff3366;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-
-        .file-upload {
-            display: none;
-        }
-
-        .search-modal {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #161616;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #ff336633;
-            display: none;
-            z-index: 1000;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .search-modal.active {
-            display: block;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 10px;
-            background: #1f1f1f;
-            border: 1px solid #ff336633;
-            border-radius: 6px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -710,10 +141,14 @@
                 <button class="modal-close">&times;</button>
             </div>
             <div>
-                <h4>Theme</h4>
+                <h4>Theme Selection</h4>
                 <select id="themeSelect" style="background: #1f1f1f; color: #fff; padding: 5px; border: 1px solid #ff336633; border-radius: 4px;">
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
+                    <option value="blue_pink">Serene Skies</option>
+                    <option value="darkcharcoal_yellow">Midnight Spark</option>
+                    <option value="lightred_yellow">Sunset Glow</option>
+                    <option value="darkblue_lightgreen">Blue Horizon</option>
+                    <option value="forestgreen_mossgreen">Woodland Whisper</option>
+                    <option value="pastelolivegreen_salmonpink">Peachy Meadow</option>
                 </select>
                 
                
@@ -727,6 +162,24 @@
         <div id="searchResults"></div>
     </div>
 
+    <div class="music-search-modal" id="musicModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Spotify Music Search</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div>
+                
+                <input type="text" class="song-search-input" placeholder="Search for a song">
+                <input type="button" class = "button-song-input" value="SUBMIT">
+                </select>
+                
+               
+              
+            </div>
+        </div>
+    </div>
+
     <input type="file" class="file-upload" id="fileUpload" accept="image/*">
 
     <script>
@@ -738,15 +191,58 @@
                 alert("working")
             });
 
-            
+            const musicButton = document.querySelector(".input-actions button:nth-child(2)")
+            const musicModal = document.getElementById('musicModal');
+            const closeMusicBtn = musicModal.querySelector('.modal-close');
+            const songButtonInputBtn = musicModal.querySelector(".button-song-input");
+
+
+            musicButton.addEventListener('click',() => {
+                    musicModal.classList.toggle('active');
+                });
+
+            songButtonInputBtn.addEventListener('click', () => {
+                const songInput = document.querySelector(".song-search-input");
+                const music = songInput.value.trim();
+                
+                
+
+            });
+
+
+            closeMusicBtn.addEventListener('click', () => {
+                    musicModal.classList.remove('active');
+                });
+
+
+  
 
             const themeSelect = document.getElementById('themeSelect');
             themeSelect.addEventListener('change', (e) => {
-                if (e.target.value === 'light') {
-                    document.body.style.background = '#f0f0f0';
-                    document.body.style.color = '#333';
+                if (e.target.value === 'blue_pink') {
+
+                    {% comment %} will finish this later using functions {% endcomment %}
+                    document.body.style.backgroundColor = "#87CEEB";  
+                    document.body.style.color = "#FF69B4"; 
+                
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#ADD8E6"; 
+                    document.querySelector('.chat-section').style.backgroundColor = "#ADD8E6";  
+                    document.querySelector('.profile button').style.backgroundColor = "#FFB6C1";  
+                    document.querySelector('.side-nav').style.backgroundColor = "#4682B4";  
+                    document.querySelector('.container').style.backgroundColor = "#B0C4DE";  
+                    document.querySelector('.room-item').style.backgroundColor = "#FFC0CB";  
+                    document.querySelector('.room-item').style.border = "1px solid #FF1493"; 
+                    document.querySelector('.chat-rooms:h2').style.color = "#FF69B4"; 
+                    document.querySelector('.add-room').style.color = "#DB7093";  
+                    document.querySelector('.chat-section').style.backgroundColor = "#87CEFA";  
+                    document.querySelector('.message').style.backgroundColor = "#E6E6FA";  
+                    document.querySelector('.message .user').style.backgroundColor = "#FFB6C1";  
+                    document.querySelector('.message .sent').style.backgroundColor = "#FF69B4";  
+                    document.querySelector('.input-area').style.backgroundColor = "#B0E0E6";  
+                }
+                
                     
-                } else {
+                else {
                     document.body.style.background = '#0a0a0a';
                     document.body.style.color = '#fff';
                     
@@ -912,6 +408,7 @@
         });
 
 
+        
 
         const settingsBtn = document.querySelector('.side-nav button:nth-child(3)');
         const settingsModal = document.getElementById('settingsModal');
