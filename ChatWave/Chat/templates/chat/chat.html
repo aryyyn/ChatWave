@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Enhanced Chat Rooms Interface</title>
     <style>
         * {
@@ -397,6 +398,15 @@
             margin-top: 10px;
         }
 
+        .volume-control button {
+            background: transparent;
+            border: none;
+            color: #ff3366;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
         .volume-slider {
             flex: 1;
             height: 4px;
@@ -465,6 +475,110 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .emoji-picker {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: #161616;
+            border: 1px solid #ff336633;
+            border-radius: 8px;
+            padding: 10px;
+            display: none;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        .emoji-picker.active {
+            display: grid;
+        }
+
+        .emoji-picker span {
+            cursor: pointer;
+            padding: 5px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .emoji-picker span:hover {
+            transform: scale(1.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #161616;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ff336633;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #ff3366;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .file-upload {
+            display: none;
+        }
+
+        .search-modal {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #161616;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ff336633;
+            display: none;
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .search-modal.active {
+            display: block;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            background: #1f1f1f;
+            border: 1px solid #ff336633;
+            border-radius: 6px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -498,11 +612,11 @@
             <div class="chat-header">
                 <h2>{{chat_room.room_name}}</h2>
                 <div class="chat-header-actions">
-                    <button>📎</button>
+        
                     <button>🔔</button>
                     <button>⋮</button>
                 </div>
-            </div>
+            </div>                                               
             <div class="chat-messages">
 
 
@@ -535,7 +649,7 @@
                     <button>😊</button>
                     <button>🎵</button>
                     <button>📸</button>
-                    <button>▶️</button>
+                  
                 </div>
             </div>
         </div>
@@ -545,7 +659,7 @@
                 <img src="https://i.pinimg.com/736x/0e/39/91/0e3991a297ab4f0f83d651112b4f5ab7.jpg" alt="Album Art" class="album-art">
                 <div class="track-info">
                     <h3>Second Chances</h3>
-                    <p>The Weatherman</p>
+                    <p>Gregory Alan Isakov</p>
                 </div>
                 <div class="progress-container">
                     <div class="time-info">
@@ -557,14 +671,12 @@
                     </div>
                 </div>
                 <div class="player-controls">
-                    <button>⏮️</button>
-                    <button>⏪</button>
-                    <button>⏯️</button>
-                    <button>⏩</button>
-                    <button>⏭️</button>
+                    <button>➕</button>
+                    <button>❤️</button>
+                    
                 </div>
                 <div class="volume-control">
-                    <button>🔊</button>
+                    <button>🔉</button>
                     <div class="volume-slider">
                         <div class="volume-level"></div>
                     </div>
@@ -590,8 +702,59 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div>
+                <h4>Theme</h4>
+                <select id="themeSelect" style="background: #1f1f1f; color: #fff; padding: 5px; border: 1px solid #ff336633; border-radius: 4px;">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                </select>
+                
+               
+              
+            </div>
+        </div>
+    </div>
+
+    <div class="search-modal" id="searchModal">
+        <input type="text" class="search-input" placeholder="Search messages...">
+        <div id="searchResults"></div>
+    </div>
+
+    <input type="file" class="file-upload" id="fileUpload" accept="image/*">
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+
+            const emojiButton = document.querySelector(".input-actions button:first-child");
+            emojiButton.addEventListener('click', () => {   
+                alert("working")
+            });
+
+            
+
+            const themeSelect = document.getElementById('themeSelect');
+            themeSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'light') {
+                    document.body.style.background = '#f0f0f0';
+                    document.body.style.color = '#333';
+                    
+                } else {
+                    document.body.style.background = '#0a0a0a';
+                    document.body.style.color = '#fff';
+                    
+                }
+            });
+
+
+            
             const roomName = "{{ chat_room.room_name }}";
             const chatSocket = new WebSocket(
                 'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
@@ -636,6 +799,14 @@
           
             const sendButton = document.querySelector('.input-area .input-actions button:last-child');
             const messageInput = document.querySelector('.input-area input');
+
+            document.addEventListener('keypress', (e) => {
+                if (e.key == "/") {
+                    const searchInput = document.querySelector('.input-area input');
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+            });
             
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', (e) => {
@@ -728,7 +899,79 @@
                 }
             };
         }
+
+
+
+        const searchBtn = document.querySelector('.side-nav button:nth-child(2)');
+        const searchModal = document.getElementById('searchModal');
+        const searchInput = document.querySelector('.search-input');
+
+        searchBtn.addEventListener('click', () => {
+            searchModal.classList.toggle('active');
+            searchInput.focus();
         });
+
+
+
+        const settingsBtn = document.querySelector('.side-nav button:nth-child(3)');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsBtn = settingsModal.querySelector('.modal-close');
+
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.toggle('active');
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        const profileBtn = document.querySelector('.profile-button');
+        profileBtn.addEventListener('click', () => {
+            alert('Profile functionality would go here');
+        });
+        });
+
+
+        const attachmentBtn = document.querySelector('.input-actions button:nth-child(3)');
+        const fileUpload = document.getElementById('fileUpload');
+
+        attachmentBtn.addEventListener('click', () => {
+            fileUpload.click();
+        });
+
+        fileUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '200px';
+                    img.style.borderRadius = '8px';
+                    
+                    const message = document.createElement('div');
+                    message.className = 'message sent';
+                    message.innerHTML = `
+                        <div class="user">You</div>
+                        <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    `;
+                    message.insertBefore(img, message.querySelector('.timestamp'));
+                    
+                    document.querySelector('.chat-messages').appendChild(message);
+                    scrollToBottom();
+                };
+                reader.readAsDataURL(file);
+                
+            }
+
+            
+
+            
+        });
+
+
+        
     
     </script>
 </body>
