@@ -45,7 +45,7 @@
                 <div class="chat-header-actions">
         
                     <button>🔔</button>
-                    <button>⋮</button>
+                    <button>🔓</button>
                 </div>
             </div>                                               
             <div class="chat-messages">
@@ -86,33 +86,23 @@
         </div>
 
         <div class="right-panel">
-            <div class="music-player">
-                <img src="https://i.pinimg.com/736x/0e/39/91/0e3991a297ab4f0f83d651112b4f5ab7.jpg" alt="Album Art" class="album-art">
-                <div class="track-info">
-                    <h3>Second Chances</h3>
-                    <p>Gregory Alan Isakov</p>
-                </div>
-                <div class="progress-container">
-                    <div class="time-info">
-                        <span>2:15</span>
-                        <span>3:45</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
-                </div>
-                <div class="player-controls">
-                    <button>➕</button>
-                    <button>❤️</button>
-                    
-                </div>
-                <div class="volume-control">
-                    <button>🔉</button>
-                    <div class="volume-slider">
-                        <div class="volume-level"></div>
-                    </div>
-                </div>
-            </div>
+<div class="music-player">
+    <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art">
+    <div class="track-info">
+        <h3>{{ songs.title }}</h3>
+        <p>{{ songs.artist }}</p>
+    </div>
+    <audio controls>
+        <source src="{{ songs.song.url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="player-controls">
+        <button>➕</button>
+        <button>❤️</button>
+    </div>
+
+</div>
             <div class="users-section">
                 <div class="online-count">
                     <span id='online-count'>Users Online: {{ chat_room.online_count}}</span>
@@ -214,7 +204,14 @@
                     musicModal.classList.remove('active');
                 });
 
+            
+                const logoutButton = document.querySelector(".chat-header-actions button:nth-child(2)");
 
+                logoutButton.addEventListener('click', () => {
+                   
+                    window.location.href = "http://localhost:8000/auth/logout/"; 
+                });
+                
   
 
             const themeSelect = document.getElementById('themeSelect');
@@ -456,7 +453,8 @@
                     message.insertBefore(img, message.querySelector('.timestamp'));
                     
                     document.querySelector('.chat-messages').appendChild(message);
-                    scrollToBottom();
+                    const chatMessages = document.querySelector('.chat-messages');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 };
                 reader.readAsDataURL(file);
                 

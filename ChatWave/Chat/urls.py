@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 def redirect_to_homepage(request):
@@ -11,4 +13,4 @@ urlpatterns = [
     path('home/chat/', chatHomeView, name='homeChatViewLogic'),
     path('', redirect_to_homepage, name='redirectToHomePage')
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

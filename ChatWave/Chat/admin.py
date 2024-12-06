@@ -10,3 +10,4 @@ class ChatRoomMessagesAdmin(admin.ModelAdmin):
     list_display = ('room', 'sender', 'message', 'created')  # Add the 'created' field here
 
 admin.site.register(ChatRoomMessages, ChatRoomMessagesAdmin)
+admin.site.register(Music)

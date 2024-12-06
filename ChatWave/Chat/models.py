@@ -27,4 +27,17 @@ class ChatRoomMessages(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+class Music(models.Model):
+    song_id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=256)
+    genre = models.CharField(max_length=100)
+    artist = models.CharField(max_length=100)
+    thumbnail = models.ImageField(upload_to='thumbnails/')
+    song = models.FileField(upload_to='songs/')
+
+    def __str__(self):
+        return f"{self.title} by {self.artist}"
+
     
