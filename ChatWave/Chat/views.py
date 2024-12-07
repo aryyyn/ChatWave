@@ -25,19 +25,23 @@ def chatView(request, chatroom):
             'songs': randomsong,
             'status': status,
         }
-        
+        return render(request, 'chat/chat.html', context)
+  
+
     else:
         songs = Music.objects.all()
         randomsong = random.choice(songs)
         
         context = {
             'chat_room': chat_room,
-            'chat_messages': chat_messages,
-         
-            
+            'chat_messages': chat_messages, 
         }
+        return render(request, 'chat/chat.html', context)
+    
+    
+
             
-    return render(request, 'chat/chat.html', context)
+    
 
 @login_required
 def chatHomeView(request):

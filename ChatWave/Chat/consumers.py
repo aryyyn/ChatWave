@@ -2,7 +2,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import ChatRoom, ChatRoomMessages
+from .models import ChatRoom, ChatRoomMessages, Music
+from Profile.models import Playlists
 import datetime
 from django.db.models import F, Q
 
@@ -82,24 +83,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        
-        # Save message to database
-        # await self.save_message(message)
-        
-        #save the message to the database
-        await self.save_message(message)
 
-        #send the message to a specific group (chat_message is automatically called)
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
-                'message': message,
-                'username': self.scope["user"].username,
-            }
-        )
+        try:
+            text_data_json = json.loads(text_data)
+            message_type = text_data_json.get('type')
+            if message_type == 'song':
+                songResult = await self.addSong(text_data_json['song'])
+               
+
+                await self.send(
+                    text_data=json.dumps({
+                        'type': 'songResult',  
+                        'songResult': songResult
+                    })
+                )
+                            
+               
+                
+            else:
+                message = text_data_json['message']
+                
+                # Save message to database
+                # await self.save_message(message)
+                
+                #save the message to the database
+                await self.save_message(message)
+
+                #send the message to a specific group (chat_message is automatically called)
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
+                        'message': message,
+                        'username': self.scope["user"].username,
+                    }
+                )
+        except Exception as err:
+            print(err)
 
 
     async def chat_message(self, event):
@@ -124,7 +144,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # created = datetime.datetime.now() #not needed since models.py already handles it
         )
 
-
+    @database_sync_to_async
+    def addSong(self,song):
+        isMusic = Music.objects.filter(title=song).exists()
+        
+        if (isMusic):
+            music = Music.objects.get(title = song)
+            playlist = Playlists.objects.filter(user=self.scope["user"], playlist_name=music.genre).first()
+            if playlist:
+           
+                current_songs = playlist.songs.split(",") if playlist.songs else []
+                if song in current_songs:
+                    return "Present"
+                else:
+                    current_songs.append(song)
+                    playlist.songs = ",".join(current_songs)
+                    playlist.save()
+                    return "Absent"
 
 
     @database_sync_to_async

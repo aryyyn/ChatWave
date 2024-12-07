@@ -123,8 +123,9 @@
         <form method="post">
             {% csrf_token %}   
         <button type="submit" id="next-song" name="action" value="next-song" >➕</button>
-        <button>❤️</button>
     </form>
+        <button type="submit" id="like-song" name="action" value="like-song">❤️</button>
+    
     </div>
 
 </div>
@@ -279,7 +280,16 @@
                 'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
             );
 
-           
+            const likeSong = document.getElementById("like-song");
+            likeSong.addEventListener("click", () => {
+                const songs = "{{ songs.title|escapejs }}";
+                chatSocket.send(JSON.stringify({
+                    'type': 'song',
+                    'song': songs
+                }));
+            });
+            
+
             function scrollToBottom() {
                 const chatMessages = document.querySelector('.chat-messages');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -356,16 +366,25 @@
            
             chatSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
+                console.log(data)
+                
+                if (data.type === 'songResult') {
+                    if (data.songResult == "Present") {
+                        alert("Song already present")
+                    }
+                    else {
+                        alert("song added")
+                    
+                    }
+                }
 
-                if (data.type === "online_count")
+                else if (data.type === "online_count")
                 {
                     document.getElementById('online-count').textContent = "Users Online: " +  data.online_count;
                     if (data.identifier === 'joined'){
                     userJoinLeaveMessage(`Welcome to the ChatRoom, ${data.recently_joined}`)
                     }
-                    if (data.identifier === "left") {
-                        userJoinLeaveMessage(`${data.recently_joined} has left the ChatRoom`)
-                    }
+                    
                     const onlineUserList = document.querySelector(".users-list");
                     onlineUserList.innerHTML = ''; 
 
@@ -391,8 +410,7 @@
                 }
 
                 else {
-                
-
+               
                 const message = data.message;
                 const username = data.username;
                 

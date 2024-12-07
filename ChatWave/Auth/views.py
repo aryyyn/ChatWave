@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
 from .models import CustomUser
 from django.core.exceptions import ValidationError
+from Profile.models import Playlists
 
 def RegisterLogic(request):
 
@@ -35,7 +36,13 @@ def RegisterLogic(request):
         else:
             try:
                
-                CustomUser.objects.create_user(username=username, email=email, password=password)
+                user = CustomUser.objects.create_user(username=username, email=email, password=password)
+                Playlists.objects.create(playlist_name="indie", user=user)
+                Playlists.objects.create(playlist_name="pop", user=user)
+                Playlists.objects.create(playlist_name="rap", user=user)
+                Playlists.objects.create(playlist_name="hiphop", user=user)
+                Playlists.objects.create(playlist_name="lofi", user=user)
+                Playlists.objects.create(playlist_name="edm", user=user)
                 messages.success(request, "Successfully registered! You can now log in.")
                 return redirect("login_logic")
             except ValidationError as v:
