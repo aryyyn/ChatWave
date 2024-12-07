@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <title>Enhanced Chat Rooms Interface</title>
+    <title>ChatWave | Chat</title>
    
     <link rel="stylesheet" href="{% static 'chatstyle.css' %}">
-    <script src="{% static 'chatscript.js' %}" type="text/javascript"></script>
+    
 
 </head>
 <body>
@@ -55,7 +55,7 @@
                 {% if message.sender.username != request.user.username%}
 
                 <div class="message">
-                    <div class="user">{{ message.sender.username }}</div>
+                    <div class="user">{{ message.sender.username }} </div>
                     {{ message.message }}
                     <div class="timestamp">{{ message.created|date:"h:i A" }}</div>
                 </div>
@@ -87,26 +87,51 @@
 
         <div class="right-panel">
 <div class="music-player">
-    <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art">
+
+    {% if songs%}
+        {% if status == "valid" %}
+        <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art">
+        <div class="track-info">
+            <h3>{{ songs.title }}</h3>
+            <p>{{ songs.artist }}</p>
+        </div>
+        <audio controls>
+            <source src="{{ songs.song.url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        {%else%}
+        {% comment %} <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art"> {% endcomment %}
+        <div class="track-info">
+            <h3>Not enough messages! Would you like to play a random song instead?</h3>
+            <button>Yes </button>
+            <button>No </button>
+        </div>
+        {%endif%}
+
+
+    {% else %}
+        
+    <img src="https://media.discordapp.net/attachments/958193242892042261/1312454536354599043/image.png?ex=67547709&is=67532589&hm=a9118e22ee5eb5cd675d023041f6f98ba062c1b0e26127fa93e9b8548ff703f2&=&format=webp&quality=lossless" alt="Album Art" class="album-art">
     <div class="track-info">
-        <h3>{{ songs.title }}</h3>
-        <p>{{ songs.artist }}</p>
+        <h3>Press on the '➕' icon to start listening to music!</h3>
     </div>
-    <audio controls>
-        <source src="{{ songs.song.url }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+
+    {% endif %}
+
 
     <div class="player-controls">
-        <button>➕</button>
+        <form method="post">
+            {% csrf_token %}   
+        <button type="submit" id="next-song" name="action" value="next-song" >➕</button>
         <button>❤️</button>
+    </form>
     </div>
 
 </div>
             <div class="users-section">
                 <div class="online-count">
                     <span id='online-count'>Users Online: {{ chat_room.online_count}}</span>
-                    <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
+           
                 </div>
                 <ul class="users-list">
 
@@ -114,7 +139,8 @@
                     {% if user %}
 
                     <li>
-                        <span> {{user}} </span>
+                        
+                        <a href= {%url 'profile' user%}><span> {{user}} </span>
                         <span class="status"></span>
                     </li>
                     {%endif%}
@@ -343,21 +369,25 @@
                     const onlineUserList = document.querySelector(".users-list");
                     onlineUserList.innerHTML = ''; 
 
+                   
+
                     for (let user of data.online_users) {
                         const li = document.createElement('li');
-
+                    
                         const spanUser = document.createElement('span');
-                        spanUser.textContent = user;
+                       
+                        const profileUrl = `/account/${user}`;  
+                        spanUser.innerHTML = `<a href="${profileUrl}">${user}</a>`;  
                     
                         const spanStatus = document.createElement('span');
-                        spanStatus.classList.add('status'); 
+                        spanStatus.classList.add('status');
                     
                         li.appendChild(spanUser);
                         li.appendChild(spanStatus);
                     
-
                         onlineUserList.appendChild(li);
                     }
+                    
                 }
 
                 else {
@@ -421,8 +451,11 @@
 
         const profileBtn = document.querySelector('.profile-button');
         profileBtn.addEventListener('click', () => {
-            alert('Profile functionality would go here');
+            const username = "{{ request.user.username }}"
+            
+            window.location.href = window.location.origin + "/account/" + username ;
         });
+        
         });
 
 

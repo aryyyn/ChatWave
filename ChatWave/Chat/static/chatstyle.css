@@ -333,6 +333,16 @@ body {
     text-align: center;
     margin-bottom: 15px;
 }
+.track-info button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    color: #ff3366;
+    transition: transform 0.3s ease;
+
+}
 
 .track-info h3 {
     margin: 0;
@@ -449,11 +459,22 @@ audio {
     align-items: center;
 }
 
+.online-count a {
+    text-decoration: none; 
+}
+
 .users-list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.users-list a {
+    text-decoration: none; 
+    color: #ff3366;
+    
+    
 }
 
 .users-list li {
