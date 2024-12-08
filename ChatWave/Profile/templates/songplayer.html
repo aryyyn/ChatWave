@@ -27,14 +27,14 @@
             <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Indie" class="playlist-cover">
             <div class="song-info">
                 <h3>Playlist Songs</h3>
-                <p>24 songs</p>
+                <p>21</p>
             </div>
         </div>
 
         {% if songs %}
         {% for song in songs %}
             <div class="song-item">
-                <a href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}"> 
+                <a id="play-button" href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}"> 
                     <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
                     <div class="song-info">
                         <h3>{{ song.title }}</h3>
@@ -58,8 +58,8 @@
             </div>
         </div>
 
-        <audio controls>
-            <source src="{{ clickedsong.song.url }}" type="audio/mpeg">
+        <audio id="audio-player" controls>
+            <source id="audio-player" src="{{ clickedsong.song.url }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
     </div>
@@ -68,19 +68,27 @@
 
     <div class="main-player">
         <div class="now-playing">
-            <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Current Track" class="current-artwork">
+            <img src="https://i.pinimg.com/736x/3f/0b/ef/3f0bef8c86c928dd41b914a64b598b16.jpg" alt="Current Track" class="current-artwork">
             <div class="song-info">
                 <h2>No song playing</h2>
-                <p>Artist Name</p>
+                
             </div>
         </div>
 
-        <audio controls>
-            <source src="{{ song.song.url }}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
     </div>
 
     {%endif%}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+       
+            const music = document.getElementById("audio-player")
+            music.play()
+            
+        });
+
+    </script>
+
+
 </body>
 </html>

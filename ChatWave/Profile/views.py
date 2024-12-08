@@ -3,6 +3,10 @@ from Auth.models import *
 from Chat.models import *
 from Profile.models import *
 from django.contrib.auth.decorators import login_required
+
+
+
+# def getTotalSongC
 @login_required
 def profileHome(request, username):
 

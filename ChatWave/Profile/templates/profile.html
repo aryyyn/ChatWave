@@ -73,41 +73,56 @@
                         </div>
                     </div>
                 </a>
+                <a href="{% url 'songPlayer' username=user clickedplaylist="pop" %}">
                     <div class="playlist-card">
+                        
                         <img src="https://i.pinimg.com/736x/5d/18/f4/5d18f4f26c27328b4af9c92bda69b31f.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Pop</div>
                             <div class="song-count">{{popcount}} songs</div>
                         </div>
                     </div>
+                </a>
+                <a href="{% url 'songPlayer' username=user clickedplaylist="rap" %}">
                     <div class="playlist-card">
+                       
                         <img src="https://i.pinimg.com/474x/8d/fb/4a/8dfb4ae26f921d25892833878837a5a3.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Rap</div>
                             <div class="song-count">{{rapcount}} songs</div>
                         </div>
                     </div>
+                </a>
+                <a href="{% url 'songPlayer' username=user clickedplaylist="lofi" %}">
                     <div class="playlist-card">
+                       
                         <img src="https://i.pinimg.com/236x/6f/79/ad/6f79ad502be93c697c7541ef46052438.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Lofi</div>
                             <div class="song-count">{{loficount}} songs</div>
                         </div>
                     </div>
+                </a>
+                <a href="{% url 'songPlayer' username=user clickedplaylist="hiphop" %}">
                     <div class="playlist-card">
+                       
                         <img src="https://i.pinimg.com/236x/b6/3a/9a/b63a9a1dfa2aaceec75adbef20172688.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">HipHop</div>
                             <div class="song-count">{{hiphopcount}} songs</div>
                         </div>
                     </div>
+                </a>
+                <a href="{% url 'songPlayer' username=user clickedplaylist="edm" %}">
                     <div class="playlist-card">
+                        
                         <img src="https://i.pinimg.com/736x/ff/8e/d3/ff8ed3bb1c168646c942405b3e050fd2.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">EDM</div>
                             <div class="song-count">{{edmcount}} songs</div>
                         </div>
                     </div>
+                </a>
                 </div>
             </div>
             
