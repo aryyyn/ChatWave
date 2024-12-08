@@ -1,254 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0a0a0a;
-            color: #fff;
-            min-height: 100vh;
-        }
-
-        .profile-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            padding: 30px;
-            background: #161616;
-            border-radius: 15px;
-            border: 1px solid #ff336633;
-            margin-bottom: 30px;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid #ff3366;
-            object-fit: cover;
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-info h1 {
-            color: #ff3366;
-            margin-bottom: 10px;
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 30px;
-            margin-top: 15px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            color: #ff3366;
-            font-weight: bold;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .profile-sections {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-
-        .section-card {
-            background: #161616;
-            border-radius: 15px;
-            border: 1px solid #ff336633;
-            padding: 20px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ff336622;
-        }
-
-        .section-title {
-            color: #ff3366;
-            font-size: 1.2rem;
-        }
-
-        .playlist-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .playlist-card {
-            background: #1f1f1f;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .playlist-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .playlist-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .playlist-info {
-            padding: 15px;
-        }
-
-        .song-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .song-count {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .account-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .form-group label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            padding: 10px;
-            background: #1f1f1f;
-            border: 1px solid #ff336633;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 1rem;
-        }
-
-        .save-button {
-            background: #ff3366;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .home-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #ff3366;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            z-index: 1000;
-        }
-
-        .home-button:hover {
-            background: #ff1f55;
-        }
-
-        .save-button:hover {
-            background: #ff1f55;
-        }
-
-        @media (max-width: 768px) {
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-            }
-
-            .profile-stats {
-                justify-content: center;
-            }
-
-            .profile-sections {
-                grid-template-columns: 1fr;
-            }
-
-            .playlist-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
-
-        @media (max-width: 480px) {
-            .profile-container {
-                padding: 10px;
-            }
-
-            .profile-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .playlist-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-item {
-                flex: 1;
-            }
-
-           
+    <link rel="stylesheet" href="{% static 'profilestyle.css' %}">
     
-            @media (max-width: 768px) {
-                .home-button {
-                    top: 10px;
-                    left: 10px;
-                    padding: 10px 20px;
-                }
-            }
-        
-    </style>
 </head>
 <body>
     <a href="{% url 'homeChatViewLogic' %}" class="home-button">Home</a>
@@ -283,7 +42,7 @@
                     <p>@{{userinfo.username}}</p>
                     <div class="profile-stats">
                         <div class="stat-item">
-                            <div class="stat-value">12</div>
+                            <div class="stat-value">{{ songcount }}</div>
                             <div class="stat-label">Liked Songs</div>
                         </div>
                         <div class="stat-item">
@@ -304,46 +63,49 @@
                 </div>
                 
                 <div class="playlist-grid">
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="indie" %}">
+
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Indie</div>
-                            <div class="song-count">24 songs</div>
+                            <div class="song-count">{{indiecount}} songs</div>
                         </div>
                     </div>
+                </a>
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/736x/5d/18/f4/5d18f4f26c27328b4af9c92bda69b31f.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Pop</div>
-                            <div class="song-count">18 songs</div>
+                            <div class="song-count">{{popcount}} songs</div>
                         </div>
                     </div>
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/474x/8d/fb/4a/8dfb4ae26f921d25892833878837a5a3.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Rap</div>
-                            <div class="song-count">32 songs</div>
+                            <div class="song-count">{{rapcount}} songs</div>
                         </div>
                     </div>
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/236x/6f/79/ad/6f79ad502be93c697c7541ef46052438.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">Lofi</div>
-                            <div class="song-count">2 songs</div>
+                            <div class="song-count">{{loficount}} songs</div>
                         </div>
                     </div>
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/236x/b6/3a/9a/b63a9a1dfa2aaceec75adbef20172688.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">HipHop</div>
-                            <div class="song-count">12 songs</div>
+                            <div class="song-count">{{hiphopcount}} songs</div>
                         </div>
                     </div>
                     <div class="playlist-card">
                         <img src="https://i.pinimg.com/736x/ff/8e/d3/ff8ed3bb1c168646c942405b3e050fd2.jpg" alt="Playlist Cover" class="playlist-image">
                         <div class="playlist-info">
                             <div class="song-name">EDM</div>
-                            <div class="song-count">12 songs</div>
+                            <div class="song-count">{{edmcount}} songs</div>
                         </div>
                     </div>
                 </div>

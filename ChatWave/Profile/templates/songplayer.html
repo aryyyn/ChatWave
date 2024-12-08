@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'songplayer.css' %}">
+</head>
+<body>
+    <div class="nav-buttons">
+        <a href="{% url 'homeChatViewLogic'%}" class="nav-button">
+            <i class="fas fa-home"></i>
+            Home
+        </a>
+        <a href="{%url 'profile' username=userinfo.username%}" class="nav-button">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+    </div>
+    <div class="sidebar">
+
+        
+        <div class="song-header">
+            <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Indie" class="playlist-cover">
+            <div class="song-info">
+                <h3>Playlist Songs</h3>
+                <p>24 songs</p>
+            </div>
+        </div>
+
+        {% if songs %}
+        {% for song in songs %}
+            <div class="song-item">
+                <a href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}"> 
+                    <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
+                    <div class="song-info">
+                        <h3>{{ song.title }}</h3>
+                        <p>{{ song.artist }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+
+    </div>
+    
+    {% if clickedsong %}
+    <div class="main-player">
+        <div class="now-playing">
+            <img src={{ clickedsong.thumbnail.url }} alt="Current Track" class="current-artwork">
+            <div class="song-info">
+                <h2>{{clickedsong.title}}</h2>
+                <p>{{clickedsong.artist}}</p>
+            </div>
+        </div>
+
+        <audio controls>
+            <source src="{{ clickedsong.song.url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    {%else%}
+
+    <div class="main-player">
+        <div class="now-playing">
+            <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Current Track" class="current-artwork">
+            <div class="song-info">
+                <h2>No song playing</h2>
+                <p>Artist Name</p>
+            </div>
+        </div>
+
+        <audio controls>
+            <source src="{{ song.song.url }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    {%endif%}
+</body>
+</html>
