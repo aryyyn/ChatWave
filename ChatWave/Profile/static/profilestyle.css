@@ -17,6 +17,26 @@ body {
     padding: 20px;
 }
 
+
+.messages {
+    margin-bottom: 1.5rem;
+}
+
+.messages p {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.messages .error {
+    background-color: var(--error-color);
+}
+
+.messages .success {
+    background-color: var(--success-color);
+}
+
 .profile-header {
     display: flex;
     align-items: center;

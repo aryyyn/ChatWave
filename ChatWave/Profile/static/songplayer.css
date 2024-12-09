@@ -17,7 +17,7 @@ body {
 .nav-buttons {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 45px;
     display: flex;
     gap: 10px;
     z-index: 1000;

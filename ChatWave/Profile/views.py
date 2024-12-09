@@ -3,6 +3,8 @@ from Auth.models import *
 from Chat.models import *
 from Profile.models import *
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 
 
@@ -10,6 +12,29 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def profileHome(request, username):
 
+    if request.method == "POST":
+        currentPassword = request.POST.get("currentpassword")
+        newPassword = request.POST.get("password")
+        newConfirmPassword = request.POST.get("confirm-password")
+        
+  
+        if newPassword != newConfirmPassword:
+            messages.error(request, "Invalid Password")
+
+        elif not request.user.check_password(currentPassword):
+            messages.error(request, "Invalid Password")
+
+        elif not newPassword or not currentPassword or not newConfirmPassword:
+            messages.error(request, "Invalid Fields")
+
+
+        else:
+            request.user.set_password(newPassword)
+            request.user.save()
+
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "Password has been changed")
+    
     userinfo = request.user
     checkusername = CustomUser.objects.filter(username=username).exists()
 
@@ -43,7 +68,7 @@ def profileHome(request, username):
                 elif 'edm' in playlist.playlist_name:
                     edm_song_count += songcount
 
-       
+    
         context = {
                 "userinfo": CustomUser.objects.get(username=username),
                 "playlists": playlists,
@@ -60,7 +85,7 @@ def profileHome(request, username):
             
         return render(request, "profile.html", context=context)    
     
-     
+    
     else:      
         context = {
                 "status": "NotFound"
