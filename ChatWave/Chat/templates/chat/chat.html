@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>ChatWave | Chat</title>
    
     <link rel="stylesheet" href="{% static 'chatstyle.css' %}">
@@ -15,9 +16,11 @@
 <body>
     <div class="container">
         <div class="side-nav">
+            <div class="nav-top">
             <a class="nav-button" href="{% url 'homeChatViewLogic' %}">🏠</a>
-            <button class="nav-button">🔍</button>
+          
             <button class="nav-button">⚙️</button>
+            </div>
             <button class="nav-button profile-button">👤</button>
         </div>
         
@@ -28,13 +31,23 @@
             </div>
             <div class="room-list">
                 
-
-                <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                <div class="room-category">
+                    <h3>General</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
+                </div>
+                
+                <div class="room-category">
+                    <h3>Music</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
+                </div>
+                
+                <div class="room-category">
+                    <h3>Gaming</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                </div>
            
             </div>
         </div>
@@ -111,7 +124,7 @@
 
     {% else %}
         
-    <img src="https://media.discordapp.net/attachments/958193242892042261/1312454536354599043/image.png?ex=67547709&is=67532589&hm=a9118e22ee5eb5cd675d023041f6f98ba062c1b0e26127fa93e9b8548ff703f2&=&format=webp&quality=lossless" alt="Album Art" class="album-art">
+    <img src="https://i.pinimg.com/736x/9c/1d/df/9c1ddfa2bc9e17d4dbf4799f73622f23.jpg" alt="Album Art" class="album-art">
     <div class="track-info">
         <h3>Press on the '➕' icon to start listening to music!</h3>
     </div>
@@ -131,16 +144,14 @@
 </div>
             <div class="users-section">
                 <div class="online-count">
-                    <span id='online-count'>Users Online: {{ chat_room.online_count}}</span>
+                    <h3>Online Users</h3>
+                    <span id='online-count'> {{ chat_room.online_count}} active</span>
            
                 </div>
                 <ul class="users-list">
-
                     {%for user in chat_room.online_users%}
                     {% if user %}
-
                     <li>
-                        
                         <a href= {%url 'profile' user%}><span> {{user}} </span>
                         <span class="status"></span>
                     </li>
@@ -380,7 +391,7 @@
 
                 else if (data.type === "online_count")
                 {
-                    document.getElementById('online-count').textContent = "Users Online: " +  data.online_count;
+                    document.getElementById('online-count').textContent = data.online_count + " active";
                     if (data.identifier === 'joined'){
                     userJoinLeaveMessage(`Welcome to the ChatRoom, ${data.recently_joined}`)
                     }

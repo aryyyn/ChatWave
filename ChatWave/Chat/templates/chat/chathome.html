@@ -6,31 +6,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatWave | Home</title>
-    
     <link rel="stylesheet" href="{% static 'chathomestyle.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
+      
         <div class="side-nav">
-            <a class="nav-button" href="{% url 'homeChatViewLogic' %}">🏠</a>
-            <a class="nav-button" href="{% url 'logout_logic' %}">🔓</a>
-
-         
+            <div class="nav-top">
+                <a class="nav-button" href="{% url 'homeChatViewLogic' %}" title="Home">🏠</a>
+                <a class="nav-button" href="{% url 'logout_logic' %}" title="Logout">🔓</a>
+            </div>
             <button class="nav-button profile-button">👤</button>
         </div>
         
+    
         <div class="chat-rooms">
             <div class="chat-rooms-header">
                 <h2>Chat Rooms</h2>
-                <button class="add-room">+</button>
+                <button class="add-room" title="Create New Room">+</button>
             </div>
             <div class="room-list">
-                <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
-                <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                <div class="room-category">
+                    <h3>General</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='General_Chat' %}"><div class="room-item">General Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='General_Chat_2' %}"><div class="room-item">General Chat 2</div></a>
+                </div>
+                
+                <div class="room-category">
+                    <h3>Music</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='Music_Chat' %}"><div class="room-item">Music Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='Music_Chat_2' %}"><div class="room-item">Music Chat 2</div></a>
+                </div>
+                
+                <div class="room-category">
+                    <h3>Gaming</h3>
+                    <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
+                    <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                </div>
             </div>
         </div>
 
@@ -39,56 +52,46 @@
                 <div class="welcome-icon">💭</div>
                 <h1 class="welcome-title">Welcome to ChatWave</h1>
                 <p class="welcome-text">
-                    Join the conversation! Select a chat room from the left to get started
-                   
+                    Join the conversation! Select a chat room from the left to get started, or create your own room to begin a new discussion.
                 </p>
                 <button class="create-chat-btn">Create A Chatroom</button>
             </div>
         </div>
 
+
         <div class="right-panel">
-
-            
-
-
-            <div class="music-player">
-         <img src="https://i.pinimg.com/736x/4c/d2/a6/4cd2a6615820a4a15f4d85de7762251d.jpg" alt="Album Art" class="album-art">
-                    <div class="track-info">
-                        <h3>Logged in as, {{request.user.username}}</h3>
-                        <p>Sufjan Stevens</p>
+           
+            <div class="user-profile">
+                <div class="profile-header">
+                    <img src="https://i.pinimg.com/736x/4c/d2/a6/4cd2a6615820a4a15f4d85de7762251d.jpg" alt="Profile Picture" class="profile-image">
+                    <div class="profile-info">
+                        <h3>{{request.user.username}}</h3>
+                        <span class="status-badge">Online</span>
                     </div>
-
-                   
-              
                 </div>
-                   
+            </div>
             
             
-              
-                    
-              
-         
             <div class="users-section">
                 <div class="online-count">
-                    <span>Users Online: {{ total_online_users}}</span>
-                    <button style="background: none; border: none; color: #ff3366; cursor: pointer;">⋮</button>
+                    <h3>Online Users</h3>
+                    <span>{{ total_online_users }} active</span>
                 </div>
                 <ul class="users-list">
-                    {%for user in online_users%}
+                    {% for user in online_users %}
                     {% if user %}
-
                     <li>
-                        <span> {{user}} </span>
+                        <span class="user-name">{{user}}</span>
                         <span class="status"></span>
                     </li>
-
-                    {%endif%}
-                    {%endfor%}
+                    {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
     </div>
 
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
           
