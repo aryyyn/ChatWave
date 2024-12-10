@@ -47,6 +47,17 @@ body {
     border: 1px solid #ff336633;
     margin-bottom: 30px;
 }
+.profile-header span {
+    display: none;
+}
+.profile-image:hover {
+    opacity: 50%;  
+    cursor: pointer; 
+  
+}
+
+
+
 
 .profile-image {
     width: 150px;

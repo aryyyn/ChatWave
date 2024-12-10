@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'profilestyle.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    
 </head>
 <body>
     <a href="{% url 'homeChatViewLogic' %}" class="home-button"> <i class="fas fa-home"></i> Home</a>
@@ -39,6 +40,7 @@
             <div class="profile-header">
                 
                 <img src="https://i.pinimg.com/736x/fc/3f/26/fc3f26002a8b326a0449c73fea855963.jpg" alt="Profile Picture" class="profile-image">
+            
                 <div class="profile-info">
                     
                     <p>@{{userinfo.username}}</p>
@@ -175,5 +177,9 @@
         </div>
     </div>
     {%endif%}
+
+  
+
 </body>
+
 </html>

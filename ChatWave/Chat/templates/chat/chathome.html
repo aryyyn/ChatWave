@@ -24,7 +24,7 @@
         <div class="chat-rooms">
             <div class="chat-rooms-header">
                 <h2>Chat Rooms</h2>
-                <button class="add-room" title="Create New Room">+</button>
+                
             </div>
             <div class="room-list">
                 <div class="room-category">
@@ -52,9 +52,9 @@
                 <div class="welcome-icon">💭</div>
                 <h1 class="welcome-title">Welcome to ChatWave</h1>
                 <p class="welcome-text">
-                    Join the conversation! Select a chat room from the left to get started, or create your own room to begin a new discussion.
+                    Join the conversation! Select a chat room from the left to get started, or join a random chat room.
                 </p>
-                <button class="create-chat-btn">Create A Chatroom</button>
+                <button class="create-chat-btn">Join A Random Chatroom</button>
             </div>
         </div>
 
@@ -63,7 +63,7 @@
            
             <div class="user-profile">
                 <div class="profile-header">
-                    <img src="https://i.pinimg.com/736x/4c/d2/a6/4cd2a6615820a4a15f4d85de7762251d.jpg" alt="Profile Picture" class="profile-image">
+                    <img src={{request.user.profilePicture}} alt="Profile Picture" class="profile-image">
                     <div class="profile-info">
                         <h3>{{request.user.username}}</h3>
                         <span class="status-badge">Online</span>
@@ -96,12 +96,7 @@
         document.addEventListener('DOMContentLoaded', () => {
           
             const roomItems = document.querySelectorAll('.room-item');
-            roomItems.forEach(room => {
-                room.addEventListener('click', () => {
-                    roomItems.forEach(r => r.classList.remove('active'));
-                    room.classList.add('active');
-                });
-            });
+      
 
             const profileBtn = document.querySelector('.profile-button');
             profileBtn.addEventListener('click', () => {
@@ -110,14 +105,14 @@
                 window.location.href = window.location.origin + "/account/" + username ;
             });
 
+            const randomChat = document.querySelector(".create-chat-btn");
+            randomChat.addEventListener('click', () => {
+                random_choices = ['General_Chat', "General_Chat_2", "Music_Chat", "Music_Chat_2", "Game_Chat", "Game_Chat_2"]
+                const randomIndex = Math.floor(Math.random() * random_choices.length);
+                const randomItem = random_choices[randomIndex];
+                window.location.href = window.location.origin + "/home/chat/" + randomItem ;
+            });
 
-            const createChatBtn = document.querySelector('.create-chat-btn');
-            createChatBtn.addEventListener('mouseover', () => {
-                createChatBtn.style.transform = 'scale(1.05)';
-            });
-            createChatBtn.addEventListener('mouseout', () => {
-                createChatBtn.style.transform = 'scale(1)';
-            });
 
           
             const actionButtons = document.querySelectorAll('.action-button');

@@ -89,16 +89,6 @@ body {
     font-weight: 600;
 }
 
-.add-room {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #1a1a1a;
-    border: 1px solid #ff336622;
-    color: #ff3366;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
 
 .room-category {
     margin-bottom: 24px;

@@ -13,6 +13,7 @@ from django.contrib.auth import update_session_auth_hash
 def profileHome(request, username):
 
     if request.method == "POST":
+        
         currentPassword = request.POST.get("currentpassword")
         newPassword = request.POST.get("password")
         newConfirmPassword = request.POST.get("confirm-password")

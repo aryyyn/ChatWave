@@ -63,6 +63,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             'unique': "A user with that email address already exists.",
         }
     )
+    profilePicture = models.TextField(max_length=500)
+
     # User status
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

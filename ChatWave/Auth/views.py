@@ -17,6 +17,7 @@ def RegisterLogic(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirmpassword = request.POST.get("confirmpassword")
+        profilePicture = "https://i.pinimg.com/736x/4c/d2/a6/4cd2a6615820a4a15f4d85de7762251d.jpg"
 
         
         if not all([username, email, password, confirmpassword]):
@@ -36,7 +37,7 @@ def RegisterLogic(request):
         else:
             try:
                
-                user = CustomUser.objects.create_user(username=username, email=email, password=password)
+                user = CustomUser.objects.create_user(username=username, email=email, password=password, profilePicture=profilePicture)
                 Playlists.objects.create(playlist_name="indie", user=user)
                 Playlists.objects.create(playlist_name="pop", user=user)
                 Playlists.objects.create(playlist_name="rap", user=user)
