@@ -39,7 +39,7 @@
             
             <div class="profile-header">
                 
-                <img src="https://i.pinimg.com/736x/fc/3f/26/fc3f26002a8b326a0449c73fea855963.jpg" alt="Profile Picture" class="profile-image">
+                <img src={{userinfo.profilePicture}} alt="Profile Picture" class="profile-image">
             
                 <div class="profile-info">
                     
@@ -168,9 +168,10 @@
                         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password">
                     </div>
                     <button type="submit" class="save-button">Save Changes</button>
+                    <input type="file" class="file-upload" id="fileUpload" accept="image/*">
                 </form>
 
-                
+               
             </div>
             {%endif%}
 
@@ -178,7 +179,70 @@
     </div>
     {%endif%}
 
-  
+  <script>
+    const CLOUD_NAME = "dv2qm6ktz"; 
+    const UPLOAD_PRESET = "chatwave"; 
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    async function uploadFile(image) {
+        const formData = new FormData();
+        formData.append('file', image); 
+        formData.append('upload_preset', UPLOAD_PRESET); 
+    
+        try {
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData,
+                
+            });
+    
+            const result = await response.json(); 
+            const user = "{{request.user.username}}";
+            
+            const url = 'saveFileUrl/';
+    
+            if (response.ok) {
+                const dbresponse = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({ image_url: result }),
+                });
+                return "success"; 
+
+            } else {
+                throw new Error(result.error.message); 
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            return "error"; 
+        }
+    }
+
+    
+
+    
+
+
+    const fileUpload = document.getElementById('fileUpload');
+
+    const profileImage = document.querySelector(".profile-image")
+    profileImage.addEventListener('click', () => {
+        fileUpload.click();
+    });
+
+    fileUpload.addEventListener('change',async (e) => {
+        const image = e.target.files[0];
+        const Imageurl = await uploadFile(image)
+        window.location.reload()
+
+    });
+
+  </script>
+
+
 
 </body>
 

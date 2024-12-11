@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('account/<str:username>/', profileHome, name="profile"),
+    path('account/<str:username>/saveFileUrl/', saveFileUrl, name="saveFileUrl"),
     path('account/<str:username>/player/<str:clickedplaylist>/', songPlayer, name="songPlayer"),
     path('account/<str:username>/player/<str:clickedplaylist>/<int:id>/', Player, name="Player")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

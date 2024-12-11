@@ -5,10 +5,30 @@ from Profile.models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+import json
 
 
 
 # def getTotalSongC
+@login_required
+def saveFileUrl(request, username):
+    if request.method == "POST":
+        if request.user.username == username:
+            try:
+                data = json.loads(request.body)
+                image_url = data.get('image_url')
+            
+                user = CustomUser.objects.get(username=username)
+                user.profilePicture = image_url['secure_url']
+                user.save()
+            except Exception as err:
+                print(err)
+
+        else:
+            print("Invalid User")
+            
+    return render(request, 'profile.html', {'username': username})
+
 @login_required
 def profileHome(request, username):
 
