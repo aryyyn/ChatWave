@@ -116,6 +116,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
                         'message': message,
                         'username': self.scope["user"].username,
+                        'profilePicture': self.scope["user"].profilePicture
                     }
                 )
         except Exception as err:
@@ -125,11 +126,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
+        profilePicture = event['profilePicture']
 
         #send the message via websocket to the frontend
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
+            'profilePicture': profilePicture,
         }))
         
         

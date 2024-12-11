@@ -346,7 +346,7 @@
                     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const sanitizedMessage = escapeHTML(message);
                     newMessage.innerHTML = `
-                    <img src={{request.user.profilePicture}} alt="userimage">
+                    <img src={{ request.user.profilePicture }} alt="userimage">
                         <div class="user">You
                         <div class="timestamp">${time}</div>
                        <h3> ${sanitizedMessage} </h3>
@@ -447,7 +447,8 @@
                
                 const message = data.message;
                 const username = data.username;
-                
+                const profilePicture = data.profilePicture
+                console.log(profilePicture)
                 const currentUser = "{{ request.user.username }}";
                 
                 
@@ -459,11 +460,15 @@
                 newMessage.className = 'message';
 
                 const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
+                const sanitizedMessage = escapeHTML(message);
                 newMessage.innerHTML = `
-                <div class="user">${username}</div>
-                ${message}
+                <img src=${profilePicture} alt="userimage">
+                <div class="user">${username}
                 <div class="timestamp">${time}</div>
+                
+               <h3> ${sanitizedMessage}</h3>
+               </div>
+               
             `;
             
             chatMessages.appendChild(newMessage);
