@@ -260,7 +260,7 @@
 
                 logoutButton.addEventListener('click', () => {
                    
-                    window.location.href = "http://localhost:8000/auth/logout/"; 
+                    window.location.href = window.location.host + "/auth" + "/logout/";
                 });
                 
   
@@ -444,48 +444,57 @@
                 }
 
                 else {
-               
-                const message = data.message;
-                const username = data.username;
-                const profilePicture = data.profilePicture
-                console.log(profilePicture)
-                const currentUser = "{{ request.user.username }}";
+                    const { message, username, profilePicture } = data;
+                    const currentUser = "{{ request.user.username }}";
+                    
+                  
+                    if (username !== currentUser) {
+                        const chatMessages = document.querySelector('.chat-messages');
+                        const newMessage = document.createElement('div');
+                        newMessage.className = 'message';
                 
+                        const time = new Date().toLocaleTimeString([], { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                        });
                 
-                if (username != currentUser) {
+                      
+                        const imgElement = document.createElement('img');
+                        imgElement.src = profilePicture;
+                        imgElement.alt = 'userimage';
                 
+                        const userDiv = document.createElement('div');
+                        userDiv.className = 'user';
                 
-                const chatMessages = document.querySelector('.chat-messages');
-                const newMessage = document.createElement('div');
-                newMessage.className = 'message';
-
-                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const sanitizedMessage = escapeHTML(message);
-                newMessage.innerHTML = `
-                <img src=${profilePicture} alt="userimage">
-                <div class="user">${username}
-                <div class="timestamp">${time}</div>
+                        const usernameLink = document.createElement('a');
+                        usernameLink.id = 'messageUsername';
+                  
+                        usernameLink.href = `/account/${encodeURIComponent(username)}`; 
+                        usernameLink.textContent = username;
                 
-               <h3> ${sanitizedMessage}</h3>
-               </div>
-               
-            `;
-            
-            chatMessages.appendChild(newMessage);
-            scrollToBottom();
-           
-                scrollToBottom(); 
-
+                        const timestampDiv = document.createElement('div');
+                        timestampDiv.className = 'timestamp';
+                        timestampDiv.textContent = time;
+                
+                        const messageHeading = document.createElement('h3');
+                        messageHeading.textContent = escapeHTML(message);
+                
+                       
+                        userDiv.appendChild(usernameLink);
+                        userDiv.appendChild(timestampDiv);
+                        userDiv.appendChild(messageHeading);
+                        
+                        newMessage.appendChild(imgElement);
+                        newMessage.appendChild(userDiv);
+                        
+                        chatMessages.appendChild(newMessage);
+                        scrollToBottom();
+                    }
+                    
                 }
             };
-        }
 
-
-
-        
-    
-
-        
+       
 
         const settingsBtn = document.querySelector('.side-nav button:nth-child(2)');
         const settingsModal = document.getElementById('settingsModal');
