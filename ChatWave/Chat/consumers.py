@@ -7,6 +7,9 @@ from Profile.models import Playlists
 import datetime
 from django.db.models import F, Q
 
+
+from django.shortcuts import get_object_or_404
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
 
@@ -103,11 +106,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             elif message_type == "delete_message":
               
                 message_id = text_data_json.get("message_id")
+               
+         
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
                         'type': 'delete_message',
-                        'message_id': message_id
+                        'message_id': message_id,
+                       
                     }
                 )
                 
@@ -144,10 +150,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def delete_message(self, event):
         
         message_id = event['message_id']
+      
         
         await self.send(text_data=json.dumps({
             "type": "delete_message",
-            "message_id": message_id
+            "message_id": message_id,
+           
 
         }))
 
@@ -179,6 +187,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # created = datetime.datetime.now() #not needed since models.py already handles it
         )
         return MessageObject
+    
+
+    
+
+
+
 
     @database_sync_to_async
     def addSong(self,song):

@@ -396,7 +396,7 @@
            
             chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-                {% comment %} console.log(data) {% endcomment %}
+              
                 
                 if (data.type === 'songResult') {
                     if (data.songResult == "Present") {
@@ -408,17 +408,28 @@
                     }
                 }
                 else if (data.type === "delete_message") {
-                    const messageID = data.message_id;
-                    const messageToDelete = document.getElementById(messageID);
                     
-                 
-                    if (messageToDelete) {
-                        messageToDelete.remove();
-                        console.log(`Message with ID ${messageID} deleted.`);
-                    } else {
-                        console.log(`Message with ID ${messageID} not found.`);
+
+                    const messageID = data.message_id;
+                    
+                    const messageToDelete = document.getElementById(messageID);
+                    if (messageToDelete){
+                    const messageDelete = messageToDelete.parentNode
+                    const username = messageToDelete.querySelector('#messageUsername').innerText;
+                    const currentUser = "{{request.user.username}}"
+                    if (currentUser != username)
+                    {
+
+                    console.log(messageDelete);
+                    if (messageDelete)
+                    {
+                        messageDelete.remove()
                     }
                 }
+            }
+                    
+                
+            }
                 
 
                 else if (data.type === "online_count")
@@ -474,6 +485,7 @@
                 
                         const userDiv = document.createElement('div');
                         userDiv.className = 'user';
+                        userDiv.id = messageID;
                 
                         const usernameLink = document.createElement('a');
                         usernameLink.id = 'messageUsername';
