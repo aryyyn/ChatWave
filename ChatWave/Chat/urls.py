@@ -12,6 +12,7 @@ urlpatterns = [
     path('home/chat/<str:chatroom>/', chatView, name='chatViewLogic'),
     path('home/chat/<str:chatroom>/deletemessage/<int:messageid>/', deleteMessage, name='deleteMessage'),
     path('home/chat/', chatHomeView, name='homeChatViewLogic'),
+    
     path('', redirect_to_homepage, name='redirectToHomePage')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

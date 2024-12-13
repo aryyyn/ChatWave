@@ -24,7 +24,7 @@
 
         
         
-
+        {% comment %} {%if userinfo.username == request.user.username%} {% endcomment %}
         {% if songs %}
         {% for song in songs %}
             <div class="song-item">

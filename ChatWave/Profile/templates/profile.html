@@ -59,19 +59,21 @@
                     </div>
                 </div>
             </div>
+
+            {% if userinfo.username == request.user.username%}
         
         <div class="profile-sections">
             <div class="section-card">
                 <div class="section-header">
                     <h2 class="section-title">{{userinfo.username}}'s Playlists</h2>
                 </div>
-                
+             
                 <div class="playlist-grid">
-                    <a href="{% url 'songPlayer' username=user clickedplaylist="indie" %}">
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="indie" %}" >
 
-                    <div class="playlist-card">
+                    <div class="playlist-card" >
                         <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Playlist Cover" class="playlist-image">
-                        <div class="playlist-info">
+                        <div class="playlist-info" >
                             <div class="song-name">Indie</div>
                             <div class="song-count">{{indiecount}} songs</div>
                         </div>
@@ -128,7 +130,87 @@
                     </div>
                 </a>
                 </div>
+
             </div>
+
+            {%else %}
+
+            <div class="profile-sections">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">{{userinfo.username}}'s Playlists</h2>
+                    </div>
+                 
+                    <div class="playlist-grid">
+                        <a href="{% url 'songPlayer' username=user clickedplaylist="indie" %}" style="pointer-events: none;">
+    
+                        <div class="playlist-card" >
+                            <img src="https://i.pinimg.com/236x/5f/c7/3b/5fc73b003d838686cab91cc8b4f4fa62.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info" >
+                                <div class="song-name">Indie</div>
+                                <div class="song-count">{{indiecount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="pop" %}" style="pointer-events: none;">
+                        <div class="playlist-card">
+                            
+                            <img src="https://i.pinimg.com/736x/5d/18/f4/5d18f4f26c27328b4af9c92bda69b31f.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info">
+                                <div class="song-name">Pop</div>
+                                <div class="song-count">{{popcount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="rap" %}" style="pointer-events: none;">
+                        <div class="playlist-card">
+                           
+                            <img src="https://i.pinimg.com/474x/8d/fb/4a/8dfb4ae26f921d25892833878837a5a3.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info">
+                                <div class="song-name">Rap</div>
+                                <div class="song-count">{{rapcount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="lofi" %}" style="pointer-events: none;">
+                        <div class="playlist-card">
+                           
+                            <img src="https://i.pinimg.com/236x/6f/79/ad/6f79ad502be93c697c7541ef46052438.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info">
+                                <div class="song-name">Lofi</div>
+                                <div class="song-count">{{loficount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="hiphop" %}" style="pointer-events: none;">
+                        <div class="playlist-card">
+                           
+                            <img src="https://i.pinimg.com/236x/b6/3a/9a/b63a9a1dfa2aaceec75adbef20172688.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info">
+                                <div class="song-name">HipHop</div>
+                                <div class="song-count">{{hiphopcount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'songPlayer' username=user clickedplaylist="edm" %}" style="pointer-events: none;">
+                        <div class="playlist-card">
+                            
+                            <img src="https://i.pinimg.com/736x/ff/8e/d3/ff8ed3bb1c168646c942405b3e050fd2.jpg" alt="Playlist Cover" class="playlist-image">
+                            <div class="playlist-info">
+                                <div class="song-name">EDM</div>
+                                <div class="song-count">{{edmcount}} songs</div>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+    
+                </div>
+
+                {% endif %}
+
+          
+
+
             
             {% if request.user.username == userinfo.username%}
             <div class="section-card">
@@ -147,7 +229,7 @@
                 </div>
                 <form method="POST" class="account-form">
                     {% csrf_token %}
-                    <div class="form-group">
+                    <div class="form-group" disabled>
                         <label for="username">Username</label>
                         <input type="text" id="username" value={{userinfo.username}} readonly>
                     </div>
