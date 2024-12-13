@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>ChatWave | Chat</title>
    
@@ -69,7 +70,7 @@
 
                 <div class="message">
                     <img src={{message.sender.profilePicture}} alt="userimage">
-                    <div class="user"> <a id="messageUsername" href="{%url 'profile' message.sender.username %}">{{ message.sender.username }} </a>
+                    <div class="user" id = "{{message.id}}"> <a id="messageUsername" href="{%url 'profile' message.sender.username %}">{{ message.sender.username }} </a>
                         <div class="timestamp">{{ message.created|date:"h:i A" }}
                             <h3 class="text-message"> {{ message.message }} </h3>
                         </div>
@@ -85,10 +86,13 @@
                 {% else %}
                 <div class="message sent">
                     <img src="{{request.user.profilePicture}}" alt="userimage">
-                    <div class="user">You
+                    <div class="user" id = "{{message.id}}">You
+                        <button class="delete-message"><i class="fas fa-trash"></i></button>
                         <div class="timestamp">{{ message.created|date:"h:i A" }}
                             <h3> {{ message.message }} </h3>
                         </div>
+                      
+
                     </div>
            
                    
@@ -227,6 +231,9 @@
         document.addEventListener('DOMContentLoaded', () => {
 
 
+
+
+
             const emojiButton = document.querySelector(".input-actions button:first-child");
             emojiButton.addEventListener('click', () => {   
                 alert("working")
@@ -329,35 +336,8 @@
                 return div.innerHTML;
             }
             
+            
 
-            function sendMessage() {
-                const messageInput = document.querySelector('.input-area input');
-                const message = messageInput.value.trim();
-                
-                if (message) {
-                    const chatMessages = document.querySelector('.chat-messages');
-                    const newMessage = document.createElement('div');
-                    newMessage.className = 'message sent';
-
-                    chatSocket.send(JSON.stringify({
-                        'message': message
-                    }));
-                    
-                    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    const sanitizedMessage = escapeHTML(message);
-                    newMessage.innerHTML = `
-                    <img src={{ request.user.profilePicture }} alt="userimage">
-                        <div class="user">You
-                        <div class="timestamp">${time}</div>
-                       <h3> ${sanitizedMessage} </h3>
-                        </div>
-                    `;
-                    
-                    chatMessages.appendChild(newMessage);
-                    scrollToBottom();
-                    messageInput.value = '';
-                }
-            }
 
           
             const sendButton = document.querySelector('.input-area .input-actions button:last-child');
@@ -397,20 +377,49 @@
                 messageInput.value = '';
             }
 
+
+
+
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                
+                if (message) {
+
+                    chatSocket.send(JSON.stringify({
+                        'message': message
+                    }));
+                    
+                    messageInput.value = '';
+                }
+            }
+
            
             chatSocket.onmessage = function(e) {
-                const data = JSON.parse(e.data);
+            const data = JSON.parse(e.data);
                 {% comment %} console.log(data) {% endcomment %}
                 
                 if (data.type === 'songResult') {
                     if (data.songResult == "Present") {
-                        alert("Song already present")
+                        alert("Song already present");
                     }
                     else {
-                        alert("song added")
+                        alert("song added");
                     
                     }
                 }
+                else if (data.type === "delete_message") {
+                    const messageID = data.message_id;
+                    const messageToDelete = document.getElementById(messageID);
+                    
+                 
+                    if (messageToDelete) {
+                        messageToDelete.remove();
+                        console.log(`Message with ID ${messageID} deleted.`);
+                    } else {
+                        console.log(`Message with ID ${messageID} not found.`);
+                    }
+                }
+                
 
                 else if (data.type === "online_count")
                 {
@@ -444,7 +453,7 @@
                 }
 
                 else {
-                    const { message, username, profilePicture } = data;
+                    const { message, username, profilePicture, messageID} = data;
                     const currentUser = "{{ request.user.username }}";
                     
                   
@@ -490,12 +499,89 @@
                         chatMessages.appendChild(newMessage);
                         scrollToBottom();
                     }
+
+                    else {
+
+                        const messageInput = document.querySelector('.input-area input');
+                        if (message) 
+                        {
+                            const chatMessages = document.querySelector('.chat-messages');
+                            const newMessage = document.createElement('div');
+                            newMessage.className = 'message sent';
+
+
+                            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            const sanitizedMessage = escapeHTML(message);
+                            newMessage.innerHTML = `
+                            <img src={{ request.user.profilePicture }} alt="userimage">
+                                <div class="user" id = "${messageID}">You
+                                <button class="delete-message"><i class="fas fa-trash"></i></button>
+                                <div class="timestamp">${time}</div>
+                               <h3> ${sanitizedMessage} </h3>
+                                </div>
+                            `;
+
+                            chatMessages.appendChild(newMessage);
+                            scrollToBottom();
+
+                        }
+
+                    }
                     
                 }
             };
 
        
+        
+            async function deleteMessageFunc(messageid)
+            
+            {
+                try {
 
+
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const url = `deletemessage/${messageid}/`;
+                const response = await fetch(url ,{
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+
+                    },
+                    
+                });
+                
+                if (response.ok) 
+                {
+                    
+                    chatSocket.send(JSON.stringify({
+                        type: 'delete_message',
+                        message_id: messageid,
+                    }));
+                }
+            }
+            catch (error) {
+                console.error(error)
+            }
+            }
+                
+
+            
+            document.addEventListener('click', async (e) => {
+                const deleteMessageButton = e.target.closest(".delete-message");
+                if (deleteMessageButton) {
+                  
+                    const userDiv = deleteMessageButton.closest(".user");
+                    const messageSentDiv = deleteMessageButton.closest(".message.sent")
+                    if (userDiv) {
+                        messageSentDiv.remove()
+                        await deleteMessageFunc(userDiv.id)
+                        
+                    }
+                }
+            });
+            
+        
         const settingsBtn = document.querySelector('.side-nav button:nth-child(2)');
         const settingsModal = document.getElementById('settingsModal');
         const closeSettingsBtn = settingsModal.querySelector('.modal-close');

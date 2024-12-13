@@ -4,6 +4,25 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 import random
 from django.contrib import messages
+from django.http import JsonResponse
+
+
+@login_required
+def deleteMessage(request,chatroom,  messageid):
+    if request.method == "POST":
+        try:
+            message = get_object_or_404(ChatRoomMessages, id=messageid)
+            if message.sender != request.user:
+                return JsonResponse({"success": False, "error": "Unauthorized"}, status=403)
+            message.delete()
+            return JsonResponse({"success": True})
+        except Exception as err:
+            print(err)
+    
+
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+    
 
 
 @login_required

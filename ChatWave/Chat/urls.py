@@ -10,6 +10,7 @@ def redirect_to_homepage(request):
 
 urlpatterns = [
     path('home/chat/<str:chatroom>/', chatView, name='chatViewLogic'),
+    path('home/chat/<str:chatroom>/deletemessage/<int:messageid>/', deleteMessage, name='deleteMessage'),
     path('home/chat/', chatHomeView, name='homeChatViewLogic'),
     path('', redirect_to_homepage, name='redirectToHomePage')
 

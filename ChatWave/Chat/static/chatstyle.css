@@ -194,6 +194,41 @@ body {
     color: #ff3366;
 }
 
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: #ff4444;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+}
+
+.message .user button {
+    background: transparent;
+    border: none;
+    color: #666;
+    padding: 4px 8px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+.message .user button:hover {
+    opacity: 1;
+    color: #ff4444;
+    transform: scale(1.1);
+}
+
+.message .user button {
+    visibility: hidden;
+}
+
+.message:hover .user button {
+    visibility: visible;
+}
 
 
 .message {

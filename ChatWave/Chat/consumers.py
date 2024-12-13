@@ -87,6 +87,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             text_data_json = json.loads(text_data)
             message_type = text_data_json.get('type')
+           
+            
             if message_type == 'song':
                 songResult = await self.addSong(text_data_json['song'])
                
@@ -97,8 +99,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'songResult': songResult
                     })
                 )
-                            
-               
+                          
+            elif message_type == "delete_message":
+              
+                message_id = text_data_json.get("message_id")
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'delete_message',
+                        'message_id': message_id
+                    }
+                )
                 
             else:
                 message = text_data_json['message']
@@ -107,7 +118,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # await self.save_message(message)
                 
                 #save the message to the database
-                await self.save_message(message)
+                messageObject = await self.save_message(message)
+                
+               
+                
 
                 #send the message to a specific group (chat_message is automatically called)
                 await self.channel_layer.group_send(
@@ -116,23 +130,41 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
                         'message': message,
                         'username': self.scope["user"].username,
-                        'profilePicture': self.scope["user"].profilePicture
+                        'profilePicture': self.scope["user"].profilePicture,
+                        'messageID': messageObject.id,
+                        
+                       
                     }
                 )
         except Exception as err:
             print(err)
 
 
+
+    async def delete_message(self, event):
+        
+        message_id = event['message_id']
+        
+        await self.send(text_data=json.dumps({
+            "type": "delete_message",
+            "message_id": message_id
+
+        }))
+
+
+
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
         profilePicture = event['profilePicture']
+        messageID = event['messageID']
 
         #send the message via websocket to the frontend
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
             'profilePicture': profilePicture,
+            'messageID': messageID
         }))
         
         
@@ -140,12 +172,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_message(self, message):
         room = ChatRoom.objects.get(room_name=self.room_name)
-        ChatRoomMessages.objects.create(
+        MessageObject = ChatRoomMessages.objects.create(
             room=room,
             sender=self.scope["user"],
             message=message,
             # created = datetime.datetime.now() #not needed since models.py already handles it
         )
+        return MessageObject
 
     @database_sync_to_async
     def addSong(self,song):
