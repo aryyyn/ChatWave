@@ -188,10 +188,12 @@ body {
 }
 
 .profile-image {
+
     width: 48px;
     height: 48px;
     border-radius: 12px;
     object-fit: cover;
+    border-radius: 70%;
 }
 
 .profile-info h3 {

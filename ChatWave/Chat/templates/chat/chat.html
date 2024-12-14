@@ -28,7 +28,10 @@
         <div class="chat-rooms">
             <div class="chat-rooms-header">
                 <h2>Chat Rooms</h2>
-                <button class="add-room">+</button>
+                <form method="post">
+                    {% csrf_token %}   
+                <button class="add-room" name="action" value="add-room">+</button>
+                </form>
             </div>
             <div class="room-list">
                 
@@ -48,6 +51,12 @@
                     <h3>Gaming</h3>
                     <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
                     <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                </div>
+
+                <div class="room-category">
+                    <h3>Other</h3>
+                    <a><div class="room-item">Aryn's Chat</div></a>
+                    <a><div class="room-item">Ako's Chat</div></a>
                 </div>
            
             </div>
@@ -613,7 +622,16 @@
             
             window.location.href = window.location.origin + "/account/" + username ;
         });
+
+        const addRoomButton = document.querySelector(".add-room");
+        addRoomButton.addEventListener('click', () => {
+
+
+
+        });
         
+
+       
 
         
         
