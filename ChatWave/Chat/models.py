@@ -9,6 +9,7 @@ class ChatRoom(models.Model):
     room_name = models.CharField(max_length=100, unique=True)
     online_count = models.IntegerField(blank=True)
     online_users = models.JSONField(default=list, blank=True)
+    category = models.CharField(max_length=100, default="General")
 
 
     def __str__(self):

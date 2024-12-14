@@ -55,8 +55,14 @@
 
                 <div class="room-category">
                     <h3>Other</h3>
-                    <a><div class="room-item">Aryn's Chat</div></a>
-                    <a><div class="room-item">Ako's Chat</div></a>
+                    
+                    {%for ChatRooms in ChatRoomOther%}
+                        {%if ChatRooms.category == "Other" %}
+                    <a href="{% url 'chatViewLogic' chatroom=ChatRooms.room_name %}"><div class="room-item">{{ChatRooms.room_name}}</div></a>
+
+                    {%endif%}
+                    {%endfor%}
+                   
                 </div>
            
             </div>
