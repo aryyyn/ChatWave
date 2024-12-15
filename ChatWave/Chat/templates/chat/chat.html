@@ -445,6 +445,17 @@
                 }
 
 
+                else if (data.type == "remove_update_all")
+                {
+
+                    const username = "{{ request.user.username|escapejs }}";
+                    if (username ==  data.updateUsername) {
+                        
+                        window.location.href = window.location.origin + "/home/chat/General_Chat/";
+                    }
+                }
+
+
                 else if (data.type === "delete_message") {
                     
 

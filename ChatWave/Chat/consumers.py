@@ -125,6 +125,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 chat_room = await self.getChatRoomObject(ChatRoomName)
 
                 if chat_room.category == "Other" and message.startswith("/add"):
+                    
                     chatRoomOwnerUsername = ChatRoomName.split("_")[0]
                     toAddUsername = message.split(' ')[1]
                     if self.scope["user"].username == chatRoomOwnerUsername and self.scope["user"].username!= toAddUsername :             
@@ -134,8 +135,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         await self.send(text_data=json.dumps({
                             'type': 'add_update',
                             'addUserResult': addUserResult,
+                            
 
                         }))
+
+                        
+                   
 
                 elif chat_room.category == "Other" and message.startswith("/remove"):
                     chatRoomOwnerUsername = ChatRoomName.split("_")[0]
@@ -147,15 +152,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         await self.send(text_data=json.dumps({
                             'type': 'remove_update',
                             'removeUserResult': removeUserResult,
+                            
 
                         }))
 
-                  
-                
-                # Save message to database
-                # await self.save_message(message)
-                
-                #save the message to the database
+                        await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'remove_update_all',
+                            'toRemoveUsername': toRemoveUsername
+
+
+                        }
+                        )
                 else:
                     
                     messageObject = await self.save_message(message)
@@ -190,13 +199,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         }))
 
+
+
+    
+    async def remove_update_all(self, event):
+        toRemoveUsername = event['toRemoveUsername']
+        await self.send(text_data=json.dumps({
+            "type": "remove_update_all",
+            "updateUsername": toRemoveUsername,
+           
+        }))
+
+
     @database_sync_to_async 
     def getChatRoomObject(self, ChatRoomName):
         return ChatRoom.objects.filter(room_name=ChatRoomName).first()
 
     @database_sync_to_async
     def add_user_chatroom(self, username, chat_room):
-       
+        
         User = CustomUser.objects.filter(username=username).first()
         if (User):
             chat_room.allowed.append(username)
