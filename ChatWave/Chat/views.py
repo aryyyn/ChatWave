@@ -28,13 +28,20 @@ def deleteMessage(request, chatroom, messageid):
 def chatView(request, chatroom):
 
 
+
     chat_room = get_object_or_404(ChatRoom, room_name=chatroom)
+
+    if chat_room.category == "Other": 
+        if request.user.username not in chat_room.allowed:
+            return redirect(chatView, chatroom="General_Chat")
+
+    
     chat_messages = chat_room.chat_messages.all().order_by("created")
     ChatRoomOther = ChatRoom.objects.filter(category="Other")
     action = request.POST.get("action")
     status = "valid"
 
-  
+
 
     if action == "add-room":
         songs = Music.objects.all()
@@ -45,7 +52,8 @@ def chatView(request, chatroom):
         ChatRoomObject = ChatRoom.objects.filter(room_name=ChatRoomName).first()
 
         if not ChatRoomObject:
-            ChatRoomObj = ChatRoom.objects.create(room_name=ChatRoomName, online_count=0, category="Other")
+            ChatRoomObj = ChatRoom.objects.create(room_name=ChatRoomName, online_count=0, category="Other", allowed = [username])
+            return redirect(chatView, chatroom=ChatRoomName)
             
                 
         else:

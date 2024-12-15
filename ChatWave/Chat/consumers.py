@@ -3,6 +3,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import ChatRoom, ChatRoomMessages, Music
+from Auth.models import *
 from Profile.models import Playlists
 import datetime
 from django.db.models import F, Q
@@ -119,29 +120,59 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 
             else:
                 message = text_data_json['message']
+                ChatRoomName = text_data_json['ChatRoom']
+                
+                chat_room = await self.getChatRoomObject(ChatRoomName)
+
+                if chat_room.category == "Other" and message.startswith("/add"):
+                    chatRoomOwnerUsername = ChatRoomName.split("_")[0]
+                    toAddUsername = message.split(' ')[1]
+                    if self.scope["user"].username == chatRoomOwnerUsername and self.scope["user"].username!= toAddUsername :             
+                        
+                        addUserResult = await self.add_user_chatroom(toAddUsername, chat_room)
+
+                        await self.send(text_data=json.dumps({
+                            'type': 'add_update',
+                            'addUserResult': addUserResult,
+
+                        }))
+
+                elif chat_room.category == "Other" and message.startswith("/remove"):
+                    chatRoomOwnerUsername = ChatRoomName.split("_")[0]
+                    toRemoveUsername = message.split(' ')[1]
+                    if self.scope["user"].username == chatRoomOwnerUsername and self.scope["user"].username != toRemoveUsername:
+                        
+                        removeUserResult = await self.remove_user_chatroom(toRemoveUsername, chat_room)
+
+                        await self.send(text_data=json.dumps({
+                            'type': 'remove_update',
+                            'removeUserResult': removeUserResult,
+
+                        }))
+
+                  
                 
                 # Save message to database
                 # await self.save_message(message)
                 
                 #save the message to the database
-                messageObject = await self.save_message(message)
-                
-               
-                
+                else:
+                    
+                    messageObject = await self.save_message(message)
 
-                #send the message to a specific group (chat_message is automatically called)
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
-                        'message': message,
-                        'username': self.scope["user"].username,
-                        'profilePicture': self.scope["user"].profilePicture,
-                        'messageID': messageObject.id,
+                    #send the message to a specific group (chat_message is automatically called)
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message', #can also use type as notification if we want to send notifications to the user
+                            'message': message,
+                            'username': self.scope["user"].username,
+                            'profilePicture': self.scope["user"].profilePicture,
+                            'messageID': messageObject.id,
+                            
                         
-                       
-                    }
-                )
+                        }
+                    )
         except Exception as err:
             print(err)
 
@@ -159,7 +190,40 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         }))
 
+    @database_sync_to_async 
+    def getChatRoomObject(self, ChatRoomName):
+        return ChatRoom.objects.filter(room_name=ChatRoomName).first()
 
+    @database_sync_to_async
+    def add_user_chatroom(self, username, chat_room):
+       
+        User = CustomUser.objects.filter(username=username).first()
+        if (User):
+            chat_room.allowed.append(username)
+            chat_room.save()
+            return "User Added"
+        else:
+            return "No User Found"
+        
+    @database_sync_to_async
+    def remove_user_chatroom(self, username, chat_room):
+       
+        User = CustomUser.objects.filter(username=username).first()
+        if (User):
+            if username in chat_room.allowed:
+                chat_room.allowed.remove(username)
+                chat_room.save()
+                return "User Removed"
+            else:
+                return "User Doesn't Have Access"
+           
+        else:
+            return "No User Found"
+
+
+        #check if the user actually exists
+        #add the user to the chatroom
+        
 
     async def chat_message(self, event):
         message = event['message']
