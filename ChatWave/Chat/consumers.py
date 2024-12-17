@@ -6,6 +6,7 @@ from .models import ChatRoom, ChatRoomMessages, Music
 from Auth.models import *
 from Profile.models import Playlists
 import datetime
+import random
 from django.db.models import F, Q
 
 
@@ -117,8 +118,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
                        
                     }
                 )
+
+            elif message_type == "change_song":
+                print("working")
+                
+                randomsong = await self.getRandomMusic()
+                await self.send(text_data=json.dumps({
+                    'type': "change_song",
+                    'song_title': randomsong.title,
+                    'song_artist': randomsong.artist,
+                    'song_thumbnail': randomsong.thumbnail.url,
+                    'song': randomsong.song.url,
+
+                }))
+                #will modify the logic for this once the model has been integrated
+                
+
                 
             else:
+
                 message = text_data_json['message']
                 ChatRoomName = text_data_json['ChatRoom']
                 
@@ -200,7 +218,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
 
-
+    
     
     async def remove_update_all(self, event):
         toRemoveUsername = event['toRemoveUsername']
@@ -209,6 +227,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "updateUsername": toRemoveUsername,
            
         }))
+
+
+    @database_sync_to_async
+    def getRandomMusic(self):
+        songs = Music.objects.all()
+        randomsong = random.choice(songs)
+        print(randomsong)
+        return randomsong
+
 
 
     @database_sync_to_async 

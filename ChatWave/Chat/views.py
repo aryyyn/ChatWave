@@ -59,7 +59,7 @@ def chatView(request, chatroom):
         else:
             return redirect(chatView, chatroom=ChatRoomName)
 
-    elif action == "next-song":
+    elif action == "add-song":
         songs = Music.objects.all()
         randomsong = random.choice(songs)
 
@@ -69,6 +69,7 @@ def chatView(request, chatroom):
             "songs": randomsong,
             "status": status,
             "ChatRoomOther": ChatRoomOther,
+            "songPlaying": True
         }
         return render(request, "chat/chat.html", context)
 

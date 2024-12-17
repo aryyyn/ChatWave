@@ -147,7 +147,7 @@
             <h3>{{ songs.title }}</h3>
             <p>{{ songs.artist }}</p>
         </div>
-        <audio controls>
+        <audio controls autoplay>
             <source src="{{ songs.song.url }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -170,15 +170,26 @@
 
     {% endif %}
 
-
+    {% if not songPlaying%}
     <div class="player-controls">
         <form method="post">
             {% csrf_token %}   
-        <button type="submit" id="next-song" name="action" value="next-song" >➕</button>
+        <button type="submit" id="next-song" name="action" value="add-song" >➕</button>
     </form>
-        <button type="submit" id="like-song" name="action" value="like-song">❤️</button>
+        <button type="submit" id="like-song" name="action" value="like-song" disabled>❤️</button>
     
     </div>
+
+    {%else%}
+    <div class="player-controls">
+    
+        
+    <button type="submit" id="next-song" class="next-song" name="action" value="next-song" >➤</button>
+
+    <button type="submit" id="like-song" name="action" value="like-song">❤️</button>
+
+</div>
+{%endif%}
 
 </div>
             <div class="users-section">
@@ -296,34 +307,116 @@
 
             const themeSelect = document.getElementById('themeSelect');
             themeSelect.addEventListener('change', (e) => {
-                if (e.target.value === 'blue_pink') {
-
-                    {% comment %} will finish this later using functions {% endcomment %}
-                    document.body.style.backgroundColor = "#87CEEB";  
-                    document.body.style.color = "#FF69B4"; 
+                if (e.target.value === 'blue_pink') {  
+                    document.body.style.backgroundColor = "#E0F4FF";  
+                    document.body.style.color = "#FF69B4";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#F8FBFF";
+                    document.querySelector('.chat-section').style.backgroundColor = "#F0F8FF";
+                    document.querySelector('.profile button').style.backgroundColor = "#FFE4F3";
+                    document.querySelector('.side-nav').style.backgroundColor = "#CAEDFF";
+                    document.querySelector('.container').style.backgroundColor = "#E0F4FF";
+                    document.querySelector('.room-item').style.backgroundColor = "#F8FBFF";
+                    document.querySelector('.room-item').style.border = "1px solid #FF9ECD";
+                    document.querySelector('.chat-rooms:h2').style.color = "#FF9ECD";
+                    document.querySelector('.add-room').style.color = "#FF9ECD";
+                    document.querySelector('.message').style.backgroundColor = "#F8FBFF";
+                    document.querySelector('.message .user').style.backgroundColor = "#FFE4F3";
+                    document.querySelector('.message.sent').style.backgroundColor = "#FFE4F3";
+                    document.querySelector('.input-area').style.backgroundColor = "#F0F8FF";
+                }
                 
-                    document.querySelector('.chat-rooms').style.backgroundColor = "#ADD8E6"; 
-                    document.querySelector('.chat-section').style.backgroundColor = "#ADD8E6";  
-                    document.querySelector('.profile button').style.backgroundColor = "#FFB6C1";  
-                    document.querySelector('.side-nav').style.backgroundColor = "#4682B4";  
-                    document.querySelector('.container').style.backgroundColor = "#B0C4DE";  
-                    document.querySelector('.room-item').style.backgroundColor = "#FFC0CB";  
-                    document.querySelector('.room-item').style.border = "1px solid #FF1493"; 
-                    document.querySelector('.chat-rooms:h2').style.color = "#FF69B4"; 
-                    document.querySelector('.add-room').style.color = "#DB7093";  
-                    document.querySelector('.chat-section').style.backgroundColor = "#87CEFA";  
-                    document.querySelector('.message').style.backgroundColor = "#E6E6FA";  
-                    document.querySelector('.message .user').style.backgroundColor = "#FFB6C1";  
-                    document.querySelector('.message .sent').style.backgroundColor = "#FF69B4";  
-                    document.querySelector('.input-area').style.backgroundColor = "#B0E0E6";  
+                else if (e.target.value === 'darkcharcoal_yellow') {  
+                    document.body.style.backgroundColor = "#1A1B1E";  
+                    document.body.style.color = "#FFD93D";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#212428";
+                    document.querySelector('.chat-section').style.backgroundColor = "#2A2B2F";
+                    document.querySelector('.profile button').style.backgroundColor = "#FFE169";
+                    document.querySelector('.side-nav').style.backgroundColor = "#2A2B2F";
+                    document.querySelector('.container').style.backgroundColor = "#1A1B1E";
+                    document.querySelector('.room-item').style.backgroundColor = "#2A2B2F";
+                    document.querySelector('.room-item').style.border = "1px solid #FFD93D";
+                    document.querySelector('.chat-rooms:h2').style.color = "#FFE169";
+                    document.querySelector('.add-room').style.color = "#FFD93D";
+                    document.querySelector('.message').style.backgroundColor = "#2A2B2F";
+                    document.querySelector('.message .user').style.backgroundColor = "#32333A";
+                    document.querySelector('.message.sent').style.backgroundColor = "#FFE169";
+                    document.querySelector('.input-area').style.backgroundColor = "#212428";
+                }
+                
+                else if (e.target.value === 'lightred_yellow') {  
+                    document.body.style.backgroundColor = "#FFF3E2"; 
+                    document.body.style.color = "#FF9F9F";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#FFE5CA";
+                    document.querySelector('.chat-section').style.backgroundColor = "#FFF3E2";
+                    document.querySelector('.profile button').style.backgroundColor = "#FA9884";
+                    document.querySelector('.side-nav').style.backgroundColor = "#FFE5CA";
+                    document.querySelector('.container').style.backgroundColor = "#FFF3E2";
+                    document.querySelector('.room-item').style.backgroundColor = "#FFE5CA";
+                    document.querySelector('.room-item').style.border = "1px solid #FF9F9F";
+                    document.querySelector('.chat-rooms:h2').style.color = "#FF9F9F";
+                    document.querySelector('.add-room').style.color = "#FA9884";
+                    document.querySelector('.message').style.backgroundColor = "#FFE5CA";
+                    document.querySelector('.message .user').style.backgroundColor = "#FA9884";
+                    document.querySelector('.message.sent').style.backgroundColor = "#FF9F9F";
+                    document.querySelector('.input-area').style.backgroundColor = "#FFE5CA";
+                }
+                
+                else if (e.target.value === 'darkblue_lightgreen') {  
+                    document.body.style.backgroundColor = "#1B2430"; 
+                    document.body.style.color = "#9FE6A0";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#233142";
+                    document.querySelector('.chat-section').style.backgroundColor = "#1B2430";
+                    document.querySelector('.profile button').style.backgroundColor = "#4E9F3D";
+                    document.querySelector('.side-nav').style.backgroundColor = "#233142";
+                    document.querySelector('.container').style.backgroundColor = "#1B2430";
+                    document.querySelector('.room-item').style.backgroundColor = "#233142";
+                    document.querySelector('.room-item').style.border = "1px solid #9FE6A0";
+                    document.querySelector('.chat-rooms:h2').style.color = "#9FE6A0";
+                    document.querySelector('.add-room').style.color = "#4E9F3D";
+                    document.querySelector('.message').style.backgroundColor = "#233142";
+                    document.querySelector('.message .user').style.backgroundColor = "#2C3E50";
+                    document.querySelector('.message.sent').style.backgroundColor = "#4E9F3D";
+                    document.querySelector('.input-area').style.backgroundColor = "#233142";
+                }
+                
+                else if (e.target.value === 'forestgreen_mossgreen') {  
+                    document.body.style.backgroundColor = "#354F52"; 
+                    document.body.style.color = "#CAD2C5";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#52796F";
+                    document.querySelector('.chat-section').style.backgroundColor = "#354F52";
+                    document.querySelector('.profile button').style.backgroundColor = "#84A98C";
+                    document.querySelector('.side-nav').style.backgroundColor = "#52796F";
+                    document.querySelector('.container').style.backgroundColor = "#354F52";
+                    document.querySelector('.room-item').style.backgroundColor = "#52796F";
+                    document.querySelector('.room-item').style.border = "1px solid #CAD2C5";
+                    document.querySelector('.chat-rooms:h2').style.color = "#CAD2C5";
+                    document.querySelector('.add-room').style.color = "#84A98C";
+                    document.querySelector('.message').style.backgroundColor = "#52796F";
+                    document.querySelector('.message .user').style.backgroundColor = "#84A98C";
+                    document.querySelector('.message.sent').style.backgroundColor = "#CAD2C5";
+                    document.querySelector('.input-area').style.backgroundColor = "#52796F";
+                }
+                
+                else if (e.target.value === 'pastelolivegreen_salmonpink') {  
+                    document.body.style.backgroundColor = "#E9EDC9";  
+                    document.body.style.color = "#FF9494";
+                    document.querySelector('.chat-rooms').style.backgroundColor = "#FEFAE0";
+                    document.querySelector('.chat-section').style.backgroundColor = "#E9EDC9";
+                    document.querySelector('.profile button').style.backgroundColor = "#FFB4B4";
+                    document.querySelector('.side-nav').style.backgroundColor = "#CCD5AE";
+                    document.querySelector('.container').style.backgroundColor = "#E9EDC9";
+                    document.querySelector('.room-item').style.backgroundColor = "#FEFAE0";
+                    document.querySelector('.room-item').style.border = "1px solid #FF9494";
+                    document.querySelector('.chat-rooms:h2').style.color = "#FF9494";
+                    document.querySelector('.add-room').style.color = "#FFB4B4";
+                    document.querySelector('.message').style.backgroundColor = "#FEFAE0";
+                    document.querySelector('.message .user').style.backgroundColor = "#FFB4B4";
+                    document.querySelector('.message.sent').style.backgroundColor = "#FF9494";
+                    document.querySelector('.input-area').style.backgroundColor = "#FEFAE0";
                 }
                 
                     
-                else {
-                    document.body.style.background = '#0a0a0a';
-                    document.body.style.color = '#fff';
-                    
-                }
+               
             });
 
 
@@ -365,14 +458,15 @@
             const sendButton = document.querySelector('.input-area .input-actions button:last-child');
             const messageInput = document.querySelector('.input-area input');
 
-            {% comment %} document.addEventListener('keypress', (e) => {
+            /*
                 if (e.key == "/") {
                     const searchInput = document.querySelector('.input-area input');
                     e.preventDefault();
                     searchInput.focus();
                 }
             });
-             {% endcomment %}
+             */
+
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
@@ -399,7 +493,16 @@
                 messageInput.value = '';
             }
 
+            const nextSong = document.querySelector(".next-song");
+            if (nextSong) {
+            nextSong.addEventListener('click', ()=>{
+              
+                chatSocket.send(JSON.stringify({
+                    'type': "change_song",
 
+                }))
+            });
+        }
 
 
             function sendMessage() {
@@ -410,7 +513,7 @@
                     
 
                     chatSocket.send(JSON.stringify({
-                        
+                        'type': "send_message",
                         'message': message,
                         'ChatRoom': chat_room
                     }));
@@ -433,6 +536,45 @@
                     
                     }
                 }
+
+                else if (data.type === 'change_song')
+                {
+
+                    const musicPlayer = document.querySelector(".music-player");
+
+                    const albumArt = musicPlayer.querySelector(".album-art");
+                    if (albumArt) {
+                        albumArt.src = data.song_thumbnail;
+                    }
+
+                    const trackInfo = musicPlayer.querySelector(".track-info");
+                    if (trackInfo) {
+                        const titleElement = trackInfo.querySelector("h3");
+                        if (titleElement) {
+                            titleElement.textContent = data.song_title;
+                        }
+                        const artistElement = trackInfo.querySelector("p");
+                        if (artistElement) {
+                            artistElement.textContent = data.song_artist;
+                        }
+                        
+                    
+                        const audioElement = musicPlayer.querySelector("audio source");
+                        if (audioElement) {
+                            audioElement.src = data.song;
+                            // Reload the audio to reflect the new source
+                            const audioParent = audioElement.closest("audio");
+                            if (audioParent) {
+                                audioParent.load();
+                                audioParent.play();
+                            }
+                        }
+
+
+                }
+                        }
+            
+        
 
                 else if (data.type == "add_update"){
                     addUserResult = data.addUserResult
@@ -513,6 +655,7 @@
                 }
 
                 else {
+                    console.log("working")
                     const { message, username, profilePicture, messageID} = data;
                     const currentUser = "{{ request.user.username }}";
                     
@@ -671,6 +814,7 @@
         });
         
 
+       
        
 
         
