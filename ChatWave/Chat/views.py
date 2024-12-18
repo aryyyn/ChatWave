@@ -28,7 +28,7 @@ def deleteMessage(request, chatroom, messageid):
 def chatView(request, chatroom):
 
 
-
+    TENOR_API_KEY = settings.TENOR_API_KEY
     chat_room = get_object_or_404(ChatRoom, room_name=chatroom)
 
     if chat_room.category == "Other": 
@@ -39,7 +39,7 @@ def chatView(request, chatroom):
     chat_messages = chat_room.chat_messages.all().order_by("created")
     ChatRoomOther = ChatRoom.objects.filter(category="Other")
     action = request.POST.get("action")
-    status = "valid"
+    
 
 
 
@@ -63,14 +63,32 @@ def chatView(request, chatroom):
         songs = Music.objects.all()
         randomsong = random.choice(songs)
 
-        context = {
-            "chat_room": chat_room,
-            "chat_messages": chat_messages,
-            "songs": randomsong,
-            "status": status,
-            "ChatRoomOther": ChatRoomOther,
-            "songPlaying": True
-        }
+        #some logic to check whether the user has enough messages or not
+        isEligible = True
+
+
+        
+        if (isEligible):
+            context = {
+                "chat_room": chat_room,
+                "chat_messages": chat_messages,
+                "songs": randomsong,
+                "ChatRoomOther": ChatRoomOther,
+                "songPlaying": True,
+                "isEligible": isEligible,
+                "TENOR_API_KEY": TENOR_API_KEY
+            }
+        else:
+            context = {
+                "chat_room": chat_room,
+                "chat_messages": chat_messages,
+                "ChatRoomOther": ChatRoomOther,
+                "songPlaying": False,
+                "songs": randomsong,
+                "isEligible": isEligible,
+                "TENOR_API_KEY": TENOR_API_KEY,
+
+            }
         return render(request, "chat/chat.html", context)
 
     
@@ -83,6 +101,7 @@ def chatView(request, chatroom):
         "chat_room": chat_room,
         "chat_messages": chat_messages,
         "ChatRoomOther": ChatRoomOther,
+        "TENOR_API_KEY": TENOR_API_KEY,
     }
     return render(request, "chat/chat.html", context)
 

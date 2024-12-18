@@ -614,7 +614,7 @@ audio {
 }
 
 
-.modal, .music-search-modal {
+.modal, .gif-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -629,7 +629,7 @@ audio {
 
 
 
-.modal.active, .music-search-modal.active {
+.modal.active, .gif-modal.active {
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -651,7 +651,7 @@ audio {
     margin-bottom: 15px;
 }
 
-.modal-close {
+.modal-close,.gif-modal-close {
     background: none;
     border: none;
     color: #ff3366;
@@ -663,24 +663,51 @@ audio {
     display: none;
 }
 
-.search-modal {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #161616;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #ff336633;
-    display: none;
-    z-index: 1000;
-    width: 90%;
-    max-width: 600px;
+
+
+.gif-results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+    gap: 10px;
+    margin-top: 20px;
+    overflow-y: auto; 
 }
 
-.search-modal.active {
-    display: block;
+.result-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    background: #222;
+    border-radius: 8px;
 }
+
+.result-item img {
+    width: 100%; 
+    border-radius: 8px;
+}
+.gif-modal input {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    border: 1px solid white;
+}
+
+
+.gif-modal button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    color: #ff3366;
+    transition: transform 0.3s ease;
+}
+
+
 
 
 .button-input {
@@ -694,15 +721,7 @@ audio {
 
 
 
-.search-input, .song-search-input {
-    width: 100%;
-    padding: 10px;
-    background: #1f1f1f;
-    border: 1px solid #ff336633;
-    border-radius: 6px;
-    color: #fff;
-    margin-bottom: 10px;
-}
+
 
 @media screen and (max-width: 1024px) {
     .container {

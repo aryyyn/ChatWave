@@ -58,10 +58,12 @@ def profileHome(request, username):
     
     userinfo = request.user
     checkusername = CustomUser.objects.filter(username=username).exists()
+    
 
     if checkusername:
         messagecount = ChatRoomMessages.objects.filter(sender__username=username).count()
         playlists = Playlists.objects.filter(user__username= username)
+        
         count = 0
         indie_song_count = 0
         pop_song_count = 0
@@ -94,6 +96,7 @@ def profileHome(request, username):
                 "userinfo": CustomUser.objects.get(username=username),
                 "playlists": playlists,
                 "messagecount": messagecount,
+                'datejoined': userinfo.date_joined,
                 "songcount": count,
                 "indiecount": indie_song_count,
                 "popcount": pop_song_count,

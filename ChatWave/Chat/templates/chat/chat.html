@@ -130,7 +130,7 @@
                 <input type="text" placeholder="Start typing...">
                 <div class="input-actions">
                     <button>😊</button>
-                    <button>🎵</button>
+                    <button>🎥</button>
                     <button>📸</button>
                   
                 </div>
@@ -141,9 +141,13 @@
 <div class="music-player">
 
     {% if songs%}
-        {% if status == "valid" %}
+       
+    {% if isEligible %}
         <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art">
+
+      
         <div class="track-info">
+            
             <h3>{{ songs.title }}</h3>
             <p>{{ songs.artist }}</p>
         </div>
@@ -151,13 +155,18 @@
             <source src="{{ songs.song.url }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+
         {%else%}
-        {% comment %} <img src="{{ songs.thumbnail.url }}" alt="Album Art" class="album-art"> {% endcomment %}
+        <img src="https://i.pinimg.com/736x/ec/e9/01/ece901e3b7a2de83e379215e778d8fb8.jpg" alt="Album Art" class="album-art">
         <div class="track-info">
             <h3>Not enough messages! Would you like to play a random song instead?</h3>
             <button>Yes </button>
             <button>No </button>
         </div>
+
+       
+
+        
         {%endif%}
 
 
@@ -171,6 +180,7 @@
     {% endif %}
 
     {% if not songPlaying%}
+    
     <div class="player-controls">
         <form method="post">
             {% csrf_token %}   
@@ -179,14 +189,21 @@
         <button type="submit" id="like-song" name="action" value="like-song" disabled>❤️</button>
     
     </div>
+    
+   
+
+
 
     {%else%}
+   
     <div class="player-controls">
     
         
     <button type="submit" id="next-song" class="next-song" name="action" value="next-song" >➤</button>
 
     <button type="submit" id="like-song" name="action" value="like-song">❤️</button>
+
+    
 
 </div>
 {%endif%}
@@ -201,10 +218,7 @@
                 <ul class="users-list">
                     {%for user in chat_room.online_users%}
                     {% if user %}
-                    <li>
-                        <a href= {%url 'profile' user%}><span> {{user}} </span>
-                        <span class="status"></span>
-                    </li>
+                    <li></li>
                     {%endif%}
                     {%endfor%}
                 </ul>
@@ -235,35 +249,106 @@
         </div>
     </div>
 
-    <div class="search-modal" id="searchModal">
-        <input type="text" class="search-input" placeholder="Search messages...">
-        <div id="searchResults"></div>
-    </div>
-
-    <div class="music-search-modal" id="musicModal">
+    <div class="gif-modal" id="gifModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Spotify Music Search</h3>
-                <button class="modal-close">&times;</button>
+                <h3>GIFs </h3>
+                <button class="gif-modal-close">&times;</button>
             </div>
-            <div>
-                
-                <input type="text" class="song-search-input" placeholder="Search for a song">
-                <input type="button" class = "button-song-input" value="SUBMIT">
-                </select>
-                
-               
-              
-            </div>
+        <div>
+            <input type="text" id="gifInput" placeholder="Search Tenor..">
+            <button id="gifSearchButton">🔍</button>
         </div>
+        <div id="gifresults" class="gif-results-container">
+          
+        </div>
+
     </div>
+</div>
+
+
+
+   
+   
 
     <input type="file" class="file-upload" id="fileUpload" accept="image/*">
+
+    </html>
+</head>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
 
+            const gifSearchButton = document.getElementById("gifSearchButton");
+            const gifInput = document.getElementById("gifInput")
+            
+            gifSearchButton.addEventListener('click', () => {
+                const TENOR_API_KEY = "{{TENOR_API_KEY}}";
+                const clientKey = "my_test_app";
+                const lmt = 8;
+                const searchTerm = gifInput.value;
+              
+                
+                const searchUrl = `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(searchTerm)}&key=${TENOR_API_KEY}&client_key=${clientKey}&limit=${lmt}`;
+                
+                fetch(searchUrl)
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                  })
+                  .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const urls = data.results.map(result => result.media_formats.gif.url);
+        
+                      \
+                        const resultsContainer = document.getElementById("gifresults");
+                        resultsContainer.innerHTML = ''; 
+                        
+                        urls.forEach(url => {
+                            const resultItem = document.createElement('div');
+                            resultItem.classList.add('result-item');
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = 'GIF result';
+        
+                            resultItem.appendChild(img);
+                            resultsContainer.appendChild(resultItem);
+                        });
+                    }
+                  })
+                  .catch(error => console.error("Error fetching data:", error));
+            });
+    
+        
+
+
+            //for theme selection
+            const settingsBtn = document.querySelector('.side-nav button:nth-child(2)');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeSettingsBtn = settingsModal.querySelector('.modal-close');
+    
+            settingsBtn.addEventListener('click', () => {
+                settingsModal.classList.toggle('active');
+            });
+    
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsModal.classList.remove('active');
+            }); 
+  
+            const gifButton = document.querySelector(".input-actions button:nth-child(2)");
+            const gifModal = document.getElementById('gifModal');
+            const closeGifButton = document.querySelector(".gif-modal-close")
+            gifButton.addEventListener('click', (e) => {
+                gifModal.classList.toggle('active');
+
+            });
+
+            closeGifButton.addEventListener('click', () => {
+                gifModal.classList.remove('active');
+            }); 
 
 
 
@@ -272,35 +357,23 @@
                 alert("working")
             });
 
-            const musicButton = document.querySelector(".input-actions button:nth-child(2)")
-            const musicModal = document.getElementById('musicModal');
-            const closeMusicBtn = musicModal.querySelector('.modal-close');
-            const songButtonInputBtn = musicModal.querySelector(".button-song-input");
-
-
-            musicButton.addEventListener('click',() => {
-                    musicModal.classList.toggle('active');
-                });
-
-            songButtonInputBtn.addEventListener('click', () => {
-                const songInput = document.querySelector(".song-search-input");
-                const music = songInput.value.trim();
+            const profileBtn = document.querySelector('.profile-button');
+            profileBtn.addEventListener('click', () => {
                 
+                const username = "{{ request.user.username }}"
                 
-
+                window.location.href = window.location.origin + "/account/" + username ;
             });
+    
 
 
-            closeMusicBtn.addEventListener('click', () => {
-                    musicModal.classList.remove('active');
-                });
+           
 
-            
-                const logoutButton = document.querySelector(".chat-header-actions button:nth-child(2)");
+            const logoutButton = document.querySelector(".chat-header-actions button:nth-child(2)");
 
-                logoutButton.addEventListener('click', () => {
+            logoutButton.addEventListener('click', () => {
                    
-                    window.location.href = window.location.host + "/auth" + "/logout/";
+            window.location.href = window.location.host + "/auth" + "/logout/";
                 });
                 
   
@@ -455,7 +528,7 @@
 
 
           
-            const sendButton = document.querySelector('.input-area .input-actions button:last-child');
+            
             const messageInput = document.querySelector('.input-area input');
 
             /*
@@ -467,7 +540,7 @@
             });
              */
 
-            sendButton.addEventListener('click', sendMessage);
+            
             messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     sendMessage();
@@ -767,10 +840,8 @@
             catch (error) {
                 console.error(error)
             }
-            }
-                
-
-            
+        }
+                         
             document.addEventListener('click', async (e) => {
                 const deleteMessageButton = e.target.closest(".delete-message");
                 if (deleteMessageButton) {
@@ -785,42 +856,6 @@
                 }
             });
             
-        
-        const settingsBtn = document.querySelector('.side-nav button:nth-child(2)');
-        const settingsModal = document.getElementById('settingsModal');
-        const closeSettingsBtn = settingsModal.querySelector('.modal-close');
-
-        settingsBtn.addEventListener('click', () => {
-            settingsModal.classList.toggle('active');
-        });
-
-        closeSettingsBtn.addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        }); 
-
-        const profileBtn = document.querySelector('.profile-button');
-        profileBtn.addEventListener('click', () => {
-            
-            const username = "{{ request.user.username }}"
-            
-            window.location.href = window.location.origin + "/account/" + username ;
-        });
-
-        const addRoomButton = document.querySelector(".add-room");
-        addRoomButton.addEventListener('click', () => {
-
-
-
-        });
-        
-
-       
-       
-
-        
-        
-
-
         const attachmentBtn = document.querySelector('.input-actions button:nth-child(3)');
         const fileUpload = document.getElementById('fileUpload');
 
@@ -836,28 +871,28 @@
                 reader.onload = (e) => {
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.maxWidth = '200px';
+                    img.style.width = '400px';
                     img.style.borderRadius = '8px';
-                    
+                    img.style.height = '300px';
+                    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const message = document.createElement('div');
                     message.className = 'message sent';
                     message.innerHTML = `
-                        <div class="user">You</div>
-                        <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    <img src={{ request.user.profilePicture }} alt="userimage">
+                        <div class="user">You
+                        <button class="delete-message"><i class="fas fa-trash"></i></button>
+                        <div class="timestamp">${time}</div>
+                        
+                        </div>
                     `;
-                    message.insertBefore(img, message.querySelector('.timestamp'));
+                    const timestampElement = message.querySelector('.timestamp');
+                    timestampElement.insertAdjacentElement('afterend', img);
                     
                     document.querySelector('.chat-messages').appendChild(message);
-                    const chatMessages = document.querySelector('.chat-messages');
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    scrollToBottom();
                 };
-                reader.readAsDataURL(file);
-                
+                reader.readAsDataURL(file);   
             }
-
-            
-
-            
         });
 
 

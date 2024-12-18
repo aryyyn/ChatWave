@@ -133,6 +133,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+
+TENOR_API_KEY = "AIzaSyBDPYrWK2q1pvw-l4kQEo1kVYaTq3AmbC0"
 USE_TZ = True
 
 
