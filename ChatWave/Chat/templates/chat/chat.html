@@ -94,7 +94,11 @@
                     <img src={{message.sender.profilePicture}} alt="userimage">
                     <div class="user" id = "{{message.id}}"> <a id="messageUsername" href="{%url 'profile' message.sender.username %}">{{ message.sender.username }} </a>
                         <div class="timestamp">{{ message.created|date:"h:i A" }}
+                            {% if message.message|slice:":23" == "https://media.tenor.com" %}
+                            <img src="{{message.message}}" class="gif-image">
+                            {%else%}
                             <h3 class="text-message"> {{ message.message }} </h3>
+                            {%endif%}
                         </div>
                         
                     </div>
@@ -111,7 +115,11 @@
                     <div class="user" id = "{{message.id}}">You
                         <button class="delete-message"><i class="fas fa-trash"></i></button>
                         <div class="timestamp">{{ message.created|date:"h:i A" }}
+                            {% if message.message|slice:":23" == "https://media.tenor.com" %}
+                            <img src="{{message.message}}" class="gif-image">
+                            {%else%}
                             <h3> {{ message.message }} </h3>
+                            {%endif%}
                         </div>
                       
 
@@ -303,16 +311,21 @@
                     if (data.results && data.results.length > 0) {
                         const urls = data.results.map(result => result.media_formats.gif.url);
         
-                      \
+                      
                         const resultsContainer = document.getElementById("gifresults");
                         resultsContainer.innerHTML = ''; 
                         
-                        urls.forEach(url => {
+                        urls.forEach((url,index) => {
                             const resultItem = document.createElement('div');
                             resultItem.classList.add('result-item');
                             const img = document.createElement('img');
+                            img.id = `gif-${index}`;
                             img.src = url;
                             img.alt = 'GIF result';
+
+                            img.addEventListener('click', () => {
+                                sendMessage(img.src)
+                            });
         
                             resultItem.appendChild(img);
                             resultsContainer.appendChild(resultItem);
@@ -578,8 +591,12 @@
         }
 
 
-            function sendMessage() {
-                const message = messageInput.value.trim();
+            function sendMessage(msg) {
+                var message = messageInput.value.trim();
+                if (msg) {
+                    message = msg;
+                }
+               
                 const chat_room = "{{chat_room}}"
                 if (message) {
 
@@ -737,6 +754,8 @@
                         const chatMessages = document.querySelector('.chat-messages');
                         const newMessage = document.createElement('div');
                         newMessage.className = 'message';
+
+                      
                 
                         const time = new Date().toLocaleTimeString([], { 
                             hour: '2-digit', 
@@ -761,7 +780,23 @@
                         const timestampDiv = document.createElement('div');
                         timestampDiv.className = 'timestamp';
                         timestampDiv.textContent = time;
+
+                        if (message.startsWith("https://media.tenor.com")) {
                 
+                            const messageImg = document.createElement('img');
+                            messageImg.src = message;
+                            messageImg.className = "gif-image";
+                    
+                           
+                            userDiv.appendChild(usernameLink);
+                            userDiv.appendChild(timestampDiv);
+                            userDiv.appendChild(messageImg);
+                            
+                            newMessage.appendChild(imgElement);
+                            newMessage.appendChild(userDiv);
+                      
+                    }
+                    else {
                         const messageHeading = document.createElement('h3');
                         messageHeading.textContent = escapeHTML(message);
                 
@@ -772,9 +807,12 @@
                         
                         newMessage.appendChild(imgElement);
                         newMessage.appendChild(userDiv);
-                        
-                        chatMessages.appendChild(newMessage);
-                        scrollToBottom();
+
+
+
+                    }
+                    chatMessages.appendChild(newMessage);
+                    scrollToBottom();
                     }
 
                     else {
@@ -782,11 +820,27 @@
                         const messageInput = document.querySelector('.input-area input');
                         if (message) 
                         {
+                         
+                          
                             const chatMessages = document.querySelector('.chat-messages');
                             const newMessage = document.createElement('div');
                             newMessage.className = 'message sent';
 
+                            if (message.startsWith("https://media.tenor.com"))
+                            {
+                                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                newMessage.innerHTML = `
+                                <img src={{ request.user.profilePicture }} alt="userimage">
+                                    <div class="user" id = "${messageID}">You
+                                    <button class="delete-message"><i class="fas fa-trash"></i></button>
+                                    <div class="timestamp">${time}</div>
+                                   <img src="${message}" class="gif-image">
 
+                                    </div>
+                                `;
+                            }
+
+                            else {
                             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                             const sanitizedMessage = escapeHTML(message);
                             newMessage.innerHTML = `
@@ -797,6 +851,7 @@
                                <h3> ${sanitizedMessage} </h3>
                                 </div>
                             `;
+                            }
 
                             chatMessages.appendChild(newMessage);
                             scrollToBottom();

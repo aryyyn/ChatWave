@@ -719,6 +719,13 @@ audio {
   
 }
 
+.gif-image {
+    width: 200px !important;    
+    height: 200px !important;  
+    border-radius: 10px !important; 
+    margin-top: 10px !important;
+}
+
 
 
 
