@@ -149,13 +149,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 
                 doc = self.nlp(message)
                 filtered_message = ' '.join([word.text for word in doc if not word.is_stop])
-                print(filtered_message)
+                
+
                 split_message = filtered_message.split(' ')
+                bad_words_message = {}
 
                 for word in split_message:
                     vectorized_input = self.vectorizer.transform([word])
                     prediction = self.model.predict(vectorized_input)
-                    
+                    bad_words_message.update({word: prediction}) #get the filtered words and create a dict
+                
+                print(bad_words_message)
+                words = message.split(' ')
+                filtered_message = []
+                for w in words:
+                    if w in bad_words_message and bad_words_message[w] == "bad":
+                        lettercount = len(w)
+                        filtered_message.append("*" * lettercount)
+                    else:
+                        filtered_message.append(w)
+
+                message = ' '.join(filtered_message)
+
+                 
+                
+
                 
                 
                 
