@@ -8,12 +8,19 @@ from Profile.models import Playlists
 import datetime
 import random
 from django.db.models import F, Q
+import joblib
+import os
+import spacy
+
 
 
 from django.shortcuts import get_object_or_404
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        self.model = joblib.load('../Model/WordFilterFiles/text_classifier_model.pkl')
+        self.vectorizer = joblib.load('../Model/WordFilterFiles/vectorizer.pkl')
+        self.nlp = spacy.load('en_core_web_sm')
 
         self.room_name = self.scope['url_route']['kwargs']['room_name']  #get the room name from the url
 
@@ -139,6 +146,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 message = text_data_json['message']
                 ChatRoomName = text_data_json['ChatRoom']
+                
+                doc = self.nlp(message)
+                filtered_message = ' '.join([word.text for word in doc if not word.is_stop])
+                print(filtered_message)
+                split_message = filtered_message.split(' ')
+
+                for word in split_message:
+                    vectorized_input = self.vectorizer.transform([word])
+                    prediction = self.model.predict(vectorized_input)
+                    
+                
+                
                 
                 chat_room = await self.getChatRoomObject(ChatRoomName)
 
