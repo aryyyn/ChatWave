@@ -97,6 +97,9 @@
                             {% if message.message|slice:":23" == "https://media.tenor.com" %}
                             <img src="{{message.message}}" class="gif-image">
                         </div>
+                            {% elif message.message|slice:":26" == "https://res.cloudinary.com" %}
+                            <img src="{{message.message}}" class="sent-image">
+                        </div>
                             {%else%}
                             <h3 class="text-message"> {{ message.message }} </h3>
                         </div>
@@ -114,6 +117,9 @@
                         <div class="timestamp">{{ message.created|date:"h:i A" }} </div>
                             {% if message.message|slice:":23" == "https://media.tenor.com" %}
                             <img src="{{message.message}}" class="gif-image">
+                        </div>
+                            {% elif message.message|slice:":26" == "https://res.cloudinary.com" %}
+                            <img src="{{message.message}}" class="sent-image">
                         </div>
                             {%else%}
                             <h3> {{ message.message }} </h3>
@@ -133,7 +139,7 @@
             <div class="input-area">
                 <input type="text" placeholder="Start typing...">
                 <div class="input-actions">
-                    <button>😊</button>
+                    <button>✈️</button>
                     <button>🎥</button>
                     <button>📸</button>
                   
@@ -777,7 +783,7 @@
                         timestampDiv.className = 'timestamp';
                         timestampDiv.textContent = time;
 
-                        if (message.startsWith("https://media.tenor.com")) {
+                        if (message.startsWith("https://media.tenor.com") || (message.startsWith("https://res.cloudinary.com"))) {
                 
                             const messageImg = document.createElement('img');
                             messageImg.src = message;
@@ -822,7 +828,7 @@
                             const newMessage = document.createElement('div');
                             newMessage.className = 'message sent';
 
-                            if (message.startsWith("https://media.tenor.com"))
+                            if (message.startsWith("https://media.tenor.com") || (message.startsWith("https://res.cloudinary.com"))) 
                             {
                                 const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                                 newMessage.innerHTML = `
@@ -835,6 +841,7 @@
                                     </div>
                                 `;
                             }
+                            
 
                             else {
                             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -914,35 +921,40 @@
             fileUpload.click();
         });
 
-        fileUpload.addEventListener('change', (e) => {
+        async function uploadFile(image) {
+            const formData = new FormData();
+
+            const CLOUD_NAME = "dv2qm6ktz"; 
+            const UPLOAD_PRESET = "chatwave"; 
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            formData.append('file', image);
+            formData.append('upload_preset', UPLOAD_PRESET)
+
+            try {
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData,
+                    
+                });
+                const result = await response.json(); 
+                return result
+        
+                
+            }
+            catch (error) {
+                console.error('Error uploading file:', error);
+                return "error"; 
+            }
+        }
+
+        fileUpload.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file) {
-                
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.width = '400px';
-                    img.style.borderRadius = '8px';
-                    img.style.height = '300px';
-                    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    const message = document.createElement('div');
-                    message.className = 'message sent';
-                    message.innerHTML = `
-                    <img src={{ request.user.profilePicture }} alt="userimage">
-                        <div class="user">You
-                        <button class="delete-message"><i class="fas fa-trash"></i></button>
-                        <div class="timestamp">${time}</div>
-                        
-                        </div>
-                    `;
-                    const timestampElement = message.querySelector('.timestamp');
-                    timestampElement.insertAdjacentElement('afterend', img);
-                    
-                    document.querySelector('.chat-messages').appendChild(message);
-                    scrollToBottom();
-                };
-                reader.readAsDataURL(file);   
+
+                const Imageurl = await uploadFile(file)
+                console.log(Imageurl['secure_url']);
+                sendMessage(Imageurl['secure_url']);
             }
         });
 
