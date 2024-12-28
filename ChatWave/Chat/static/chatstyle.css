@@ -639,19 +639,28 @@ audio {
     background: #161616;
     padding: 20px;
     border-radius: 12px;
-    border: 1px solid #ff336633;
-    max-width: 500px;
-    width: 90%;
+    border: 1px solid rgba(255, 51, 102, 0.2);
+    width: 350px;  
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease-out;
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 51, 102, 0.1);
 }
 
-.modal-close,.gif-modal-close {
+.modal-header h5 {
+    color: #fff;
+    font-size: 1.25rem;
+    margin: 0;
+    font-weight: 600;
+}
+.modal-close,.gif-modal-close{
     background: none;
     border: none;
     color: #ff3366;
@@ -662,7 +671,116 @@ audio {
 .file-upload {
     display: none;
 }
+.noti-modal {
+    display: none;
+    position: fixed;
+    top: 60px;  
+    right: 20px;
+    width: auto;
+    height: auto;
+    background: transparent;
+    z-index: 1000;
+}
 
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.noti-modal.active {
+    display: block;
+}
+
+
+
+.noti-modal-close {
+    background: none;
+    border: none;
+    color: #ff3366;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.noti-modal-close:hover {
+    background-color: rgba(255, 51, 102, 0.1);
+}
+
+.noti-area {
+    color: #fff;
+    max-height: 400px;  
+    overflow-y: auto;
+}
+
+.notification {
+    background: rgba(255, 51, 102, 0.1);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-left: 4px solid #ff3366;
+    transition: transform 0.2s;
+}
+
+.notification:hover {
+    transform: translateX(4px);
+}
+
+
+
+.notification-message {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.noti-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background: #ff3366;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.noti-toggle:hover {
+    background-color: #e62e5c;
+}
+
+
+.noti-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.noti-area::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.noti-area::-webkit-scrollbar-thumb {
+    background: rgba(255, 51, 102, 0.5);
+    border-radius: 3px;
+}
 
 
 .gif-results-container {

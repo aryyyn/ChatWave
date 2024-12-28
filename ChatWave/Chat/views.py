@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 import random
 from django.contrib import messages
 from django.http import JsonResponse
+from django.db.models.functions import Length
 
 
 @login_required
@@ -24,6 +25,31 @@ def deleteMessage(request, chatroom, messageid):
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
 
+def isEligibleMethod(user, chatroom) -> bool:
+    try:
+        messages = ChatRoomMessages.objects.filter(
+        sender=user,
+        room=chatroom
+            ).annotate(
+                message_length=Length('message')
+            ).filter(
+                message_length__gte=10
+            )
+        unique_messages = messages.values('message').distinct()
+        totalMessages = unique_messages.count()
+
+        if totalMessages > 5:
+            return True
+        else:
+            return False
+    except Exception as err:
+        print(err)
+
+    
+    
+
+
+
 @login_required
 def chatView(request, chatroom):
 
@@ -39,6 +65,7 @@ def chatView(request, chatroom):
     chat_messages = chat_room.chat_messages.all().order_by("created")
     ChatRoomOther = ChatRoom.objects.filter(category="Other")
     action = request.POST.get("action")
+    notifications = Notification.objects.filter(user = request.user)
     
 
 
@@ -60,19 +87,23 @@ def chatView(request, chatroom):
             return redirect(chatView, chatroom=ChatRoomName)
 
     elif action == "add-song":
+        
         songs = Music.objects.all()
         randomsong = random.choice(songs)
+        CRO = ChatRoom.objects.get(room_name = chatroom)
 
         #some logic to check whether the user has enough messages or not
-        isEligible = True
+        isEligible = isEligibleMethod(request.user,CRO)
 
 
         
         if (isEligible):
+            SentimentSong = Music.objects.filter(genre="indie")
+            randomSentimentSong = random.choice(SentimentSong)
             context = {
                 "chat_room": chat_room,
                 "chat_messages": chat_messages,
-                "songs": randomsong,
+                "songs": randomSentimentSong,
                 "ChatRoomOther": ChatRoomOther,
                 "songPlaying": True,
                 "isEligible": isEligible,
@@ -101,6 +132,7 @@ def chatView(request, chatroom):
         "chat_room": chat_room,
         "chat_messages": chat_messages,
         "ChatRoomOther": ChatRoomOther,
+        "notifications": notifications,
         "TENOR_API_KEY": TENOR_API_KEY,
     }
     return render(request, "chat/chat.html", context)

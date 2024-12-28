@@ -44,4 +44,9 @@ class Music(models.Model):
     def __str__(self):
         return f"{self.title} by {self.artist}"
 
+
+
+class Notification(models.Model):
+    notification_text = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     

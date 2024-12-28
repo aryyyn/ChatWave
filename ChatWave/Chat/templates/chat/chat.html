@@ -276,6 +276,28 @@
     </div>
 </div>
 
+<div class="noti-modal" id="notiModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5>Notifications</h5>
+            <button class="noti-modal-close" onclick="document.getElementById('notiModal').classList.remove('active')">&times;</button>
+        </div>
+        <div class="noti-area">
+            {% if notifications %}
+            <div class="notification">
+                <div class="notification-message">
+                    You have been pinged by aryn in General Chat 1.
+                </div>
+            </div>
+            {%else%}
+            <div class="notification-message">
+          No New Notifications. 
+            </div>
+            {%endif%}
+            
+        </div>
+    </div>
+</div>
 
 
    
@@ -366,10 +388,28 @@
             }); 
 
 
+            const notiButton = document.querySelector(".chat-header-actions button:first-child");
+            const notiModal = document.getElementById("notiModal");
+            const closeNotiModal = document.querySelector(".noti-modal-close");
 
-            const emojiButton = document.querySelector(".input-actions button:first-child");
-            emojiButton.addEventListener('click', () => {   
-                alert("working")
+            notiButton.addEventListener('click', () => {
+
+                notiModal.classList.toggle('active');
+            });
+
+            closeNotiModal.addEventListener('click', ()=> {
+                notiModal.classList.remove('active');
+            });
+
+
+
+            
+
+
+
+            const sendButton = document.querySelector(".input-actions button:first-child");
+            sendButton.addEventListener('click', () => {   
+                sendMessage()
             });
 
             const profileBtn = document.querySelector('.profile-button');
@@ -747,9 +787,11 @@
                 }
 
                 else {
-                    console.log("working")
+                    
                     const { message, username, profilePicture, messageID} = data;
                     const currentUser = "{{ request.user.username }}";
+
+                  
                     
                   
                     if (username !== currentUser) {
