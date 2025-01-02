@@ -697,6 +697,35 @@ audio {
     display: block;
 }
 
+.type-indicator-area {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #555;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-align: left;
+    width: fit-content;
+    display: inline-block;
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.type-indicator-area span {
+    font-style: italic;
+    color: #777;
+}
+
+
 
 
 .noti-modal-close {

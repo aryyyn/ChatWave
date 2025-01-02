@@ -111,6 +111,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'songResult': songResult
                     })
                 )
+
+            elif message_type == 'typeindicator':
+              
+                await self.channel_layer.group_send(
+                    self.room_group_name, 
+                    {
+                        'type': 'type_indicator',
+                        'username': text_data_json.get('username')
+                    }
+                )
+
+            elif message_type == 'stopped_typing':
+               
+                await self.channel_layer.group_send(
+                    self.room_group_name, 
+                    {
+                        'type': 'stopped_typing',
+                        
+                    }
+                )
+
                           
             elif message_type == "delete_message":
               
@@ -254,6 +275,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         }))
 
+    async def type_indicator(self,event):
+        username = event['username']
+        
+        await self.send(text_data=json.dumps({
+            "type": "typeindicator",
+            "username": username
+        }))
+
+
+    async def stopped_typing(self, event):
+       
+        await self.send(text_data=json.dumps({
+            "type": "stopped_typing"
+        }))
 
     
     
