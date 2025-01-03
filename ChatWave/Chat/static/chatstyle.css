@@ -614,7 +614,7 @@ audio {
 }
 
 
-.modal, .gif-modal {
+.modal, .gif-modal, .image-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -629,7 +629,7 @@ audio {
 
 
 
-.modal.active, .gif-modal.active {
+.modal.active, .gif-modal.active, .image-modal.active {
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -692,10 +692,12 @@ audio {
         opacity: 1;
     }
 }
-
+notiModal
 .noti-modal.active {
     display: block;
 }
+
+
 
 .type-indicator-area {
     font-family: 'Arial', sans-serif;

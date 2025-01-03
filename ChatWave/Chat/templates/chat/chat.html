@@ -137,7 +137,7 @@
             <img src="{{message.message}}" class="sent-image">
         </div>
         {%else%}
-        <h3> {{ message.message }} </h3>
+        <h3 class="text-message"> {{ message.message }} </h3>
     </div>
     {%endif%}
     </div>
@@ -190,8 +190,8 @@
                 class="album-art">
             <div class="track-info">
                 <h3>Not enough messages! Would you like to play a random song instead?</h3>
-                <button>Yes </button>
-                <button>No </button>
+                <button class="randomSongYes">Yes </button>
+                <button class="randomSongNo">No </button>
             </div>
 
 
@@ -298,6 +298,17 @@
         </div>
     </div>
 
+
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button class="image-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+    </div>
+
     <div class="noti-modal" id="notiModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -321,6 +332,9 @@
             </div>
         </div>
     </div>
+
+
+    
 
 
 
@@ -591,20 +605,20 @@
         const username = '{{request.user.username}}'
         let typingTimeout;
         inputChatBox.addEventListener('input', () => {
-         
+
             clearTimeout(typingTimeout);
 
             try {
-               
+
                 chatSocket.send(JSON.stringify({
                     'type': 'typeindicator',
                     'username': username,
                     'status': 'typing'
                 }));
 
-             
+
                 typingTimeout = setTimeout(() => {
-                    chatSocket.send(JSON.stringify({ 
+                    chatSocket.send(JSON.stringify({
                         'type': 'stopped_typing',
                     }));
                 }, 1000);
@@ -614,6 +628,14 @@
         });
 
 
+        document.body.addEventListener('click', (event) => {
+            if (event.target && event.target.classList.contains('randomSongYes')) {
+                console.log("working")
+                chatSocket.send(JSON.stringify({
+                    'type': "change_song",
+                }));
+            }
+        });
 
         function scrollToBottom() {
             const chatMessages = document.querySelector('.chat-messages');
@@ -680,6 +702,37 @@
             });
         }
 
+        const selectors = [".gif-image", ".sent-image"];
+        const modal = document.getElementById("imageModal");
+        const modalContent = modal.querySelector(".modal-body");
+
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(element => {
+                element.addEventListener("click", (event) => {
+              
+                    modalContent.innerHTML = "";
+
+                
+                    const img = document.createElement("img");
+                    img.src = event.target.src; 
+                    
+                   
+
+
+                    modalContent.appendChild(img);
+
+                    modal.style.display = "block";
+                });
+            });
+        });
+
+
+        const closeModalButton = document.querySelector(".image-modal-close");
+        closeModalButton.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+
 
         function sendMessage(msg) {
             var message = messageInput.value.trim();
@@ -689,15 +742,11 @@
 
             const chat_room = "{{chat_room}}"
             if (message) {
-
-
-
                 chatSocket.send(JSON.stringify({
                     'type': "send_message",
                     'message': message,
                     'ChatRoom': chat_room
                 }));
-
                 messageInput.value = '';
             }
         }
@@ -718,20 +767,19 @@
             }
             else if (data.type === 'typeindicator') {
                 const username = "{{ request.user.username|escapejs }}";
-                if (username != data.username) 
-                {
+                if (username != data.username) {
                     const typeIndicatorArea = document.querySelector(".type-indicator-area");
                     typeIndicatorArea.innerHTML = `${data.username} is typing...`;
-                   
+
                 }
 
-                
+
             }
 
-            else if (data.type === "stopped_typing") {                    
-            const typeIndicatorArea = document.querySelector(".type-indicator-area");
-            typeIndicatorArea.innerHTML = ``;
-                
+            else if (data.type === "stopped_typing") {
+                const typeIndicatorArea = document.querySelector(".type-indicator-area");
+                typeIndicatorArea.innerHTML = ``;
+
             }
 
             else if (data.type === 'change_song') {

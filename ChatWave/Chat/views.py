@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 import random
 from django.contrib import messages
 from django.http import JsonResponse
@@ -67,6 +68,8 @@ def getMessages(user, chatroom):
         message_length=Length('message')
     ).filter(
         message_length__gte=10
+    ).exclude(
+        Q(message__icontains='http://') | Q(message__icontains='https://')
     ).order_by('-created')
 
   
