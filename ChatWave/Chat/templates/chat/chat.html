@@ -267,6 +267,7 @@
                 <h4>Theme Selection</h4>
                 <select id="themeSelect"
                     style="background: #1f1f1f; color: #fff; padding: 5px; border: 1px solid #ff336633; border-radius: 4px;">
+                    <option value="default">Default</option>
                     <option value="blue_pink">Serene Skies</option>
                     <option value="darkcharcoal_yellow">Midnight Spark</option>
                     <option value="lightred_yellow">Sunset Glow</option>
@@ -301,11 +302,10 @@
 
     <div class="image-modal" id="imageModal">
         <div class="modal-content">
-        <div class="modal-header">
-            <button class="image-modal-close">&times;</button>
-        </div>
-        <div class="modal-body">
 
+            <div class="image-area">
+
+            </div>
         </div>
     </div>
 
@@ -334,7 +334,7 @@
     </div>
 
 
-    
+
 
 
 
@@ -472,116 +472,152 @@
 
 
         const themeSelect = document.getElementById('themeSelect');
+
+
+        const elements = {
+            body: document.body,
+            chatRooms: document.querySelector('.chat-rooms'),
+            chatSection: document.querySelector('.chat-section'),
+            sideNav: document.querySelector('.side-nav'),
+            container: document.querySelector('.container'),
+            roomItem: document.querySelector('.room-item'),
+            chatRoomsH2: document.querySelector('.chat-rooms h2'),
+            addRoom: document.querySelector('.add-room'),
+            message: document.querySelector('.message'),
+            messageUser: document.querySelector('.message .user'),
+            messageSent: document.querySelector('.message.sent'),
+            inputArea: document.querySelector('.input-area'),
+        };
+
+
+        const applyTheme = (theme) => {
+            if (theme === 'default') {
+                elements.body.style.backgroundColor = "#0a0a0a";
+                elements.body.style.color = "#fff";
+                elements.chatRooms.style.backgroundColor = "#111";
+                elements.chatSection.style.backgroundColor = "#0d0d0d";
+                elements.sideNav.style.backgroundColor = "#111";
+                elements.container.style.backgroundColor = "#0a0a0a";
+                elements.roomItem.style.backgroundColor = "#1a1a1a";
+                elements.roomItem.style.border = "1px solid #ff336622";
+                elements.chatRoomsH2.style.color = "#ff3366";
+                elements.addRoom.style.color = "#ff3366";
+                elements.message.style.backgroundColor = "#161616";
+                elements.messageUser.style.backgroundColor = "#1a1a1a";
+                elements.messageSent.style.backgroundColor = "#ff33661a";
+                elements.inputArea.style.backgroundColor = "#161616";
+            }
+
+            else if (theme === 'blue_pink') {
+                elements.body.style.backgroundColor = "#E0F4FF";
+                elements.body.style.color = "#FF69B4";
+                elements.chatRooms.style.backgroundColor = "#F8FBFF";
+                elements.chatSection.style.backgroundColor = "#F0F8FF";
+                elements.sideNav.style.backgroundColor = "#CAEDFF";
+                elements.container.style.backgroundColor = "#E0F4FF";
+                elements.roomItem.style.backgroundColor = "#F8FBFF";
+                elements.roomItem.style.border = "1px solid #FF9ECD";
+                elements.chatRoomsH2.style.color = "#FF9ECD";
+                elements.addRoom.style.color = "#FF9ECD";
+                elements.message.style.backgroundColor = "#F8FBFF";
+                elements.messageUser.style.backgroundColor = "#FFE4F3";
+                elements.messageSent.style.backgroundColor = "#FFE4F3";
+                elements.inputArea.style.backgroundColor = "#F0F8FF";
+            }
+
+
+
+            else if (theme === 'darkcharcoal_yellow') {
+                elements.body.style.backgroundColor = "#1A1B1E";
+                elements.body.style.color = "#FFD93D";
+                elements.chatRooms.style.backgroundColor = "#212428";
+                elements.chatSection.style.backgroundColor = "#2A2B2F";
+                elements.sideNav.style.backgroundColor = "#2A2B2F";
+                elements.container.style.backgroundColor = "#1A1B1E";
+                elements.roomItem.style.backgroundColor = "#2A2B2F";
+                elements.roomItem.style.border = "1px solid #FFD93D";
+                elements.chatRoomsH2.style.color = "#FFE169";
+                elements.addRoom.style.color = "#FFD93D";
+                elements.message.style.backgroundColor = "#2A2B2F";
+                elements.messageUser.style.backgroundColor = "#32333A";
+                elements.messageSent.style.backgroundColor = "#FFE169";
+                elements.inputArea.style.backgroundColor = "#212428";
+            }
+            else if (theme === 'lightred_yellow') {
+                elements.body.style.backgroundColor = "#FFF3E2";
+                elements.body.style.color = "#FF9F9F";
+                elements.chatRooms.style.backgroundColor = "#FFE5CA";
+                elements.chatSection.style.backgroundColor = "#FFF3E2";
+                elements.sideNav.style.backgroundColor = "#FFE5CA";
+                elements.container.style.backgroundColor = "#FFF3E2";
+                elements.roomItem.style.backgroundColor = "#FFE5CA";
+                elements.roomItem.style.border = "1px solid #FF9F9F";
+                elements.chatRoomsH2.style.color = "#FF9F9F";
+                elements.addRoom.style.color = "#FA9884";
+                elements.message.style.backgroundColor = "#FFE5CA";
+                elements.messageUser.style.backgroundColor = "#FA9884";
+                elements.messageSent.style.backgroundColor = "#FF9F9F";
+                elements.inputArea.style.backgroundColor = "#FFE5CA";
+            }
+            else if (theme === 'darkblue_lightgreen') {
+                elements.body.style.backgroundColor = "#1B2430";
+                elements.body.style.color = "#9FE6A0";
+                elements.chatRooms.style.backgroundColor = "#233142";
+                elements.chatSection.style.backgroundColor = "#1B2430";
+                elements.sideNav.style.backgroundColor = "#233142";
+                elements.container.style.backgroundColor = "#1B2430";
+                elements.roomItem.style.backgroundColor = "#233142";
+                elements.roomItem.style.border = "1px solid #9FE6A0";
+                elements.chatRoomsH2.style.color = "#9FE6A0";
+                elements.addRoom.style.color = "#4E9F3D";
+                elements.message.style.backgroundColor = "#233142";
+                elements.messageUser.style.backgroundColor = "#2C3E50";
+                elements.messageSent.style.backgroundColor = "#4E9F3D";
+                elements.inputArea.style.backgroundColor = "#233142";
+            }
+            else if (theme === 'forestgreen_mossgreen') {
+                elements.body.style.backgroundColor = "#354F52";
+                elements.body.style.color = "#CAD2C5";
+                elements.chatRooms.style.backgroundColor = "#52796F";
+                elements.chatSection.style.backgroundColor = "#354F52";
+                elements.sideNav.style.backgroundColor = "#52796F";
+                elements.container.style.backgroundColor = "#354F52";
+                elements.roomItem.style.backgroundColor = "#52796F";
+                elements.roomItem.style.border = "1px solid #CAD2C5";
+                elements.chatRoomsH2.style.color = "#CAD2C5";
+                elements.addRoom.style.color = "#84A98C";
+                elements.message.style.backgroundColor = "#52796F";
+                elements.messageUser.style.backgroundColor = "#84A98C";
+                elements.messageSent.style.backgroundColor = "#CAD2C5";
+                elements.inputArea.style.backgroundColor = "#52796F";
+            }
+            else if (theme === 'pastelolivegreen_salmonpink') {
+                elements.body.style.backgroundColor = "#E9EDC9";
+                elements.body.style.color = "#FF9494";
+                elements.chatRooms.style.backgroundColor = "#FEFAE0";
+                elements.chatSection.style.backgroundColor = "#E9EDC9";
+                elements.sideNav.style.backgroundColor = "#CCD5AE";
+                elements.container.style.backgroundColor = "#E9EDC9";
+                elements.roomItem.style.backgroundColor = "#FEFAE0";
+                elements.roomItem.style.border = "1px solid #FF9494";
+                elements.chatRoomsH2.style.color = "#FF9494";
+                elements.addRoom.style.color = "#FFB4B4";
+                elements.message.style.backgroundColor = "#FEFAE0";
+                elements.messageUser.style.backgroundColo = "#FFB4B4";
+                elements.messageSent.style.backgroundColor = "#FF9494";
+                elements.inputArea.style.backgroundColor = "#FEFAE0";
+            }
+
+        }
+
+        const savedTheme = localStorage.getItem('theme')
+        applyTheme(savedTheme);
+        themeSelect.value = savedTheme;
+
         themeSelect.addEventListener('change', (e) => {
-            if (e.target.value === 'blue_pink') {
-                document.body.style.backgroundColor = "#E0F4FF";
-                document.body.style.color = "#FF69B4";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#F8FBFF";
-                document.querySelector('.chat-section').style.backgroundColor = "#F0F8FF";
-                document.querySelector('.profile button').style.backgroundColor = "#FFE4F3";
-                document.querySelector('.side-nav').style.backgroundColor = "#CAEDFF";
-                document.querySelector('.container').style.backgroundColor = "#E0F4FF";
-                document.querySelector('.room-item').style.backgroundColor = "#F8FBFF";
-                document.querySelector('.room-item').style.border = "1px solid #FF9ECD";
-                document.querySelector('.chat-rooms:h2').style.color = "#FF9ECD";
-                document.querySelector('.add-room').style.color = "#FF9ECD";
-                document.querySelector('.message').style.backgroundColor = "#F8FBFF";
-                document.querySelector('.message .user').style.backgroundColor = "#FFE4F3";
-                document.querySelector('.message.sent').style.backgroundColor = "#FFE4F3";
-                document.querySelector('.input-area').style.backgroundColor = "#F0F8FF";
-            }
-
-            else if (e.target.value === 'darkcharcoal_yellow') {
-                document.body.style.backgroundColor = "#1A1B1E";
-                document.body.style.color = "#FFD93D";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#212428";
-                document.querySelector('.chat-section').style.backgroundColor = "#2A2B2F";
-                document.querySelector('.profile button').style.backgroundColor = "#FFE169";
-                document.querySelector('.side-nav').style.backgroundColor = "#2A2B2F";
-                document.querySelector('.container').style.backgroundColor = "#1A1B1E";
-                document.querySelector('.room-item').style.backgroundColor = "#2A2B2F";
-                document.querySelector('.room-item').style.border = "1px solid #FFD93D";
-                document.querySelector('.chat-rooms:h2').style.color = "#FFE169";
-                document.querySelector('.add-room').style.color = "#FFD93D";
-                document.querySelector('.message').style.backgroundColor = "#2A2B2F";
-                document.querySelector('.message .user').style.backgroundColor = "#32333A";
-                document.querySelector('.message.sent').style.backgroundColor = "#FFE169";
-                document.querySelector('.input-area').style.backgroundColor = "#212428";
-            }
-
-            else if (e.target.value === 'lightred_yellow') {
-                document.body.style.backgroundColor = "#FFF3E2";
-                document.body.style.color = "#FF9F9F";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#FFE5CA";
-                document.querySelector('.chat-section').style.backgroundColor = "#FFF3E2";
-                document.querySelector('.profile button').style.backgroundColor = "#FA9884";
-                document.querySelector('.side-nav').style.backgroundColor = "#FFE5CA";
-                document.querySelector('.container').style.backgroundColor = "#FFF3E2";
-                document.querySelector('.room-item').style.backgroundColor = "#FFE5CA";
-                document.querySelector('.room-item').style.border = "1px solid #FF9F9F";
-                document.querySelector('.chat-rooms:h2').style.color = "#FF9F9F";
-                document.querySelector('.add-room').style.color = "#FA9884";
-                document.querySelector('.message').style.backgroundColor = "#FFE5CA";
-                document.querySelector('.message .user').style.backgroundColor = "#FA9884";
-                document.querySelector('.message.sent').style.backgroundColor = "#FF9F9F";
-                document.querySelector('.input-area').style.backgroundColor = "#FFE5CA";
-            }
-
-            else if (e.target.value === 'darkblue_lightgreen') {
-                document.body.style.backgroundColor = "#1B2430";
-                document.body.style.color = "#9FE6A0";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#233142";
-                document.querySelector('.chat-section').style.backgroundColor = "#1B2430";
-                document.querySelector('.profile button').style.backgroundColor = "#4E9F3D";
-                document.querySelector('.side-nav').style.backgroundColor = "#233142";
-                document.querySelector('.container').style.backgroundColor = "#1B2430";
-                document.querySelector('.room-item').style.backgroundColor = "#233142";
-                document.querySelector('.room-item').style.border = "1px solid #9FE6A0";
-                document.querySelector('.chat-rooms:h2').style.color = "#9FE6A0";
-                document.querySelector('.add-room').style.color = "#4E9F3D";
-                document.querySelector('.message').style.backgroundColor = "#233142";
-                document.querySelector('.message .user').style.backgroundColor = "#2C3E50";
-                document.querySelector('.message.sent').style.backgroundColor = "#4E9F3D";
-                document.querySelector('.input-area').style.backgroundColor = "#233142";
-            }
-
-            else if (e.target.value === 'forestgreen_mossgreen') {
-                document.body.style.backgroundColor = "#354F52";
-                document.body.style.color = "#CAD2C5";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#52796F";
-                document.querySelector('.chat-section').style.backgroundColor = "#354F52";
-                document.querySelector('.profile button').style.backgroundColor = "#84A98C";
-                document.querySelector('.side-nav').style.backgroundColor = "#52796F";
-                document.querySelector('.container').style.backgroundColor = "#354F52";
-                document.querySelector('.room-item').style.backgroundColor = "#52796F";
-                document.querySelector('.room-item').style.border = "1px solid #CAD2C5";
-                document.querySelector('.chat-rooms:h2').style.color = "#CAD2C5";
-                document.querySelector('.add-room').style.color = "#84A98C";
-                document.querySelector('.message').style.backgroundColor = "#52796F";
-                document.querySelector('.message .user').style.backgroundColor = "#84A98C";
-                document.querySelector('.message.sent').style.backgroundColor = "#CAD2C5";
-                document.querySelector('.input-area').style.backgroundColor = "#52796F";
-            }
-
-            else if (e.target.value === 'pastelolivegreen_salmonpink') {
-                document.body.style.backgroundColor = "#E9EDC9";
-                document.body.style.color = "#FF9494";
-                document.querySelector('.chat-rooms').style.backgroundColor = "#FEFAE0";
-                document.querySelector('.chat-section').style.backgroundColor = "#E9EDC9";
-                document.querySelector('.profile button').style.backgroundColor = "#FFB4B4";
-                document.querySelector('.side-nav').style.backgroundColor = "#CCD5AE";
-                document.querySelector('.container').style.backgroundColor = "#E9EDC9";
-                document.querySelector('.room-item').style.backgroundColor = "#FEFAE0";
-                document.querySelector('.room-item').style.border = "1px solid #FF9494";
-                document.querySelector('.chat-rooms:h2').style.color = "#FF9494";
-                document.querySelector('.add-room').style.color = "#FFB4B4";
-                document.querySelector('.message').style.backgroundColor = "#FEFAE0";
-                document.querySelector('.message .user').style.backgroundColor = "#FFB4B4";
-                document.querySelector('.message.sent').style.backgroundColor = "#FF9494";
-                document.querySelector('.input-area').style.backgroundColor = "#FEFAE0";
-            }
-
-
+            const selectedTheme = e.target.value;
+            localStorage.setItem('theme', selectedTheme);
+            applyTheme(selectedTheme)
 
         });
 
@@ -704,32 +740,30 @@
 
         const selectors = [".gif-image", ".sent-image"];
         const modal = document.getElementById("imageModal");
-        const modalContent = modal.querySelector(".modal-body");
+        const modalContent = modal.querySelector(".image-area");
 
         selectors.forEach(selector => {
             document.querySelectorAll(selector).forEach(element => {
                 element.addEventListener("click", (event) => {
-              
                     modalContent.innerHTML = "";
-
-                
                     const img = document.createElement("img");
-                    img.src = event.target.src; 
-                    
-                   
-
-
+                    img.src = event.target.src;
                     modalContent.appendChild(img);
-
-                    modal.style.display = "block";
+                    modal.classList.add("active");
                 });
             });
         });
 
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
 
-        const closeModalButton = document.querySelector(".image-modal-close");
+
+        const closeModalButton = modal.querySelector(".image-modal-close");
         closeModalButton.addEventListener("click", () => {
-            modal.style.display = "none";
+            modal.classList.remove("active");
         });
 
 
@@ -999,7 +1033,7 @@
                                 <div class="user" id = "${messageID}">You
                                 <button class="delete-message"><i class="fas fa-trash"></i></button>
                                 <div class="timestamp">${time}</div>
-                               <h3> ${sanitizedMessage} </h3>
+                               <h3 class="text-message"> ${sanitizedMessage} </h3>
                                 </div>
                             `;
                         }
