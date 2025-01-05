@@ -301,7 +301,7 @@
 
 
     <div class="image-modal" id="imageModal">
-        <div class="modal-content">
+        <div class="image-modal-content">
 
             <div class="image-area">
 
@@ -319,6 +319,9 @@
             <div class="noti-area">
                 {% if notifications %}
                 <div class="notification">
+                    <div class="notification-message">
+                        You have been pinged by aryn in General Chat 1.
+                    </div>
                     <div class="notification-message">
                         You have been pinged by aryn in General Chat 1.
                     </div>
@@ -437,6 +440,12 @@
         closeNotiModal.addEventListener('click', () => {
             notiModal.classList.remove('active');
         });
+
+        document.addEventListener('click', (e) => {
+                if (!notiModal.contains(e.target) && !notiButton.contains(e.target) && notiModal.classList.contains('active')) {
+                    notiModal.classList.remove('active');
+                }
+            });
 
 
 
@@ -761,11 +770,6 @@
         });
 
 
-        const closeModalButton = modal.querySelector(".image-modal-close");
-        closeModalButton.addEventListener("click", () => {
-            modal.classList.remove("active");
-        });
-
 
 
         function sendMessage(msg) {
@@ -982,6 +986,8 @@
                         newMessage.appendChild(userDiv);
 
                     }
+
+
                     else {
                         const messageHeading = document.createElement('h3');
                         messageHeading.textContent = escapeHTML(message);
@@ -1023,6 +1029,7 @@
                                     </div>
                                 `;
                         }
+
 
 
                         else {
