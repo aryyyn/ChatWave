@@ -7,3 +7,58 @@ ChatWave/thumbnails
 Security/tenorapikey
 Security\tenorapikey
 ChatWave/ChatWave/settings.py
+
+
+# Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment
+venv/
+.env/
+.envrc
+
+# Django-specific
+db.sqlite3
+*.sqlite3
+/media/
+staticfiles/
+
+# Environment variables
+.env
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+.tox/
+.nox/
+
+# Logs and debug files
+*.log
+*.pot
+*.py[cod]
+*.coverage
+*.mypy_cache/
+*.pytest_cache/
+debug.log
+
+# Pipenv
+Pipfile.lock
+pip-log.txt
+
+
+# Build files
+build/
+dist/
+*.egg-info/
+.eggs/
