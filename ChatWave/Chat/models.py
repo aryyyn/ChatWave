@@ -22,6 +22,7 @@ class ChatRoomMessages(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.CharField(max_length=250)
     created = models.DateTimeField(default=datetime.datetime.now())
+    isDeleted = models.BooleanField(default=False)
 
 
     def __str__(self):

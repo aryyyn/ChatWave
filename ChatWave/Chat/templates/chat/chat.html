@@ -102,7 +102,9 @@
 
 
                 {% for message in chat_messages %}
+                {% if not message.isDeleted%}
                 {% if message.sender.username != request.user.username%}
+                
 
                 <div class="message">
                     <img src={{message.sender.profilePicture}} alt="userimage">
@@ -125,6 +127,7 @@
 
 
         {% else %}
+       
         <div class="message sent">
             <img src="{{request.user.profilePicture}}" alt="userimage">
             <div class="user" id="{{message.id}}">You
@@ -140,11 +143,12 @@
         <h3 class="text-message"> {{ message.message }} </h3>
     </div>
     {%endif%}
+    
     </div>
 
 
 
-
+    {%endif%}
     {% endif %}
     {% endfor %}
 

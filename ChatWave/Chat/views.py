@@ -32,7 +32,8 @@ def deleteMessage(request, chatroom, messageid):
                 return JsonResponse(
                     {"success": False, "error": "Unauthorized"}, status=403
                 )
-            message.delete()
+            message.isDeleted = True
+            message.save()
             return JsonResponse({"success": True})
         except Exception as err:
             print(err)
