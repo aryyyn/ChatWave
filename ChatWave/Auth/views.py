@@ -53,9 +53,8 @@ def RegisterLogic(request):
                 Playlists.objects.create(playlist_name="lofi", user=user)
                 Playlists.objects.create(playlist_name="edm", user=user)
                 messages.success(request, "Successfully registered! You can now log in.")
-                email_logic(request)
-                #logic for send an email
-                return redirect("verification_logic")
+                email_logic(user, email)
+                return render(request, "login/loginbase.html")
             except ValidationError as v:
                 messages.error(request, f"{v}")
             except Exception as e:
@@ -68,29 +67,33 @@ def RegisterLogic(request):
     return render(request, "register/registerbase.html")
 
 
-def email_logic(request):
+def email_logic(user, email):
+    sender_email = os.getenv('SENDER_EMAIL')
+    sender_password = os.getenv('SENDER_PASSWORD')
+
     try:
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587
 
-        sender_email = os.getenv('SENDER_EMAIL')
-        sender_password = os.getenv('SENDER_PASSWORD')
-
         message = MIMEMultipart()
         message['From'] = sender_email
-        message['To'] = request.user.email
+        message['To'] = email
         message['Subject'] = "Verification Code for ChatWave"
-        message.attach(MIMEText(f"Your verification code for ChatWave is {request.user.verification_code}", 'plain'))
+        message.attach(MIMEText(f"Your verification code for ChatWave is {user.verification_code}", 'plain'))
 
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()  
         server.login(sender_email, sender_password)
-        server.sendmail(sender_email, request.user.email, message.as_string())
+        server.sendmail(sender_email, email, message.as_string())
         server.quit()
 
         print("Email sent successfully!")
+        return "Success"
     except Exception as e:
         print(f"Failed to send email: {e}")
+        return "Failure"
+
+
 
 def loginLogic(request):
 
@@ -139,8 +142,7 @@ def verificationLogic(request):
                 return redirect('homeChatViewLogic')
             
             else:
-                messages.error(request, "Invalid Code")
-        
+                return redirect('verification_logic')
         #compare this code with the code that was sent to the email, and if the code is correct, then change the verification status and redirect them to the homepage
         
         
