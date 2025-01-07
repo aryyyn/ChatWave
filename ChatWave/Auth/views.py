@@ -4,12 +4,20 @@ from django.contrib.auth import login,authenticate,logout
 from .models import CustomUser
 from django.core.exceptions import ValidationError
 from Profile.models import Playlists
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def RegisterLogic(request):
 
     if request.method == "GET":
         if request.user.is_authenticated:
             return redirect('homeChatViewLogic')
+
            
     if request.method == "POST":
         # Extracting form data
@@ -45,7 +53,9 @@ def RegisterLogic(request):
                 Playlists.objects.create(playlist_name="lofi", user=user)
                 Playlists.objects.create(playlist_name="edm", user=user)
                 messages.success(request, "Successfully registered! You can now log in.")
-                return redirect("login_logic")
+                email_logic(request)
+                #logic for send an email
+                return redirect("verification_logic")
             except ValidationError as v:
                 messages.error(request, f"{v}")
             except Exception as e:
@@ -58,6 +68,30 @@ def RegisterLogic(request):
     return render(request, "register/registerbase.html")
 
 
+def email_logic(request):
+    try:
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587
+
+        sender_email = os.getenv('SENDER_EMAIL')
+        sender_password = os.getenv('SENDER_PASSWORD')
+
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = request.user.email
+        message['Subject'] = "Verification Code for ChatWave"
+        message.attach(MIMEText(f"Your verification code for ChatWave is {request.user.verification_code}", 'plain'))
+
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()  
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, request.user.email, message.as_string())
+        server.quit()
+
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
 def loginLogic(request):
 
     if request.method == "GET":  
@@ -69,10 +103,14 @@ def loginLogic(request):
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)  #check if the info is correct, and if it returns any user
-
+        
         if user is not None:
-            login(request, user) #login the user if the info is correct
-            return redirect('homeChatViewLogic')
+            if user.is_verified == False:
+                login(request, user)
+                return redirect("verification_logic")
+            else:
+                login(request, user) #login the user if the info is correct
+                return redirect('homeChatViewLogic')
         else:
             messages.error(request, "Invalid Login Info")
 
@@ -82,3 +120,27 @@ def loginLogic(request):
 def logoutLogic(request):
     logout(request) #simple logic to logout the user
     return redirect("login_logic")
+
+
+def verificationLogic(request):
+
+    if request.user.is_authenticated and not request.user.is_verified:
+    
+        if request.method == "GET":
+            return render(request, "verification/verification.html")
+        if request.method == "POST":
+            user_code = "".join([request.POST.get(f"code-input-{i}") for i in range(1, 7)])
+
+            code_in_db = str(request.user.verification_code)
+            
+            if (user_code == code_in_db):
+                request.user.is_verified = True
+                request.user.save()
+                return redirect('homeChatViewLogic')
+            
+            else:
+                messages.error(request, "Invalid Code")
+        
+        #compare this code with the code that was sent to the email, and if the code is correct, then change the verification status and redirect them to the homepage
+        
+        

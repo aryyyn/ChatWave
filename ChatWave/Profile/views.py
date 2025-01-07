@@ -12,6 +12,8 @@ import json
 # def getTotalSongC
 @login_required
 def saveFileUrl(request, username):
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
     if request.method == "POST":
         if request.user.username == username:
             try:
@@ -31,7 +33,8 @@ def saveFileUrl(request, username):
 
 @login_required
 def profileHome(request, username):
-
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
     if request.method == "POST":
         
         currentPassword = request.POST.get("currentpassword")
@@ -119,6 +122,8 @@ def profileHome(request, username):
 
 @login_required
 def songPlayer(request, username, clickedplaylist):
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
     playlist = Playlists.objects.get(user__username=username, playlist_name=clickedplaylist)
     songs = playlist.songs.split(",")
     songlist = []
@@ -136,7 +141,8 @@ def songPlayer(request, username, clickedplaylist):
     
 @login_required
 def Player(request, username, clickedplaylist, id):
-    print(username, clickedplaylist)
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
 
     playlist = Playlists.objects.get(user__username=username, playlist_name=clickedplaylist)
     songs = playlist.songs.split(",")

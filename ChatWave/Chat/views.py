@@ -25,6 +25,8 @@ import json
 
 @login_required
 def deleteMessage(request, chatroom, messageid):
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
     if request.method == "POST":
         try:
             message = get_object_or_404(ChatRoomMessages, id=messageid)
@@ -173,7 +175,7 @@ def modelTest(messages):
          
                 predictions = new_model.predict(padded_sequences, verbose=0)
                 sentiment = get_sentiment(predictions[0])
-                print(message, sentiment)
+               
                 finalResult.append(sentiment)
                 
             except Exception as e:
@@ -189,7 +191,8 @@ def modelTest(messages):
 @login_required
 def chatView(request, chatroom):
 
-
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
     TENOR_API_KEY = settings.TENOR_API_KEY
     chat_room = get_object_or_404(ChatRoom, room_name=chatroom)
 
@@ -283,6 +286,8 @@ def chatView(request, chatroom):
 
 @login_required
 def chatHomeView(request):
+    if request.user.is_authenticated and not request.user.is_verified:
+        return redirect("verification_logic")
 
     chat_rooms = ChatRoom.objects.all()
     sum = 0

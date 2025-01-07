@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWave - Verify Email</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff7e7e;
+            --primary-dark: #ff6666;
+            --text-color: #ffd4d4;
+            --background-dark: #1a0f10;
+            --error-color: #ff4646;
+            --input-background: rgba(42, 18, 21, 0.3);
+            --success-color: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-dark);
+            color: var(--text-color);
+        }
+
+        .split-screen {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: rgba(42, 18, 21, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--background-dark);
+        }
+
+        .brand h1 {
+            color: white;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .logout-btn {
+            background-color: var(--error-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255, 70, 70, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .main {
+            display: flex;
+            flex: 1;
+        }
+
+        .left-side {
+            flex: 1;
+            position: relative;
+            background: url('https://media.discordapp.net/attachments/958193242892042261/1312454950034608168/sunset.png?ex=675914ac&is=6757c32c&hm=cd5f2ee9e08021e9615f73a488dcb4f57d39f8a3488321b9dd9b1de149da2705&=&format=webp&quality=lossless') no-repeat center center;
+            background-size: cover;
+            background-color: #2a1215;
+            image-rendering: pixelated;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(42, 18, 21, 0.2);
+        }
+
+        .right-side {
+            flex: 1;
+            background-color: var(--background-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .verification-wrapper {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .verification-code {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            background-color: var(--input-background);
+            border: 1px solid rgba(255, 126, 126, 0.3);
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: rgba(42, 18, 21, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 126, 126, 0.2);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .verify-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .resend-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .resend-link:hover {
+            color: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .left-side {
+                display: none;
+            }
+
+            .right-side {
+                padding: 1rem;
+            }
+
+            .verification-wrapper {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="split-screen">
+        <div class="header">
+            <div class="brand">
+                <div class="logo">
+                    <span>CW</span>
+                </div>
+                <h1>CHATWAVE</h1>
+            </div>
+            <button class="logout-btn" title="Logout from your account">Logout</button>
+        </div>
+        <div class="main">
+            <div class="left-side">
+                <div class="overlay"></div>
+            </div>
+            <div class="right-side">
+                <div class="verification-wrapper">
+                    <div class="verification-icon">✉️</div>
+                    <h2>Verify Your Email</h2>
+                    <p class="description">We've sent a verification code to your email address. Please enter the code below to verify your account.</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="verification-code">
+                            <input type="text" name="code-input-1" class="code-input" maxlength="1" required>
+                            <input type="text" name="code-input-2" class="code-input" maxlength="1" required>
+                            <input type="text" name="code-input-3" class="code-input" maxlength="1" required>
+                            <input type="text" name="code-input-4" class="code-input" maxlength="1" required>
+                            <input type="text" name="code-input-5" class="code-input" maxlength="1" required>
+                            <input type="text" name="code-input-6" class="code-input" maxlength="1" required>
+                        </div>
+                        <button type="submit" class="verify-btn">Verify Email</button>
+                    </form>
+                    <a href="#" class="resend-link">Didn't receive the code? Resend</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+            logoutButton = document.querySelector(".logout-btn");
+            logoutButton.addEventListener('click', () => {
+
+            window.location.href = "/auth" + "/logout/";
+            });
+
+
+        const codeInputs = document.querySelectorAll('.code-input');
+        
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                if (e.key >= 0 && e.key <= 9) {
+                    if (index < codeInputs.length - 1) {
+                        codeInputs[index + 1].focus();
+                    }
+                } else if (e.key === 'Backspace') {
+                    if (index > 0) {
+                        codeInputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

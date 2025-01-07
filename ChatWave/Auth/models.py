@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 from django.core.validators import MinLengthValidator, EmailValidator
+import random
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -63,7 +64,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             'unique': "A user with that email address already exists.",
         }
     )
+
+    def generate_verification_code():
+        return random.randint(100000, 999999)
+
     profilePicture = models.TextField(max_length=500)
+    is_verified = models.BooleanField(default=False)
+    verification_code = models.IntegerField(default=generate_verification_code)
 
     # User status
     is_active = models.BooleanField(default=True)
