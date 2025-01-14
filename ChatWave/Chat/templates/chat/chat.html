@@ -200,7 +200,6 @@
 
 
 
-
             {%endif%}
 
 
@@ -224,9 +223,6 @@
                 <button type="submit" id="like-song" name="action" value="like-song" disabled>❤️</button>
 
             </div>
-
-
-
 
 
             {%else%}
@@ -679,10 +675,15 @@
 
         document.body.addEventListener('click', (event) => {
             if (event.target && event.target.classList.contains('randomSongYes')) {
-                console.log("working")
                 chatSocket.send(JSON.stringify({
                     'type': "change_song",
                 }));
+            }
+
+            if (event.target && event.target.classList.contains('randomSongNo')) { 
+                trackInfo = document.querySelector(".track-info");
+                trackInfo.innerHTML = "<h3>Press on the '➕' icon to start listening to music!</h3>"
+
             }
         });
 
@@ -843,18 +844,45 @@
                     if (artistElement) {
                         artistElement.textContent = data.song_artist;
                     }
+                    
+                    
 
-
+                    const musicPlayer = document.querySelector(".music-player");
                     const audioElement = musicPlayer.querySelector("audio source");
+
                     if (audioElement) {
-                        audioElement.src = data.song;
-                        // Reload the audio to reflect the new source
-                        const audioParent = audioElement.closest("audio");
+                        audioElement.src = data.song; 
+                        const audioParent = audioElement.closest("audio"); t
                         if (audioParent) {
-                            audioParent.load();
-                            audioParent.play();
+                            audioParent.load(); 
+                            audioParent.play(); 
                         }
+                    } else {
+
+
+                        const button = document.querySelectorAll("button");
+                        button.forEach(button => button.remove());
+                      
+                        const audioParent = document.createElement("audio");
+                        audioParent.controls = true; 
+                        audioParent.autoplay = true; 
+
+                       
+                        const sourceElement = document.createElement("source");
+                        sourceElement.src = data.song; 
+                        sourceElement.type = "audio/mpeg"; 
+
+                      
+                        audioParent.appendChild(sourceElement);
+
+                        audioParent.innerHTML += "Your browser does not support the audio element.";
+                      
+                        musicPlayer.appendChild(audioParent);
+
+                        audioParent.load();
+                        audioParent.play();
                     }
+
 
 
                 }
