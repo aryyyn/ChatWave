@@ -1,0 +1,39 @@
+# Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Environment variables
+.env
+
+# Django migrations
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+
+# Media/Static files
+media/
+staticfiles/
+
+# IDEs
+.vscode/
+.idea/
+
+# Virtual environment
+venv/
+env/
+
+# Pytest cache
+.pytest_cache/
+.coverage
+.tox/
+
+# Node modules (if you use frontend frameworks)
+node_modules/
+
+# Ignore other OS-specific or editor files
+.DS_Store
+Thumbs.db

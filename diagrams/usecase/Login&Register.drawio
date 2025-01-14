@@ -1,0 +1,110 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.4">
+  <diagram name="System Architecture" id="0">
+    <mxGraphModel dx="1434" dy="790" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="88lbMA_JnoWxU76s___U-13" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="395" y="71" width="674" height="674" as="geometry" />
+        </mxCell>
+        <mxCell id="88lbMA_JnoWxU76s___U-14" value="Login" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="466" y="162" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-1" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="265" y="229" width="73" height="152" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-2" value="Register" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="466" y="258" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-3" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-1" target="88lbMA_JnoWxU76s___U-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="341" y="264" as="sourcePoint" />
+            <mxPoint x="391" y="214" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-4" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-1" target="TXirxSdXY60RtmtBickg-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="254" as="sourcePoint" />
+            <mxPoint x="492" y="248" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-5" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;rounded=0;exitX=0.964;exitY=0.684;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="88lbMA_JnoWxU76s___U-14" target="TXirxSdXY60RtmtBickg-6">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="640" y="552" as="sourcePoint" />
+            <mxPoint x="690" y="388" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-6" value="Verify Email" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="688" y="185" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-7" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;rounded=0;entryX=0.205;entryY=0.877;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-2" target="TXirxSdXY60RtmtBickg-6">
+          <mxGeometry x="-0.1258" y="10" width="160" relative="1" as="geometry">
+            <mxPoint x="600" y="256" as="sourcePoint" />
+            <mxPoint x="731" y="246" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-8" value="Verify Account" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="466" y="345" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-9" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-1" target="TXirxSdXY60RtmtBickg-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="348" y="290" as="sourcePoint" />
+            <mxPoint x="499" y="334" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-10" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="1097" y="454" width="73" height="152" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-11" value="Update Password" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="831" y="531" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-12" value="Delete Account" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="831" y="440" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-15" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-10" target="TXirxSdXY60RtmtBickg-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="322" y="239" as="sourcePoint" />
+            <mxPoint x="451" y="356" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-16" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-10" target="TXirxSdXY60RtmtBickg-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1195" y="570" as="sourcePoint" />
+            <mxPoint x="1033" y="548" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-17" value="Enter OTP" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="688" y="295" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-18" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.018;entryY=0.737;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-8" target="TXirxSdXY60RtmtBickg-17">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="637" y="549" as="sourcePoint" />
+            <mxPoint x="797" y="549" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-19" value="Request Passowrd Reset" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="466" y="440" width="112" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-20" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-1" target="TXirxSdXY60RtmtBickg-19">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="312" y="315" as="sourcePoint" />
+            <mxPoint x="470" y="433" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-21" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TXirxSdXY60RtmtBickg-19" target="TXirxSdXY60RtmtBickg-23">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="582" y="433" as="sourcePoint" />
+            <mxPoint x="724" y="425" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-22" value="CHATWAVE" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="702" y="75" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TXirxSdXY60RtmtBickg-23" value="Send Verification Email" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="688" y="427" width="112" height="57" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
