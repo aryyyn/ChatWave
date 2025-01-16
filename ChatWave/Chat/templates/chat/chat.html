@@ -193,9 +193,8 @@
             <img src="https://i.pinimg.com/736x/ec/e9/01/ece901e3b7a2de83e379215e778d8fb8.jpg" alt="Album Art"
                 class="album-art">
             <div class="track-info">
-                <h3>Not enough messages! Would you like to play a random song instead?</h3>
-                <button class="randomSongYes">Yes </button>
-                <button class="randomSongNo">No </button>
+                <h3>Chat more to unlock mood-based music!</h3>
+                <button class="randomSongNo">Okay!</button>
             </div>
 
 
@@ -674,11 +673,6 @@
 
 
         document.body.addEventListener('click', (event) => {
-            if (event.target && event.target.classList.contains('randomSongYes')) {
-                chatSocket.send(JSON.stringify({
-                    'type': "change_song",
-                }));
-            }
 
             if (event.target && event.target.classList.contains('randomSongNo')) { 
                 trackInfo = document.querySelector(".track-info");
@@ -827,7 +821,6 @@
 
             else if (data.type === 'change_song') {
 
-                const musicPlayer = document.querySelector(".music-player");
 
                 const albumArt = musicPlayer.querySelector(".album-art");
                 if (albumArt) {
