@@ -9,8 +9,12 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 from dotenv import load_dotenv
+import random
+from django.contrib.auth.hashers import make_password
 
 load_dotenv()
+
+
 
 def RegisterLogic(request):
 
@@ -65,6 +69,59 @@ def RegisterLogic(request):
 
    
     return render(request, "register/registerbase.html")
+
+
+
+def forgotPassword(request):
+    if request.method == "POST":
+        
+        email = request.POST.get("email")
+        user = CustomUser.objects.filter(email=email).first()
+        
+        if (user):
+            user.verification_code = random.randint(100000, 999999)
+            user.save()
+            email_logic(user, email)
+            return render(request, "forgot_password/new_password.html")
+
+    return render(request, "forgot_password/forgot_password.html")
+
+
+def newPassword(request):
+    if request.method == "POST":
+            email = request.POST.get("email")
+            user = CustomUser.objects.filter(email=email).first()
+
+            user_code = "".join([request.POST.get(f"code-{i}") for i in range(1, 7)])
+
+            newPassword = request.POST.get("new-password")
+            confirmPassword = request.POST.get("confirm-password")
+
+
+
+            code_in_db = str(user.verification_code)
+
+            print(email)
+            print(newPassword)
+            print(confirmPassword)
+            print(user)
+
+            print(user_code)
+            print(code_in_db)
+
+            if (user_code == code_in_db and newPassword == confirmPassword):
+                hashed_password = make_password(newPassword)
+                user.password = hashed_password
+                user.save()
+                login(request, user)
+                return redirect('homeChatViewLogic')
+            else:
+                print("wrong code")
+            
+
+   
+
+    return render(request, "forgot_password/new_password.html")
 
 
 def email_logic(user, email):

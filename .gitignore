@@ -1,6 +1,6 @@
 Data/dataset.csv
 Data/filtered_twitter_dataset.csv
-ChatWave\db.sqlite3
+ChatWave/db.sqlite3
 ChatWave\songs
 ChatWave/songs
 ChatWave/thumbnails
