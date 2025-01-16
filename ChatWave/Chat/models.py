@@ -50,4 +50,7 @@ class Music(models.Model):
 class Notification(models.Model):
     notification_text = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.notification_text
     

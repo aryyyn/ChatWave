@@ -11,10 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>ChatWave | Chat</title>
-
     <link rel="stylesheet" href="{% static 'chatstyle.css' %}">
-
-
 </head>
 
 <body>
@@ -104,7 +101,7 @@
                 {% for message in chat_messages %}
                 {% if not message.isDeleted%}
                 {% if message.sender.username != request.user.username%}
-                
+
 
                 <div class="message">
                     <img src={{message.sender.profilePicture}} alt="userimage">
@@ -127,7 +124,7 @@
 
 
         {% else %}
-       
+
         <div class="message sent">
             <img src="{{request.user.profilePicture}}" alt="userimage">
             <div class="user" id="{{message.id}}">You
@@ -143,7 +140,7 @@
         <h3 class="text-message"> {{ message.message }} </h3>
     </div>
     {%endif%}
-    
+
     </div>
 
 
@@ -318,12 +315,12 @@
             <div class="noti-area">
                 {% if notifications %}
                 <div class="notification">
+                    {% for notification in notifications%}
                     <div class="notification-message">
-                        You have been pinged by aryn in General Chat 1.
+                        {{notification}}
                     </div>
-                    <div class="notification-message">
-                        You have been pinged by aryn in General Chat 1.
-                    </div>
+                    {%endfor%}
+
                 </div>
                 {%else%}
                 <div class="notification-message">
@@ -441,10 +438,10 @@
         });
 
         document.addEventListener('click', (e) => {
-                if (!notiModal.contains(e.target) && !notiButton.contains(e.target) && notiModal.classList.contains('active')) {
-                    notiModal.classList.remove('active');
-                }
-            });
+            if (!notiModal.contains(e.target) && !notiButton.contains(e.target) && notiModal.classList.contains('active')) {
+                notiModal.classList.remove('active');
+            }
+        });
 
 
 
@@ -674,7 +671,7 @@
 
         document.body.addEventListener('click', (event) => {
 
-            if (event.target && event.target.classList.contains('randomSongNo')) { 
+            if (event.target && event.target.classList.contains('randomSongNo')) {
                 trackInfo = document.querySelector(".track-info");
                 trackInfo.innerHTML = "<h3>Press on the '➕' icon to start listening to music!</h3>"
 
@@ -837,39 +834,39 @@
                     if (artistElement) {
                         artistElement.textContent = data.song_artist;
                     }
-                    
-                    
+
+
 
                     const musicPlayer = document.querySelector(".music-player");
                     const audioElement = musicPlayer.querySelector("audio source");
 
                     if (audioElement) {
-                        audioElement.src = data.song; 
+                        audioElement.src = data.song;
                         const audioParent = audioElement.closest("audio"); t
                         if (audioParent) {
-                            audioParent.load(); 
-                            audioParent.play(); 
+                            audioParent.load();
+                            audioParent.play();
                         }
                     } else {
 
 
                         const button = document.querySelectorAll("button");
                         button.forEach(button => button.remove());
-                      
+
                         const audioParent = document.createElement("audio");
-                        audioParent.controls = true; 
-                        audioParent.autoplay = true; 
+                        audioParent.controls = true;
+                        audioParent.autoplay = true;
 
-                       
+
                         const sourceElement = document.createElement("source");
-                        sourceElement.src = data.song; 
-                        sourceElement.type = "audio/mpeg"; 
+                        sourceElement.src = data.song;
+                        sourceElement.type = "audio/mpeg";
 
-                      
+
                         audioParent.appendChild(sourceElement);
 
                         audioParent.innerHTML += "Your browser does not support the audio element.";
-                      
+
                         musicPlayer.appendChild(audioParent);
 
                         audioParent.load();
@@ -1000,7 +997,7 @@
 
                         const messageImg = document.createElement('img');
                         messageImg.src = message;
-                        messageImg.className = "gif-image";
+                        messageImg.className = "sent-image";
 
 
                         userDiv.appendChild(usernameLink);
