@@ -98,17 +98,7 @@ def newPassword(request):
             confirmPassword = request.POST.get("confirm-password")
 
 
-
             code_in_db = str(user.verification_code)
-
-            print(email)
-            print(newPassword)
-            print(confirmPassword)
-            print(user)
-
-            print(user_code)
-            print(code_in_db)
-
             if (user_code == code_in_db and newPassword == confirmPassword):
                 hashed_password = make_password(newPassword)
                 user.password = hashed_password
