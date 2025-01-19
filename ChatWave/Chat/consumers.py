@@ -138,9 +138,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
 
             elif message_type == "change_song":
-                print("working")
+       
+                genre = text_data_json.get("genre")
 
-                randomsong = await self.getRandomMusic()
+                randomsong = await self.getRandomMusic(genre)
                 await self.send(
                     text_data=json.dumps(
                         {
@@ -174,7 +175,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         {word: prediction}
                     )  # get the filtered words and create a dict
 
-                print(bad_words_message)
+                # print(bad_words_message)
                 words = message.split(" ")
                 filtered_message = []
                 for w in words:
@@ -310,11 +311,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def getRandomMusic(self):
-        songs = Music.objects.all()
-        randomsong = random.choice(songs)
-        print(randomsong)
-        return randomsong
+    def getRandomMusic(self, genre):
+        SentimentSong = Music.objects.filter(genre=genre)
+        randomSentimentSong = random.choice(SentimentSong)
+        # print(randomsong)
+        return randomSentimentSong
 
     @database_sync_to_async
     def getMentionedUser(self, username):
