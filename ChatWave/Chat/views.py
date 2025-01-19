@@ -77,35 +77,40 @@ def getMessages(user, chatroom):
 
 def genreTest(sentiments):
 
-    sentiment_count = {
-        "sad": sentiments.count("sad"),
-        "happy": sentiments.count("happy"),
-        "calm": sentiments.count("calm"),
-    }
+    try:
 
-    total = len(sentiments)
-    predominant_sentiment = max(sentiment_count, key=sentiment_count.get)
-    percentage = (sentiment_count[predominant_sentiment] / total) * 100
+        sentiment_count = {
+            "sad": sentiments.count("sad"),
+            "happy": sentiments.count("happy"),
+            "calm": sentiments.count("calm"),
+        }
 
-    if predominant_sentiment == "sad":
-        if percentage > 60:
-            return "Indie"
-        else:
-            return "Lofi"
-    elif predominant_sentiment == "happy":
-        if percentage > 60:
-            return "Pop"
-        elif percentage > 40:
-            return "EDM"
-        else:
-            return "Hiphop"
-    elif predominant_sentiment == "calm":
-        if percentage > 60:
-            return "Lofi"
-        elif percentage > 40:
-            return "Rap"
-        else:
-            return "Indie"
+        total = len(sentiments)
+        predominant_sentiment = max(sentiment_count, key=sentiment_count.get)
+        percentage = (sentiment_count[predominant_sentiment] / total) * 100
+
+        if predominant_sentiment == "sad":
+            if percentage > 60:
+                return "Indie"
+            else:
+                return "Lofi"
+        elif predominant_sentiment == "happy":
+            if percentage > 60:
+                return "Pop"
+            elif percentage > 40:
+                return "EDM"
+            else:
+                return "Hiphop"
+        elif predominant_sentiment == "calm":
+            if percentage > 60:
+                return "Lofi"
+            elif percentage > 40:
+                return "Rap"
+            else:
+                return "Indie"
+
+    except Exception as err:
+        print(err)
 
 
 def modelTest(messages):

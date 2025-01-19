@@ -733,11 +733,14 @@
         }
 
         const nextSong = document.querySelector(".next-song");
+
         if (nextSong) {
             nextSong.addEventListener('click', () => {
-
+                // alert("working");
+                const songGenre = "{{songs.genre}}"
                 chatSocket.send(JSON.stringify({
                     'type': "change_song",
+                    'genre': songGenre
 
                 }))
             });
@@ -818,6 +821,7 @@
 
             else if (data.type === 'change_song') {
 
+                const musicPlayer = document.querySelector(".music-player");
 
                 const albumArt = musicPlayer.querySelector(".album-art");
                 if (albumArt) {
@@ -836,43 +840,16 @@
                     }
 
 
-
-                    const musicPlayer = document.querySelector(".music-player");
                     const audioElement = musicPlayer.querySelector("audio source");
-
                     if (audioElement) {
                         audioElement.src = data.song;
-                        const audioParent = audioElement.closest("audio"); t
+                        // Reload the audio to reflect the new source
+                        const audioParent = audioElement.closest("audio");
                         if (audioParent) {
                             audioParent.load();
                             audioParent.play();
                         }
-                    } else {
-
-
-                        const button = document.querySelectorAll("button");
-                        button.forEach(button => button.remove());
-
-                        const audioParent = document.createElement("audio");
-                        audioParent.controls = true;
-                        audioParent.autoplay = true;
-
-
-                        const sourceElement = document.createElement("source");
-                        sourceElement.src = data.song;
-                        sourceElement.type = "audio/mpeg";
-
-
-                        audioParent.appendChild(sourceElement);
-
-                        audioParent.innerHTML += "Your browser does not support the audio element.";
-
-                        musicPlayer.appendChild(audioParent);
-
-                        audioParent.load();
-                        audioParent.play();
                     }
-
 
 
                 }

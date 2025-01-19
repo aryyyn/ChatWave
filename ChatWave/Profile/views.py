@@ -9,7 +9,7 @@ import json
 
 
 
-# def getTotalSongC
+# def getTotalSongCount
 @login_required
 def saveFileUrl(request, username):
     if request.user.is_authenticated and not request.user.is_verified:
