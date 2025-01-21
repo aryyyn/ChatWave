@@ -207,6 +207,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 chat_room = await self.getChatRoomObject(ChatRoomName)
 
+                if chat_room.category == "Other" and message.startswith("/leave"):
+
+                    chatRoomOwnerUsername = ChatRoomName.split("_")[0]
+                    messageUsername = self.scope["user"].username
+
+                    if chatRoomOwnerUsername != messageUsername:
+                        leave_chat_room = await self.leaveChatRoom(chat_room, messageUsername)
+                        await self.send(
+                            text_data=json.dumps(
+                                {
+                                    "type": "leave_update",
+                                    "leave_update_result": leave_chat_room
+                                }
+                            )
+                        )
+                    
+
                 if chat_room.category == "Other" and message.startswith("/add"):
 
                     chatRoomOwnerUsername = ChatRoomName.split("_")[0]
@@ -343,6 +360,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return "User Added"
         else:
             return "No User Found"
+        
+    @database_sync_to_async
+    def leaveChatRoom(self, chat_room, messageUsername):
+        chat_room.allowed.remove(messageUsername)
+        chat_room.save()
+        #some logic to remove the user from the chatroom
 
     @database_sync_to_async
     def remove_user_chatroom(self, username, chat_room):
@@ -391,6 +414,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # created = datetime.datetime.now() #not needed since models.py already handles it
         )
         return MessageObject
+    
 
     @database_sync_to_async
     def addSong(self, song):

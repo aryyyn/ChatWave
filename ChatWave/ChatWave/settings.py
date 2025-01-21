@@ -61,11 +61,7 @@ MIDDLEWARE = [
 TIME_ZONE = 'Asia/Kathmandu'  #for timezone
 USE_TZ = True
 
-
-
 LOGIN_URL = '/auth/login'
-
-
 
 ROOT_URLCONF = 'ChatWave.urls'
 

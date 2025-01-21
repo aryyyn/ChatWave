@@ -865,6 +865,10 @@
                 removeUserResult = data.removeUserResult
                 alert(removeUserResult)
             }
+            
+            else if (data.type == "leave_update") {
+                window.location.href = window.location.origin + "/home/chat/General_Chat/";
+            }
 
 
             else if (data.type == "remove_update_all") {

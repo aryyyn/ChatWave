@@ -4,6 +4,9 @@
     --bg-darker: #111;
     --bg-lighter: #161616;
     --border-color: rgba(255, 51, 102, 0.2);
+    --header-height: clamp(50px, 8vh, 70px);
+    --sidebar-width: clamp(250px, 25vw, 300px);
+    --mobile-nav-height: 60px;
 }
 
 * {
@@ -11,16 +14,21 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
-
 }
 
-
+:root {
+    --h1-size: clamp(1.5rem, 3vw, 2rem);
+    --h2-size: clamp(1rem, 2vw, 1.25rem);
+    --h3-size: clamp(0.875rem, 1.5vw, 1rem);
+    --body-size: clamp(0.875rem, 1.2vw, 1rem);
+    --small-size: clamp(0.75rem, 1vw, 0.875rem);
+}
 
 body {
-    background-color: #0a0a0a;
+    background-color: var(--bg-dark);
     color: #fff;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .container {
@@ -42,13 +50,13 @@ h3 {
 
 
 .side-nav {
-    background: #111;
+    background: var(--bg-darker);
     border-radius: 16px;
-    padding: 16px;
+    padding: clamp(12px, 2vw, 16px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 32px);
+    height: calc(100vh - clamp(16px, 4vw, 32px));
 }
 
 .nav-top,
@@ -59,17 +67,9 @@ h3 {
     align-items: center;
 }
 
-.nav-top,
-.nav-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-}
+
 
 .nav-button {
-    width: 38px;
-    height: 38px;
     border-radius: 12px;
     background: #1a1a1a;
     border: 1px solid #ff336622;
@@ -80,6 +80,9 @@ h3 {
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    width: clamp(32px, 4vw, 38px);
+    height: clamp(32px, 4vw, 38px);
+    border-radius: clamp(8px, 1vw, 12px);
 }
 
 .nav-button:hover {
@@ -88,17 +91,13 @@ h3 {
 }
 
 
-
-
-
 .chat-rooms {
-    background: #111;
+    background: var(--bg-darker);
     border-radius: 16px;
-    padding: 20px;
-    height: calc(100vh - 32px);
-    display: flex;
-    flex-direction: column;
+    padding: clamp(16px, 2vw, 20px);
+    height: calc(100vh - clamp(16px, 4vw, 32px));
 }
+
 
 .chat-rooms a {
     text-decoration: none;
@@ -142,13 +141,14 @@ h3 {
 }
 
 .room-item {
-    padding: 12px 16px;
     background: #1a1a1a;
     border-radius: 12px;
     margin-bottom: 8px;
     transition: all 0.2s ease;
     color: #fff;
     text-decoration: none;
+    padding: clamp(8px, 1.5vw, 12px) clamp(12px, 2vw, 16px);
+    font-size: var(--body-size);
 }
 
 .room-item:hover {
@@ -158,14 +158,14 @@ h3 {
 
 
 
-
 .chat-section {
     background: #0d0d0d;
     display: flex;
     flex-direction: column;
-    padding: 20px;
     height: 100vh;
     overflow: hidden;
+    padding: clamp(12px, 2vw, 20px);
+    gap: clamp(12px, 2vw, 20px);
 }
 
 .chat-header {
@@ -256,13 +256,15 @@ h3 {
     display: flex;
     align-items: flex-start;
     margin-bottom: 15px;
-    padding: 10px;
     background-color: #1e1e1e;
     border-radius: 10px;
     width: fit-content;
     max-width: 60%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     font-family: 'Arial', sans-serif;
+    padding: clamp(8px, 1.5vw, 15px);
+    max-width: min(600px, 85%);
+    font-size: var(--body-size);
 }
 
 .message h3 {
@@ -285,6 +287,7 @@ img {
     margin-right: clamp(8px, 2vw, 10px);
     border: 2px solid #444;
     object-fit: cover;
+
 }
 
 .message .user {
@@ -395,12 +398,12 @@ img {
 .input-area {
     margin-top: auto;
     display: flex;
-    gap: 15px;
-    padding: 15px;
     background: #161616;
     border: 1px solid #ff336633;
     border-radius: 12px;
     flex-shrink: 0;
+    padding: clamp(10px, 2vw, 15px);
+    gap: clamp(8px, 1.5vw, 15px);
 }
 
 .input-area input {
@@ -430,17 +433,16 @@ img {
 
 
 .music-player {
-    max-width: 400px;
     background: #161616;
     border-radius: 12px;
-    padding: 20px;
-
     margin: 20px auto;
+    max-width: min(400px, 90vw);
+    padding: clamp(15px, 3vw, 20px);
 }
 
 .album-art {
     width: 100%;
-    height: clamp(200px, 40vw, 300px);
+    height: clamp(180px, 40vw, 300px);
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -565,8 +567,8 @@ audio {
     background: #161616;
     border: 1px solid #ff336633;
     border-radius: 12px;
-    padding: 20px;
     margin-top: 20px;
+    padding: clamp(15px, 2vw, 20px);
 }
 
 .users-section a {
@@ -681,10 +683,10 @@ audio {
 
 .modal-content {
     background: #161616;
-    padding: 20px;
     border-radius: 12px;
     border: 1px solid rgba(255, 51, 102, 0.2);
-    width: 350px;
+    width: min(350px, 90vw);
+    padding: clamp(15px, 3vw, 20px);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
     animation: slideDown 0.3s ease-out;
 }
@@ -969,16 +971,16 @@ audio {
 }
 
 .gif-image {
-    width: clamp(150px, 30vw, 200px) !important;
-    height: clamp(150px, 30vw, 200px) !important;
+    width: clamp(120px, 30vw, 200px) !important;
+    height: clamp(120px, 30vw, 200px) !important;
     border-radius: 10px !important;
     margin-top: 10px !important;
     object-fit: cover;
 }
 
 .sent-image {
-    width: clamp(200px, 60vw, 400px) !important;
-    height: clamp(150px, 45vw, 300px) !important;
+    width: clamp(180px, 60vw, 400px) !important;
+    height: clamp(135px, 45vw, 300px) !important;
     border-radius: 10px !important;
     margin-top: 10px !important;
     object-fit: contain;
@@ -1007,55 +1009,53 @@ audio {
 @media screen and (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
-        grid-template-areas:
-            "chat"
-            "nav";
+        grid-template-rows: 1fr var(--mobile-nav-height);
     }
 
     .side-nav {
-        grid-area: nav;
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60px;
+        height: var(--mobile-nav-height);
         flex-direction: row;
-        justify-content: space-around;
-        padding: 10px;
-        z-index: 1000;
         border-radius: 0;
+        padding: 8px;
+        z-index: 1000;
     }
 
     .chat-section {
-        grid-area: chat;
-        height: calc(100vh - 60px);
-        padding: 10px;
+        height: calc(100vh - var(--mobile-nav-height));
     }
 
     .chat-rooms,
     .users-section {
         position: fixed;
         top: 0;
-        height: calc(100vh - 60px);
-        width: 250px;
+        height: calc(100vh - var(--mobile-nav-height));
+        width: min(300px, 80vw);
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 999;
-    }
-
-    .chat-rooms.active,
-    .users-section.active {
-        transform: translateX(0);
     }
 
     .users-section {
         right: 0;
         transform: translateX(100%);
     }
+
+    .chat-rooms.active,
+    .users-section.active {
+        transform: translateX(0);
+    }
 }
 
-/* Phones */
 @media screen and (max-width: 480px) {
+    :root {
+        --body-size: 0.875rem;
+        --small-size: 0.75rem;
+    }
+
     .container {
         padding: 8px;
         gap: 8px;
@@ -1063,7 +1063,6 @@ audio {
 
     .message {
         max-width: 95%;
-        font-size: 0.875rem;
     }
 
     .input-area {
@@ -1075,15 +1074,33 @@ audio {
         gap: 4px;
     }
 
-    .chat-header-actions button {
-        padding: 4px 8px;
-        font-size: 0.75rem;
-    }
-
     .modal-content {
         padding: 12px;
     }
 }
+
+
+@media screen and (max-width: 1200px) {
+    .container {
+        grid-template-columns: minmax(70px, auto) minmax(200px, 250px) 1fr;
+    }
+
+    .users-section {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container {
+        grid-template-columns: minmax(70px, auto) 1fr;
+    }
+
+    .chat-rooms {
+        display: none;
+    }
+}
+
+
 
 
 @media (prefers-reduced-motion: reduce) {
@@ -1095,7 +1112,7 @@ audio {
     }
 }
 
-/* Dark mode support */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-dark: #0a0a0a;
