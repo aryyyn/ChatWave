@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +44,23 @@
                     <h3>Gaming</h3>
                     <a href="{% url 'chatViewLogic' chatroom='Game_Chat' %}"><div class="room-item">Game Chat</div></a>
                     <a href="{% url 'chatViewLogic' chatroom='Game_Chat_2' %}"><div class="room-item">Game Chat 2</div></a>
+                </div>
+
+                <div class="room-category">
+                    <h3>Other</h3>
+
+                    {% for ChatRoom in ChatRoomOther %}
+                    {% if "Other" in ChatRoom.category %}
+
+                    {% if request.user.username in ChatRoom.allowed %}
+
+                    <a href="{% url 'chatViewLogic' chatroom=ChatRoom.room_name %}">
+                        <div class="room-item">{{ ChatRoom.room_name|replace_underscore }}</div>
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+
                 </div>
             </div>
         </div>

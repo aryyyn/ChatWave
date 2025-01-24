@@ -309,35 +309,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5>Notifications</h5>
-                <button class="noti-modal-close"
-                    onclick="document.getElementById('notiModal').classList.remove('active')">&times;</button>
+                <button class="noti-modal-close" onclick="closeNotiModal()">&times;</button>
             </div>
             <div class="noti-area">
                 {% if notifications %}
-                <div class="notification">
-                    {% for notification in notifications%}
-                    <div class="notification-message">
-                        {{notification}}
+                    {% for notification in notifications %}
+                    <div class="notification" data-notification-id="{{ notification.id }}">
+                        <div class="notification-message">
+                            {{ notification }}
+                        </div>
+                        <button class="notification-delete" onclick="deleteNotification('{{ notification.id }}')">&times;</button>
                     </div>
-                    {%endfor%}
-
-                </div>
-                {%else%}
-                <div class="notification-message">
-                    No New Notifications.
-                </div>
-                {%endif%}
-
+                    {% endfor %}
+                {% else %}
+                    <div class="notification">
+                        <div class="notification-message">
+                            No New Notifications.
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
 
     <input type="file" class="file-upload" id="fileUpload" accept="image/*">
 
@@ -345,8 +338,26 @@
 </head>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
 
+function deleteNotification(notificationId) {
+    const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
+    if (notificationElement) {
+        
+        notificationElement.remove();
+        
+        const notiArea = document.querySelector('.noti-area');
+        if (notiArea.querySelectorAll('.notification').length === 0) {
+            notiArea.innerHTML = `
+                <div class="notification">
+                    <div class="notification-message">
+                        No New Notifications.
+                    </div>
+                </div>
+            `;
+        }
+    }
+}
+    document.addEventListener('DOMContentLoaded', () => {
 
         const gifSearchButton = document.getElementById("gifSearchButton");
         const gifInput = document.getElementById("gifInput")
@@ -437,16 +448,12 @@
             notiModal.classList.remove('active');
         });
 
-        document.addEventListener('click', (e) => {
-            if (!notiModal.contains(e.target) && !notiButton.contains(e.target) && notiModal.classList.contains('active')) {
-                notiModal.classList.remove('active');
-            }
-        });
-
-
-
-
-
+        
+        // document.addEventListener('click', (e) => {
+        //     if (!notiModal.contains(e.target) && !notiButton.contains(e.target) && notiModal.classList.contains('active')) {
+        //         notiModal.classList.remove('active');
+        //     }
+        // });
 
 
         const sendButton = document.querySelector(".input-actions button:first-child");
@@ -461,10 +468,6 @@
 
             window.location.href = window.location.origin + "/account/" + username;
         });
-
-
-
-
 
 
         const logoutButton = document.querySelector(".chat-header-actions button:nth-child(2)");
@@ -681,7 +684,11 @@
         function scrollToBottom() {
             const chatMessages = document.querySelector('.chat-messages');
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+}
+
+        window.addEventListener('load', () => {
+            scrollToBottom();
+        });
 
 
         scrollToBottom();
@@ -776,6 +783,7 @@
             if (msg) {
                 message = msg;
             }
+            
 
             const chat_room = "{{chat_room}}"
             if (message) {
@@ -1059,11 +1067,8 @@
         };
 
 
-
         async function deleteMessageFunc(messageid) {
             try {
-
-
                 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                 const url = `deletemessage/${messageid}/`;
                 const response = await fetch(url, {

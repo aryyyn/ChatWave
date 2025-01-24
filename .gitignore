@@ -9,10 +9,21 @@ Security\tenorapikey
 ChatWave/ChatWave/settings.py
 Cryptography/chatwave.key
 
+pycache/*
 # Python bytecode
 *.pyc
 *.pyo
 __pycache__/
+ChatWave/Chat/__pycache__/
+ChatWave/ChatWave/__pycache__/
+ChatWave/Profile/__pycache__/
+ChatWave/Auth/__pycache__/
+
+ChatWave/Chat/migrations/__pycache__/
+ChatWave/ChatWave/migrations/__pycache__/
+ChatWave/Profile/migrations/__pycache__/
+ChatWave/Auth/migrations/__pycache__/
+
 
 # Virtual environment
 venv/

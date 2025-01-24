@@ -310,9 +310,9 @@ def chatHomeView(request):
     for room in chat_rooms:
         sum = sum + room.online_count
         online_users += room.online_users
-
+    ChatRoomOther = ChatRoom.objects.filter(category="Other")
     total_online_users = sum
-    context = {"total_online_users": total_online_users, "online_users": online_users}
+    context = {"total_online_users": total_online_users, "online_users": online_users, "ChatRoomOther": ChatRoomOther }
 
     # if request.method == "POST":
     #     action = request.POST.get('action')
