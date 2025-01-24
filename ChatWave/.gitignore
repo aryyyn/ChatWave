@@ -22,7 +22,6 @@ ChatWave/__pycache__
 Profile/__pycache__/
 
 # Media/Static files
-media/
 staticfiles/
 
 # IDEs
