@@ -7,7 +7,7 @@ ChatWave/thumbnails
 Security/tenorapikey
 Security\tenorapikey
 ChatWave/ChatWave/settings.py
-
+Cryptography/chatwave.key
 
 # Python bytecode
 *.pyc

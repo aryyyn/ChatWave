@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'songplayer.css' %}">
 </head>
+
 <body>
     <div class="nav-buttons">
         <a href="{% url 'homeChatViewLogic'%}" class="nav-button">
@@ -22,38 +24,40 @@
     </div>
     <div class="sidebar">
 
-        
-        
+
+
         {% comment %} {%if userinfo.username == request.user.username%} {% endcomment %}
         {% if songs %}
         {% for song in songs %}
-            <div class="song-item">
-                <a id="play-button" href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}"> 
-                    <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
-                    <div class="song-info">
-                        <h3>{{ song.title }}</h3>
-                        <p>{{ song.artist }}</p>
-                    </div>
-                </a>
-            </div>
+        <div class="song-item">
+            <a id="play-button"
+                href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}">
+                <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
+                <div class="song-info">
+                    <h3>{{ song.title }}</h3>
+                    <p>{{ song.artist }}</p>
+                </div>
+            </a>
+        </div>
         {% endfor %}
 
         {% else %}
         <div class="song-item">
-         
+
             <div class="song-info">
-            <h3>No Songs Yet</h3>
-            <p>Your favorite songs will appear here once you start liking them during your chat. Each playlist is organized by genre, and songs are selected based on the sentiment of your messages.</p>
-        </div>
+                <h3>No Songs Yet</h3>
+                <p>Your favorite songs will appear here once you start liking them during your chat. Each playlist is
+                    organized by genre, and songs are selected based on the sentiment of your messages.</p>
+            </div>
 
         </div>
 
 
-    {% endif %}
-    
+        {% endif %}
+
 
     </div>
-    
+
     {% if clickedsong %}
     <div class="main-player">
         <div class="now-playing">
@@ -74,10 +78,11 @@
 
     <div class="main-player">
         <div class="now-playing">
-            <img src="https://i.pinimg.com/736x/3f/0b/ef/3f0bef8c86c928dd41b914a64b598b16.jpg" alt="Current Track" class="current-artwork">
+            <img src="https://i.pinimg.com/736x/3f/0b/ef/3f0bef8c86c928dd41b914a64b598b16.jpg" alt="Current Track"
+                class="current-artwork">
             <div class="song-info">
                 <h2>No song playing</h2>
-                
+
             </div>
         </div>
 
@@ -87,14 +92,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-       
+
             const music = document.getElementById("audio-player")
             music.play()
-            
+
         });
 
     </script>
 
 
 </body>
+
 </html>

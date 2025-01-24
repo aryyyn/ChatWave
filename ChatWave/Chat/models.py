@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import datetime
+from django.utils.timezone import now
 
 
 # Create your models here.
@@ -21,7 +22,7 @@ class ChatRoomMessages(models.Model):
     room = models.ForeignKey(ChatRoom, related_name="chat_messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.CharField(max_length=250)
-    created = models.DateTimeField(default=datetime.datetime.now())
+    created = models.DateTimeField(default=now)
     isDeleted = models.BooleanField(default=False)
 
 

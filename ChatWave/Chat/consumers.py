@@ -11,9 +11,10 @@ from django.db.models import F, Q
 import joblib
 import os
 import spacy
-
-
 from django.shortcuts import get_object_or_404
+from cryptography.fernet import Fernet
+
+_key_cache = None 
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -365,6 +366,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def leaveChatRoom(self, chat_room, messageUsername):
         chat_room.allowed.remove(messageUsername)
         chat_room.save()
+        return "User has left the chatroom"
         #some logic to remove the user from the chatroom
 
     @database_sync_to_async
@@ -406,6 +408,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # save_message function that can be called to save the message to the database
     @database_sync_to_async
     def save_message(self, message):
+
+        #for encryption alogrithm
+        # global _key_cache
+        # if _key_cache is None:
+            
+        #     with open("../Cryptography/chatwave.key", "rb") as key_file:
+        #         _key_cache = key_file.read()
+
+        # cipher = Fernet(_key_cache)
+        # message = cipher.encrypt(message.encode()).decode()
         room = ChatRoom.objects.get(room_name=self.room_name)
         MessageObject = ChatRoomMessages.objects.create(
             room=room,

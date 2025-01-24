@@ -21,6 +21,10 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 import tensorflow as tf
 import numpy as np
 import json
+from cryptography.fernet import Fernet
+
+
+_key_cache = None 
 
 
 @login_required
@@ -202,6 +206,17 @@ def chatView(request, chatroom):
             return redirect(chatView, chatroom="General_Chat")
 
     chat_messages = chat_room.chat_messages.all().order_by("created")
+
+    # global _key_cache
+    # if _key_cache is None:
+    #     with open("../Cryptography/chatwave.key", "rb") as key_file:
+    #         _key_cache = key_file.read()
+
+    # cipher = Fernet(_key_cache)
+    # decrypted_chat_messages = []
+    # for cm in chat_messages:
+    #     decrypted_chat_messages.append(cipher.decrypt(str(cm.message).encode()).decode())
+
     ChatRoomOther = ChatRoom.objects.filter(category="Other")
     action = request.POST.get("action")
 
@@ -243,7 +258,6 @@ def chatView(request, chatroom):
             genre = str(genreTest(sentiment).lower())
 
             
-
             SentimentSong = Music.objects.filter(genre=genre)
             randomSentimentSong = random.choice(SentimentSong)
             context = {
@@ -255,6 +269,8 @@ def chatView(request, chatroom):
                 "isEligible": isEligible,
                 "TENOR_API_KEY": TENOR_API_KEY,
                 "notifications": notifications,
+                
+
             }
         else:
             context = {
@@ -267,14 +283,12 @@ def chatView(request, chatroom):
                 "TENOR_API_KEY": TENOR_API_KEY,
                 "notifications": notifications,
                 
-                
-
             }
         return render(request, "chat/chat.html", context)
 
     songs = Music.objects.all()
     randomsong = random.choice(songs)
-
+    
     context = {
         "chat_room": chat_room,
         "chat_messages": chat_messages,

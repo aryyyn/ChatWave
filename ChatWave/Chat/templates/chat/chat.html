@@ -99,6 +99,7 @@
 
 
                 {% for message in chat_messages %}
+                
                 {% if not message.isDeleted%}
                 {% if message.sender.username != request.user.username%}
 
