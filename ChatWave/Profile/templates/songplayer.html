@@ -1,8 +1,6 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,116 +8,190 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'songplayer.css' %}">
 </head>
-
 <body>
-
-    <div class="nav-buttons">
+    <header class="nav-buttons">
         <a href="{% url 'homeChatViewLogic' %}" class="nav-button">
             <i class="fas fa-home"></i> Home
         </a>
         <a href="{% url 'profile' username=userinfo.username %}" class="nav-button">
             <i class="fas fa-user"></i> Profile
         </a>
-    </div>
+    </header>
 
-    <div class="sidebar">
+    <aside class="sidebar">
         {% if songs %}
-            {% for song in songs %}
-                <div class="song-item">
-                    <a id="play-button"
-                       href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}">
-                        <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
-                        <div class="song-info">
-                            <h3>{{ song.title }}</h3>
-                            <p>{{ song.artist }}</p>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
+            <div class="playlist">
+                {% for song in songs %}
+                    <article class="song-item">
+                        <a href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}">
+                            <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
+                            <div class="song-details">
+                                <h3>{{ song.title }}</h3>
+                                <p>{{ song.artist }}</p>
+                            </div>
+                        </a>
+                    </article>
+                {% endfor %}
+            </div>
         {% else %}
-            <div class="song-item">
-                <div class="song-info">
-                    <h3>No Songs Yet</h3>
-                    <p>Your favorite songs will appear here once you start liking them during your chat.</p>
-                </div>
+            <div class="empty-playlist">
+                <h3>No Songs Yet</h3>
+                <p>Your favorite songs will appear here once you start liking them during your chat.</p>
             </div>
         {% endif %}
-    </div>
+    </aside>
 
     {% if clickedsong %}
-        <div class="main-player">
-            <div class="now-playing">
-                <img src="{{ clickedsong.thumbnail.url }}" alt="Current Track" class="current-artwork">
-                <div class="song-info">
-                    <h2>{{ clickedsong.title }}</h2>
-                    <p>{{ clickedsong.artist }}</p>
-                </div>
+    <main class="main-player">
+        <section class="now-playing">
+            <img src="{{ clickedsong.thumbnail.url }}" alt="Current Track" class="current-artwork">
+            <div class="song-info">
+                <h2>{{ clickedsong.title }}</h2>
+                <p>{{ clickedsong.artist }}</p>
             </div>
+        </section>
 
-            <audio id="audio-player" controls>
-                <source src="{{ clickedsong.song.url }}" type="audio/mpeg" autoplay>
+        <div class="custom-player">
+            <audio id="audio-player">
+                <source src="{{ clickedsong.song.url }}" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
 
-            <div class="lyrics-section">
-                <h3>Lyrics</h3>
-                <div id="lyrics-container"></div>
+            <div class="player-controls">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="time-info">
+                        <span class="current-time">0:00</span>
+                        <span class="total-time">0:00</span>
+                    </div>
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="prev-btn"><i class="fas fa-step-backward"></i></button>
+                    <button class="play-pause-btn"><i class="fas fa-play"></i></button>
+                    <button class="next-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
             </div>
         </div>
+
+        <section class="lyrics-section">
+            <h3>Lyrics</h3>
+            <div id="lyrics-container"></div>
+        </section>
+    </main>
     {% endif %}
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const music = document.getElementById("audio-player");
-            const lyricsContainer = document.getElementById("lyrics-container");
-            const lyrics = {{ clickedsong.lyrics|safe }};
-        
-            // Check if there's a song loaded and autoplay it
-            if (music) {
-                music.autoplay = true; // Enable autoplay
-                music.load();          // Ensure the audio source is loaded
-            }
-        
-            function parseTime(timeString) {
-                const [minutes, seconds] = timeString.split(':');
-                return parseInt(minutes) * 60 + parseFloat(seconds);
-            }
-        
-            function displayLyrics() {
-                lyricsContainer.innerHTML = ''; 
-        
-                lyrics.forEach((line, index) => {
-                    const lyricElement = document.createElement('p');
-                    lyricElement.id = `lyric-${index}`;
-                    lyricElement.className = 'lyric-line';
-                    lyricsContainer.appendChild(lyricElement);
-        
-                    setTimeout(() => {
-                        lyricElement.textContent = line.lyrics;
-                        lyricElement.style.opacity = 1;
-        
-                        lyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, parseTime(line.time) * 1000); 
-                });
-            }
-        
-            music.addEventListener('play', displayLyrics);
-        
-            music.addEventListener('timeupdate', () => {
-                const currentTime = music.currentTime;
-                lyrics.forEach((line, index) => {
-                    const lyricElement = document.getElementById(`lyric-${index}`);
-                    if (lyricElement) {
-                        if (currentTime >= parseTime(line.time)) {
-                            lyricElement.classList.add('highlight');
-                        } else {
-                            lyricElement.classList.remove('highlight');
-                        }
-                    }
-                });
-            });
-        });
-        </script>
-</body>
+document.addEventListener('DOMContentLoaded', () => {
+    const audioPlayer = document.getElementById('audio-player');
+    const playPauseBtn = document.querySelector('.play-pause-btn');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const progressBar = document.querySelector('.progress-bar');
+    const progressFill = document.querySelector('.progress-fill');
+    const currentTimeEl = document.querySelector('.current-time');
+    const totalTimeEl = document.querySelector('.total-time');
+    const lyricsContainer = document.getElementById('lyrics-container');
+    const lyrics = {{ clickedsong.lyrics|safe }};
 
+    let currentLyricIndex = 0;
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function parseTime(timeString) {
+        const [minutes, seconds] = timeString.split(':');
+        return parseInt(minutes) * 60 + parseFloat(seconds);
+    }
+
+    function updateProgressBar() {
+        const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressFill.style.width = `${percentage}%`;
+        currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+    }
+
+    function displayLyrics() {
+        lyricsContainer.innerHTML = ''; 
+        lyrics.forEach((line, index) => {
+            const lyricElement = document.createElement('p');
+            lyricElement.id = `lyric-${index}`;
+            lyricElement.className = 'lyric-line';
+            lyricElement.textContent = line.lyrics;
+            lyricElement.dataset.time = line.time;
+            lyricsContainer.appendChild(lyricElement);
+        });
+    }
+
+    function syncLyrics() {
+        const currentTime = audioPlayer.currentTime;
+        
+        lyrics.forEach((line, index) => {
+            const lyricElement = document.getElementById(`lyric-${index}`);
+            const lineTime = parseTime(line.time);
+            
+            if (currentTime >= lineTime) {
+                lyricElement.classList.add('highlight');
+                
+                if (index !== currentLyricIndex) {
+                    currentLyricIndex = index;
+                    lyricsContainer.scrollTo({
+                        top: lyricElement.offsetTop - lyricsContainer.clientHeight / 3,
+                        behavior: 'smooth'
+                    });
+                }
+            } else {
+                lyricElement.classList.remove('highlight');
+            }
+        });
+    }
+
+    function setProgress(e) {
+        const totalWidth = progressBar.clientWidth;
+        const clickX = e.offsetX;
+        const percentage = clickX / totalWidth;
+        audioPlayer.currentTime = percentage * audioPlayer.duration;
+    }
+
+    audioPlayer.addEventListener('canplaythrough', () => {
+        audioPlayer.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        displayLyrics();
+    });
+
+    audioPlayer.addEventListener('loadedmetadata', () => {
+        totalTimeEl.textContent = formatTime(audioPlayer.duration);
+    });
+
+    audioPlayer.addEventListener('timeupdate', () => {
+        updateProgressBar();
+        syncLyrics();
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            audioPlayer.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+
+    progressBar.addEventListener('click', setProgress);
+
+    prevBtn.addEventListener('click', () => {
+        // Future implementation
+    });
+
+    nextBtn.addEventListener('click', () => {
+        // Future implementation
+    });
+});
+    </script>
+</body>
 </html>
