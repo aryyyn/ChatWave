@@ -12,95 +12,113 @@
 </head>
 
 <body>
+
     <div class="nav-buttons">
-        <a href="{% url 'homeChatViewLogic'%}" class="nav-button">
-            <i class="fas fa-home"></i>
-            Home
+        <a href="{% url 'homeChatViewLogic' %}" class="nav-button">
+            <i class="fas fa-home"></i> Home
         </a>
-        <a href="{%url 'profile' username=userinfo.username%}" class="nav-button">
-            <i class="fas fa-user"></i>
-            Profile
+        <a href="{% url 'profile' username=userinfo.username %}" class="nav-button">
+            <i class="fas fa-user"></i> Profile
         </a>
     </div>
+
     <div class="sidebar">
-
-
-
-        {% comment %} {%if userinfo.username == request.user.username%} {% endcomment %}
         {% if songs %}
-        {% for song in songs %}
-        <div class="song-item">
-            <a id="play-button"
-                href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}">
-                <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
-                <div class="song-info">
-                    <h3>{{ song.title }}</h3>
-                    <p>{{ song.artist }}</p>
+            {% for song in songs %}
+                <div class="song-item">
+                    <a id="play-button"
+                       href="{% url 'Player' username=userinfo.username clickedplaylist=song.genre id=song.song_id %}">
+                        <img src="{{ song.thumbnail.url }}" alt="{{ song.genre }}" class="playlist-cover">
+                        <div class="song-info">
+                            <h3>{{ song.title }}</h3>
+                            <p>{{ song.artist }}</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {% endfor %}
-
+            {% endfor %}
         {% else %}
-        <div class="song-item">
-
-            <div class="song-info">
-                <h3>No Songs Yet</h3>
-                <p>Your favorite songs will appear here once you start liking them during your chat. Each playlist is
-                    organized by genre, and songs are selected based on the sentiment of your messages.</p>
+            <div class="song-item">
+                <div class="song-info">
+                    <h3>No Songs Yet</h3>
+                    <p>Your favorite songs will appear here once you start liking them during your chat.</p>
+                </div>
             </div>
-
-        </div>
-
-
         {% endif %}
-
-
     </div>
 
     {% if clickedsong %}
-    <div class="main-player">
-        <div class="now-playing">
-            <img src={{ clickedsong.thumbnail.url }} alt="Current Track" class="current-artwork">
-            <div class="song-info">
-                <h2>{{clickedsong.title}}</h2>
-                <p>{{clickedsong.artist}}</p>
+        <div class="main-player">
+            <div class="now-playing">
+                <img src="{{ clickedsong.thumbnail.url }}" alt="Current Track" class="current-artwork">
+                <div class="song-info">
+                    <h2>{{ clickedsong.title }}</h2>
+                    <p>{{ clickedsong.artist }}</p>
+                </div>
+            </div>
+
+            <audio id="audio-player" controls>
+                <source src="{{ clickedsong.song.url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="lyrics-section">
+                <h3>Lyrics</h3>
+                <div id="lyrics-container"></div>
             </div>
         </div>
-
-        <audio id="audio-player" controls>
-            <source id="audio-player" src="{{ clickedsong.song.url }}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
-
-    {%else%}
-
-    <div class="main-player">
-        <div class="now-playing">
-            <img src="https://i.pinimg.com/736x/3f/0b/ef/3f0bef8c86c928dd41b914a64b598b16.jpg" alt="Current Track"
-                class="current-artwork">
-            <div class="song-info">
-                <h2>No song playing</h2>
-
-            </div>
-        </div>
-
-    </div>
-
-    {%endif%}
+    {% endif %}
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
+    const music = document.getElementById("audio-player");
+    const lyricsContainer = document.getElementById("lyrics-container");
+    const lyrics = {{ clickedsong.lyrics|safe }};
 
-            const music = document.getElementById("audio-player")
-            music.play()
+  
+    function parseTime(timeString) {
+        const [minutes, seconds] = timeString.split(':');
+        return parseInt(minutes) * 60 + parseFloat(seconds);
+    }
 
+    function displayLyrics() {
+        lyricsContainer.innerHTML = ''; 
+
+        lyrics.forEach((line, index) => {
+            const lyricElement = document.createElement('p');
+            lyricElement.id = `lyric-${index}`;
+            lyricElement.className = 'lyric-line';
+            lyricsContainer.appendChild(lyricElement);
+
+        
+            setTimeout(() => {
+                lyricElement.textContent = line.lyrics;
+                lyricElement.style.opacity = 1;
+
+              
+                lyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, parseTime(line.time) * 1000); 
         });
+    }
 
+ 
+    music.addEventListener('play', displayLyrics);
+
+    
+    music.addEventListener('timeupdate', () => {
+        const currentTime = music.currentTime;
+        lyrics.forEach((line, index) => {
+            const lyricElement = document.getElementById(`lyric-${index}`);
+            if (lyricElement) {
+                if (currentTime >= parseTime(line.time)) {
+                    lyricElement.classList.add('highlight');
+                } else {
+                    lyricElement.classList.remove('highlight');
+                }
+            }
+        });
+    });
+});
     </script>
-
-
 </body>
 
 </html>

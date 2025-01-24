@@ -7,6 +7,7 @@ class Playlists(models.Model):
     playlist_name = models.CharField(max_length=256)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="playlists")
     songs = models.TextField(blank=True)
+    
 
 
     def __str__(self):

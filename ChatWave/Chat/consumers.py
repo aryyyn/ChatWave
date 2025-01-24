@@ -223,7 +223,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                                 }
                             )
                         )
-                    
+            
+
+
 
                 if chat_room.category == "Other" and message.startswith("/add"):
 
