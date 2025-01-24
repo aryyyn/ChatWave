@@ -57,7 +57,7 @@
             </div>
 
             <audio id="audio-player" controls>
-                <source src="{{ clickedsong.song.url }}" type="audio/mpeg">
+                <source src="{{ clickedsong.song.url }}" type="audio/mpeg" autoplay>
                 Your browser does not support the audio element.
             </audio>
 
@@ -69,56 +69,57 @@
     {% endif %}
 
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const music = document.getElementById("audio-player");
-    const lyricsContainer = document.getElementById("lyrics-container");
-    const lyrics = {{ clickedsong.lyrics|safe }};
-
-  
-    function parseTime(timeString) {
-        const [minutes, seconds] = timeString.split(':');
-        return parseInt(minutes) * 60 + parseFloat(seconds);
-    }
-
-    function displayLyrics() {
-        lyricsContainer.innerHTML = ''; 
-
-        lyrics.forEach((line, index) => {
-            const lyricElement = document.createElement('p');
-            lyricElement.id = `lyric-${index}`;
-            lyricElement.className = 'lyric-line';
-            lyricsContainer.appendChild(lyricElement);
-
+        document.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById("audio-player");
+            const lyricsContainer = document.getElementById("lyrics-container");
+            const lyrics = {{ clickedsong.lyrics|safe }};
         
-            setTimeout(() => {
-                lyricElement.textContent = line.lyrics;
-                lyricElement.style.opacity = 1;
-
-              
-                lyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, parseTime(line.time) * 1000); 
-        });
-    }
-
- 
-    music.addEventListener('play', displayLyrics);
-
-    
-    music.addEventListener('timeupdate', () => {
-        const currentTime = music.currentTime;
-        lyrics.forEach((line, index) => {
-            const lyricElement = document.getElementById(`lyric-${index}`);
-            if (lyricElement) {
-                if (currentTime >= parseTime(line.time)) {
-                    lyricElement.classList.add('highlight');
-                } else {
-                    lyricElement.classList.remove('highlight');
-                }
+            // Check if there's a song loaded and autoplay it
+            if (music) {
+                music.autoplay = true; // Enable autoplay
+                music.load();          // Ensure the audio source is loaded
             }
+        
+            function parseTime(timeString) {
+                const [minutes, seconds] = timeString.split(':');
+                return parseInt(minutes) * 60 + parseFloat(seconds);
+            }
+        
+            function displayLyrics() {
+                lyricsContainer.innerHTML = ''; 
+        
+                lyrics.forEach((line, index) => {
+                    const lyricElement = document.createElement('p');
+                    lyricElement.id = `lyric-${index}`;
+                    lyricElement.className = 'lyric-line';
+                    lyricsContainer.appendChild(lyricElement);
+        
+                    setTimeout(() => {
+                        lyricElement.textContent = line.lyrics;
+                        lyricElement.style.opacity = 1;
+        
+                        lyricElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, parseTime(line.time) * 1000); 
+                });
+            }
+        
+            music.addEventListener('play', displayLyrics);
+        
+            music.addEventListener('timeupdate', () => {
+                const currentTime = music.currentTime;
+                lyrics.forEach((line, index) => {
+                    const lyricElement = document.getElementById(`lyric-${index}`);
+                    if (lyricElement) {
+                        if (currentTime >= parseTime(line.time)) {
+                            lyricElement.classList.add('highlight');
+                        } else {
+                            lyricElement.classList.remove('highlight');
+                        }
+                    }
+                });
+            });
         });
-    });
-});
-    </script>
+        </script>
 </body>
 
 </html>
