@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lyricsContainer = document.getElementById('lyrics-container');
     const lyrics = {{ clickedsong.lyrics|safe }};
 
-    let currentLyricIndex = 0;
+    let currentLyricIndex = -1;
 
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
@@ -129,25 +129,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function syncLyrics() {
         const currentTime = audioPlayer.currentTime;
+        const newLyricIndex = lyrics.findLastIndex(line => 
+            currentTime >= parseTime(line.time)
+        );
         
-        lyrics.forEach((line, index) => {
-            const lyricElement = document.getElementById(`lyric-${index}`);
-            const lineTime = parseTime(line.time);
-            
-            if (currentTime >= lineTime) {
-                lyricElement.classList.add('highlight');
-                
-                if (index !== currentLyricIndex) {
-                    currentLyricIndex = index;
-                    lyricsContainer.scrollTo({
-                        top: lyricElement.offsetTop - lyricsContainer.clientHeight / 3,
-                        behavior: 'smooth'
-                    });
-                }
-            } else {
-                lyricElement.classList.remove('highlight');
+        if (newLyricIndex !== currentLyricIndex) {
+            // Remove highlight from previous lyric
+            if (currentLyricIndex !== -1) {
+                const prevLyric = document.getElementById(`lyric-${currentLyricIndex}`);
+                if (prevLyric) prevLyric.classList.remove('highlight');
             }
-        });
+            
+            const currentLyric = document.getElementById(`lyric-${newLyricIndex}`);
+            if (currentLyric) {
+                currentLyric.classList.add('highlight');
+                currentLyric.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            currentLyricIndex = newLyricIndex;
+        }
     }
 
     function setProgress(e) {
@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Future implementation
     });
 });
+   
     </script>
 </body>
 </html>

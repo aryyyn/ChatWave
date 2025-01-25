@@ -206,7 +206,7 @@ h3 {
     flex-direction: column;
     gap: 15px;
     margin-bottom: 20px;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
 }
 
 .user a {
