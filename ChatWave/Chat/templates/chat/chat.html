@@ -861,6 +861,15 @@ function deleteNotification(notificationId) {
             else if (data.type == "add_update") {
                 addUserResult = data.addUserResult
                 alert(addUserResult)
+              
+                
+
+            }
+            else if (data.type == "remove_chatroom")
+            {
+                remove_chatroom_result = data.remove_chatroom_result
+                alert(remove_chatroom_result)
+                window.location.href = window.location.origin + "/home/chat/General_Chat/";
 
             }
             else if (data.type == "remove_update") {
@@ -881,6 +890,13 @@ function deleteNotification(notificationId) {
                     window.location.href = window.location.origin + "/home/chat/General_Chat/";
                 }
             }
+
+            else if (data.type == "remove_chatroom_all") {
+                const username = "{{request.user.username|escapejs}}";
+                //run a for loop to iterate through all the usernames in the list
+                //and then reload for each of them
+            }
+
 
 
             else if (data.type === "delete_message") {

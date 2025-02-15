@@ -68,9 +68,12 @@
                     </div>
                 </div>
                 
-                <div class="control-buttons">
+                <div class="control-buttons"> 
                     <button class="play-pause-btn"><i class="fas fa-play"></i></button>
                     <button class="next-btn"><i class="fas fa-step-forward"></i></button>
+                    
+                    <button class="volume-icon"><i class = "fas fa-volume-low"></i> </button>
+                    <input type="range" id="volume-slider" min="0" max="100" value="50">
                 </div>
             </div>
         </div>
@@ -170,6 +173,40 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgressBar();
         syncLyrics();
     });
+
+    const volumeSlider = document.getElementById("volume-slider");
+    const volumeIcon = document.querySelector(".volume-icon")
+    volumeSlider.addEventListener('input', () => {
+        let volume = volumeSlider.value;
+
+        audioPlayer.volume = volume/100
+
+        if (volume == 0){
+            volumeIcon.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>'
+        }
+        else if (volume > 0 && volume <= 50){
+            volumeIcon.innerHTML = '<i class="fa-solid fa-volume-low"></i>'
+        }
+        else{
+            volumeIcon.innerHTML = '<i class="fa-solid fa-volume-high"></i>'
+        }
+
+    })
+    volumeIcon.addEventListener('click', () => {
+        let volume= volumeSlider.value;
+        
+        if (volume == 0) {
+            
+            volumeSlider.value = 50;
+            audioPlayer.volume = 0.5;
+            volumeIcon.innerHTML = '<i class="fa-solid fa-volume-low"></i>'
+        }
+        else {
+            volumeSlider.value = 0;
+            audioPlayer.volume = 0;
+            volumeIcon.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>'
+        }
+    })
 
     playPauseBtn.addEventListener('click', () => {
         if (audioPlayer.paused) {

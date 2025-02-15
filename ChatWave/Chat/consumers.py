@@ -233,7 +233,34 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             )
                         )
             
+                if chat_room.category == "Other" and message.startswith("/delete"):
+                    chatRoomOwnerUsername = ChatRoomName.split("_")[0]
+                    usernames_in_chatroom = await self.usernames_in_chatroom(chat_room)
+                    print(usernames_in_chatroom)
+                    if (self.scope["user"].username == chatRoomOwnerUsername):
+                        removeChatRoom = await self.remove_chat_room (
+                            chat_room
+                        )
+                        await self.send(
+                            text_data=json.dumps(
+                                {
+                                    'type': 'remove_chatroom',
+                                    'remove_chatroom_result': removeChatRoom,
+                                }
+                            )
+                        )
 
+
+
+
+                        # await self.channel_layer.group_send(
+                        #     self.room_group_name,
+                        #     {
+                        #         "type": "remove_update_all",
+                        #         "usernames_in_chatroom": usernames_in_chatroom,
+                        #     },
+                        # )
+                    
 
 
                 if chat_room.category == "Other" and message.startswith("/add"):
@@ -356,6 +383,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         Notification.objects.create(
             notification_text=notification_text, user=userMentioned
         )
+
+    @database_sync_to_async
+    def usernames_in_chatroom(self, chat_room):
+        return chat_room.allowed
         
 
     @database_sync_to_async
@@ -372,6 +403,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return "User Added"
         else:
             return "No User Found"
+        
+    @database_sync_to_async
+    def remove_chat_room(self, chat_room):
+        deleted_count, _ = chat_room.delete()
+        if (deleted_count > 0):
+            return ("Chat Room has been deleted.")
+        else:
+            return ("Chat Room can not be deleted.")
+        
         
     @database_sync_to_async
     def leaveChatRoom(self, chat_room, messageUsername):

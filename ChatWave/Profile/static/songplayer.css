@@ -182,6 +182,7 @@ body {
     background-color: #1f1f1f;
     border-radius: 12px;
     padding: 15px;
+    
 }
 
 .progress-container {
@@ -218,6 +219,7 @@ body {
     align-items: center;
     gap: 20px;
 }
+
 
 .control-buttons button {
     background: none;
