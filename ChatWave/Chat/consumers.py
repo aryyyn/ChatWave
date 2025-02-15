@@ -18,10 +18,19 @@ _key_cache = None
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+    model = None
+    vectorizer = None
+    nlp = None
+
     async def connect(self):
-        self.model = joblib.load("../Model/WordFilterFiles/text_classifier_model.pkl")
-        self.vectorizer = joblib.load("../Model/WordFilterFiles/vectorizer.pkl")
-        self.nlp = spacy.load("en_core_web_sm")
+        if not ChatConsumer.model:
+            ChatConsumer.model = joblib.load("../Model/WordFilterFiles/text_classifier_model.pkl")
+            ChatConsumer.vectorizer = joblib.load("../Model/WordFilterFiles/vectorizer.pkl")
+            ChatConsumer.nlp = spacy.load("en_core_web_sm")
+        
+        self.model = ChatConsumer.model
+        self.vectorizer = ChatConsumer.vectorizer
+        self.nlp = ChatConsumer.nlp
 
         self.room_name = self.scope["url_route"]["kwargs"][
             "room_name"

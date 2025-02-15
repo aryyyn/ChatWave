@@ -90,9 +90,10 @@
             <div class="chat-header">
                 <h2>{{chat_room.room_name}}</h2>
                 <div class="chat-header-actions">
-
                     <button>🔔</button>
-                    <button>🔓</button>
+                    <button onclick="window.location.href='{% url 'logout_logic' %}'">
+                        🔓
+                      </button>
                 </div>
             </div>
             <div class="chat-messages">
@@ -467,14 +468,6 @@ function deleteNotification(notificationId) {
             const username = "{{ request.user.username }}"
 
             window.location.href = window.location.origin + "/account/" + username;
-        });
-
-
-        const logoutButton = document.querySelector(".chat-header-actions button:nth-child(2)");
-
-        logoutButton.addEventListener('click', () => {
-
-            window.location.href = window.location.host + "/auth" + "/logout/";
         });
 
 

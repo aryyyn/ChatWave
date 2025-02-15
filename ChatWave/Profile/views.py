@@ -147,18 +147,27 @@ def Player(request, username, clickedplaylist, id):
     playlist = Playlists.objects.get(user__username=username, playlist_name=clickedplaylist)
     songs = playlist.songs.split(",")
     songlist = []
+    songIds = []
     for songtitle in songs:
         music = Music.objects.filter(title=songtitle).first()
         if music:
+            songIds.append(music.song_id)
             songlist.append(music)
+
+    # song_ids = []
+    # for songtitle in songs:
+    #     if (Music.objects.filter(title=songtitle).exists()):
+    #         song_ids = Music.objects.filter()
+        
    
-       
+    
     song = Music.objects.get(song_id=id)
     
     context = {
                     "userinfo": CustomUser.objects.get(username=username),
                     "songs": songlist,
-                    "clickedsong": song
+                    "clickedsong": song,
+                    "songids": songIds,
 
         }
     

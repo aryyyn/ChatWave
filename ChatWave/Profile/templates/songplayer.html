@@ -69,7 +69,6 @@
                 </div>
                 
                 <div class="control-buttons">
-                    <button class="prev-btn"><i class="fas fa-step-backward"></i></button>
                     <button class="play-pause-btn"><i class="fas fa-play"></i></button>
                     <button class="next-btn"><i class="fas fa-step-forward"></i></button>
                 </div>
@@ -184,13 +183,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     progressBar.addEventListener('click', setProgress);
 
-    prevBtn.addEventListener('click', () => {
-        // Future implementation
+    nextBtn.addEventListener('click', () => {
+
+        const songids = JSON.parse("{{ songids|escapejs }}");
+    
+
+        const randomIndex = Math.floor(Math.random() * songids.length);
+        const randomSongId = songids[randomIndex];
+    
+        const url = window.location.href;
+        const parts = url.split('/');
+    
+        parts[parts.length - 2] = randomSongId; 
+    
+        const newUrl = parts.join('/');
+        window.location.href = newUrl;
     });
 
-    nextBtn.addEventListener('click', () => {
-        // Future implementation
-    });
 });
    
     </script>
