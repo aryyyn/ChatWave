@@ -236,7 +236,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 if chat_room.category == "Other" and message.startswith("/delete"):
                     chatRoomOwnerUsername = ChatRoomName.split("_")[0]
                     usernames_in_chatroom = await self.usernames_in_chatroom(chat_room)
-                    print(usernames_in_chatroom)
                     if (self.scope["user"].username == chatRoomOwnerUsername):
                         removeChatRoom = await self.remove_chat_room (
                             chat_room
@@ -250,16 +249,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             )
                         )
 
-
-
-
-                        # await self.channel_layer.group_send(
-                        #     self.room_group_name,
-                        #     {
-                        #         "type": "remove_update_all",
-                        #         "usernames_in_chatroom": usernames_in_chatroom,
-                        #     },
-                        # )
+                        await self.channel_layer.group_send(
+                            self.room_group_name,
+                            {
+                                "type": "remove_chatroom_all",
+                                "usernames_in_chatroom": usernames_in_chatroom,
+                            },
+                        )
                     
 
 
@@ -349,6 +345,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.send(
             text_data=json.dumps({"type": "typeindicator", "username": username})
+        )
+
+    async def remove_chatroom_all(self,event):
+        users_in_chatroom = event["usernames_in_chatroom"]
+        await self.send(
+            text_data=json.dumps({
+                "type": "remove_chatroom_all",
+                "users_in_chatroom": users_in_chatroom,
+            })
         )
 
     async def stopped_typing(self, event):

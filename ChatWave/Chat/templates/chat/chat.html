@@ -893,8 +893,13 @@ function deleteNotification(notificationId) {
 
             else if (data.type == "remove_chatroom_all") {
                 const username = "{{request.user.username|escapejs}}";
-                //run a for loop to iterate through all the usernames in the list
-                //and then reload for each of them
+                const users_in_chatroom = data.users_in_chatroom
+
+                users_in_chatroom.forEach(uname => {
+                    if (uname == username) {
+                        window.location.href = window.location.origin + "/home/chat/General_Chat/";
+                    }
+                }) 
             }
 
 
