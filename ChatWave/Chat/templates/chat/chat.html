@@ -145,23 +145,22 @@
 
     </div>
 
-
-
     {%endif%}
     {% endif %}
     {% endfor %}
-
-
-
     </div>
     <div class="type-indicator-area">
 
     </div>
+    <div class="commands-display-area">
+
+    </div>
+
     <div class="input-area">
 
         <input type="text" class="input-chat-box" placeholder="Start typing...">
         <div class="input-actions">
-            <button>✈️</button>
+            <button>➡️</button>
             <button>🎥</button>
             <button>📸</button>
 
@@ -639,9 +638,28 @@ function deleteNotification(notificationId) {
         });
 
         const inputChatBox = document.querySelector(".input-chat-box")
+        const commandsDisplayArea = document.querySelector(".commands-display-area");
         const username = '{{request.user.username}}'
+        const chatroom_type = '{{chat_room.category}}'
         let typingTimeout;
         inputChatBox.addEventListener('input', () => {
+            const input_value = inputChatBox.value;
+            if (input_value === "/" && chatroom_type == "Other") {
+                commandsDisplayArea.innerHTML = `
+                    Commands: <br>
+                    /add (username) - Add users to chatroom <br>
+                    /remove (username) - Remove users from chatroom <br>
+                    /delete - Delete chatroom
+                `;
+            } else if (input_value.startsWith("/add")) {
+                commandsDisplayArea.innerHTML = "Usage: /add (username) - Add users to chatroom";
+            } else if (input_value.startsWith("/remove")) {
+                commandsDisplayArea.innerHTML = "Usage: /remove (username) - Remove users from chatroom";
+            } else if (input_value === "/delete") {
+                commandsDisplayArea.innerHTML = "Usage: /delete - Delete chatroom";
+            } else {
+                commandsDisplayArea.innerHTML = "";  
+            }
 
             clearTimeout(typingTimeout);
 
@@ -706,9 +724,10 @@ function deleteNotification(notificationId) {
         });
          */
 
-
+        
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                commandsDisplayArea.innerHTML = "";
                 sendMessage();
             }
         });
@@ -901,6 +920,8 @@ function deleteNotification(notificationId) {
                     }
                 }) 
             }
+
+
 
 
 
