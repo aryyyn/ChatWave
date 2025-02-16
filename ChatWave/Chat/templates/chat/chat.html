@@ -473,7 +473,6 @@ function deleteNotification(notificationId) {
 
         const themeSelect = document.getElementById('themeSelect');
 
-
         const elements = {
             body: document.body,
             chatRooms: document.querySelector('.chat-rooms'),
@@ -488,137 +487,127 @@ function deleteNotification(notificationId) {
             messageSent: document.querySelector('.message.sent'),
             inputArea: document.querySelector('.input-area'),
         };
-
-
+        
+        const themes = {
+            default: {
+                body: { backgroundColor: "#0a0a0a", color: "#fff" },
+                chatRooms: { backgroundColor: "#111" },
+                chatSection: { backgroundColor: "#0d0d0d" },
+                sideNav: { backgroundColor: "#111" },
+                container: { backgroundColor: "#0a0a0a" },
+                roomItem: { backgroundColor: "#1a1a1a", border: "1px solid #ff336622" },
+                chatRoomsH2: { color: "#ff3366" },
+                addRoom: { color: "#ff3366" },
+                inputArea: { backgroundColor: "#161616" },
+                message: { backgroundColor: "#161616" },
+                messageUser: { backgroundColor: "#1a1a1a" },
+                messageSent: { backgroundColor: "#ff33661a" },
+            },
+            blue_pink: {
+                body: { backgroundColor: "#E0F4FF", color: "#FF69B4" },
+                chatRooms: { backgroundColor: "#F8FBFF" },
+                chatSection: { backgroundColor: "#F0F8FF" },
+                sideNav: { backgroundColor: "#CAEDFF" },
+                container: { backgroundColor: "#E0F4FF" },
+                roomItem: { backgroundColor: "#F8FBFF", border: "1px solid #FF9ECD" },
+                chatRoomsH2: { color: "#FF9ECD" },
+                addRoom: { color: "#FF9ECD" },
+                inputArea: { backgroundColor: "#F0F8FF" },
+                message: { backgroundColor: "#F8FBFF" },
+                messageUser: { backgroundColor: "#FFE4F3" },
+                messageSent: { backgroundColor: "#FFE4F3" },
+            },
+            darkcharcoal_yellow: {
+                body: { backgroundColor: "#1A1B1E", color: "#FFD93D" },
+                chatRooms: { backgroundColor: "#212428" },
+                chatSection: { backgroundColor: "#2A2B2F" },
+                sideNav: { backgroundColor: "#2A2B2F" },
+                container: { backgroundColor: "#1A1B1E" },
+                roomItem: { backgroundColor: "#2A2B2F", border: "1px solid #FFD93D" },
+                chatRoomsH2: { color: "#FFE169" },
+                addRoom: { color: "#FFD93D" },
+                inputArea: { backgroundColor: "#212428" },
+                message: { backgroundColor: "#2A2B2F" },
+                messageUser: { backgroundColor: "#32333A" },
+                messageSent: { backgroundColor: "#FFE169" },
+            },
+            lightred_yellow: {
+                body: { backgroundColor: "#FFF3E2", color: "#FF9F9F" },
+                chatRooms: { backgroundColor: "#FFE5CA" },
+                chatSection: { backgroundColor: "#FFF3E2" },
+                sideNav: { backgroundColor: "#FFE5CA" },
+                container: { backgroundColor: "#FFF3E2" },
+                roomItem: { backgroundColor: "#FFE5CA", border: "1px solid #FF9F9F" },
+                chatRoomsH2: { color: "#FF9F9F" },
+                addRoom: { color: "#FA9884" },
+                inputArea: { backgroundColor: "#FFE5CA" },
+                message: { backgroundColor: "#FFE5CA" },
+                messageUser: { backgroundColor: "#FA9884" },
+                messageSent: { backgroundColor: "#FF9F9F" },
+            },
+            darkblue_lightgreen: {
+                body: { backgroundColor: "#1B2430", color: "#9FE6A0" },
+                chatRooms: { backgroundColor: "#233142" },
+                chatSection: { backgroundColor: "#1B2430" },
+                sideNav: { backgroundColor: "#233142" },
+                container: { backgroundColor: "#1B2430" },
+                roomItem: { backgroundColor: "#233142", border: "1px solid #9FE6A0" },
+                chatRoomsH2: { color: "#9FE6A0" },
+                addRoom: { color: "#4E9F3D" },
+                inputArea: { backgroundColor: "#233142" },
+                message: { backgroundColor: "#233142" },
+                messageUser: { backgroundColor: "#2C3E50" },
+                messageSent: { backgroundColor: "#4E9F3D" },
+            },
+            forestgreen_mossgreen: {
+                body: { backgroundColor: "#354F52", color: "#CAD2C5" },
+                chatRooms: { backgroundColor: "#52796F" },
+                chatSection: { backgroundColor: "#354F52" },
+                sideNav: { backgroundColor: "#52796F" },
+                container: { backgroundColor: "#354F52" },
+                roomItem: { backgroundColor: "#52796F", border: "1px solid #CAD2C5" },
+                chatRoomsH2: { color: "#CAD2C5" },
+                addRoom: { color: "#84A98C" },
+                inputArea: { backgroundColor: "#52796F" },
+                message: { backgroundColor: "#52796F" },
+                messageUser: { backgroundColor: "#84A98C" },
+                messageSent: { backgroundColor: "#CAD2C5" },
+            },
+            pastelolivegreen_salmonpink: {
+                body: { backgroundColor: "#E9EDC9", color: "#FF9494" },
+                chatRooms: { backgroundColor: "#FEFAE0" },
+                chatSection: { backgroundColor: "#E9EDC9" },
+                sideNav: { backgroundColor: "#CCD5AE" },
+                container: { backgroundColor: "#E9EDC9" },
+                roomItem: { backgroundColor: "#FEFAE0", border: "1px solid #FF9494" },
+                chatRoomsH2: { color: "#FF9494" },
+                addRoom: { color: "#FFB4B4" },
+                inputArea: { backgroundColor: "#FEFAE0" },
+                message: { backgroundColor: "#FEFAE0" },
+                messageUser: { backgroundColor: "#FFB4B4" },
+                messageSent: { backgroundColor: "#FF9494" },
+            },
+        };
+        
         const applyTheme = (theme) => {
-            if (theme === 'default') {
-                elements.body.style.backgroundColor = "#0a0a0a";
-                elements.body.style.color = "#fff";
-                elements.chatRooms.style.backgroundColor = "#111";
-                elements.chatSection.style.backgroundColor = "#0d0d0d";
-                elements.sideNav.style.backgroundColor = "#111";
-                elements.container.style.backgroundColor = "#0a0a0a";
-                elements.roomItem.style.backgroundColor = "#1a1a1a";
-                elements.roomItem.style.border = "1px solid #ff336622";
-                elements.chatRoomsH2.style.color = "#ff3366";
-                elements.addRoom.style.color = "#ff3366";
-                elements.message.style.backgroundColor = "#161616";
-                elements.messageUser.style.backgroundColor = "#1a1a1a";
-                elements.messageSent.style.backgroundColor = "#ff33661a";
-                elements.inputArea.style.backgroundColor = "#161616";
-            }
-
-            else if (theme === 'blue_pink') {
-                elements.body.style.backgroundColor = "#E0F4FF";
-                elements.body.style.color = "#FF69B4";
-                elements.chatRooms.style.backgroundColor = "#F8FBFF";
-                elements.chatSection.style.backgroundColor = "#F0F8FF";
-                elements.sideNav.style.backgroundColor = "#CAEDFF";
-                elements.container.style.backgroundColor = "#E0F4FF";
-                elements.roomItem.style.backgroundColor = "#F8FBFF";
-                elements.roomItem.style.border = "1px solid #FF9ECD";
-                elements.chatRoomsH2.style.color = "#FF9ECD";
-                elements.addRoom.style.color = "#FF9ECD";
-                elements.message.style.backgroundColor = "#F8FBFF";
-                elements.messageUser.style.backgroundColor = "#FFE4F3";
-                elements.messageSent.style.backgroundColor = "#FFE4F3";
-                elements.inputArea.style.backgroundColor = "#F0F8FF";
-            }
-
-
-
-            else if (theme === 'darkcharcoal_yellow') {
-                elements.body.style.backgroundColor = "#1A1B1E";
-                elements.body.style.color = "#FFD93D";
-                elements.chatRooms.style.backgroundColor = "#212428";
-                elements.chatSection.style.backgroundColor = "#2A2B2F";
-                elements.sideNav.style.backgroundColor = "#2A2B2F";
-                elements.container.style.backgroundColor = "#1A1B1E";
-                elements.roomItem.style.backgroundColor = "#2A2B2F";
-                elements.roomItem.style.border = "1px solid #FFD93D";
-                elements.chatRoomsH2.style.color = "#FFE169";
-                elements.addRoom.style.color = "#FFD93D";
-                elements.message.style.backgroundColor = "#2A2B2F";
-                elements.messageUser.style.backgroundColor = "#32333A";
-                elements.messageSent.style.backgroundColor = "#FFE169";
-                elements.inputArea.style.backgroundColor = "#212428";
-            }
-            else if (theme === 'lightred_yellow') {
-                elements.body.style.backgroundColor = "#FFF3E2";
-                elements.body.style.color = "#FF9F9F";
-                elements.chatRooms.style.backgroundColor = "#FFE5CA";
-                elements.chatSection.style.backgroundColor = "#FFF3E2";
-                elements.sideNav.style.backgroundColor = "#FFE5CA";
-                elements.container.style.backgroundColor = "#FFF3E2";
-                elements.roomItem.style.backgroundColor = "#FFE5CA";
-                elements.roomItem.style.border = "1px solid #FF9F9F";
-                elements.chatRoomsH2.style.color = "#FF9F9F";
-                elements.addRoom.style.color = "#FA9884";
-                elements.message.style.backgroundColor = "#FFE5CA";
-                elements.messageUser.style.backgroundColor = "#FA9884";
-                elements.messageSent.style.backgroundColor = "#FF9F9F";
-                elements.inputArea.style.backgroundColor = "#FFE5CA";
-            }
-            else if (theme === 'darkblue_lightgreen') {
-                elements.body.style.backgroundColor = "#1B2430";
-                elements.body.style.color = "#9FE6A0";
-                elements.chatRooms.style.backgroundColor = "#233142";
-                elements.chatSection.style.backgroundColor = "#1B2430";
-                elements.sideNav.style.backgroundColor = "#233142";
-                elements.container.style.backgroundColor = "#1B2430";
-                elements.roomItem.style.backgroundColor = "#233142";
-                elements.roomItem.style.border = "1px solid #9FE6A0";
-                elements.chatRoomsH2.style.color = "#9FE6A0";
-                elements.addRoom.style.color = "#4E9F3D";
-                elements.message.style.backgroundColor = "#233142";
-                elements.messageUser.style.backgroundColor = "#2C3E50";
-                elements.messageSent.style.backgroundColor = "#4E9F3D";
-                elements.inputArea.style.backgroundColor = "#233142";
-            }
-            else if (theme === 'forestgreen_mossgreen') {
-                elements.body.style.backgroundColor = "#354F52";
-                elements.body.style.color = "#CAD2C5";
-                elements.chatRooms.style.backgroundColor = "#52796F";
-                elements.chatSection.style.backgroundColor = "#354F52";
-                elements.sideNav.style.backgroundColor = "#52796F";
-                elements.container.style.backgroundColor = "#354F52";
-                elements.roomItem.style.backgroundColor = "#52796F";
-                elements.roomItem.style.border = "1px solid #CAD2C5";
-                elements.chatRoomsH2.style.color = "#CAD2C5";
-                elements.addRoom.style.color = "#84A98C";
-                elements.message.style.backgroundColor = "#52796F";
-                elements.messageUser.style.backgroundColor = "#84A98C";
-                elements.messageSent.style.backgroundColor = "#CAD2C5";
-                elements.inputArea.style.backgroundColor = "#52796F";
-            }
-            else if (theme === 'pastelolivegreen_salmonpink') {
-                elements.body.style.backgroundColor = "#E9EDC9";
-                elements.body.style.color = "#FF9494";
-                elements.chatRooms.style.backgroundColor = "#FEFAE0";
-                elements.chatSection.style.backgroundColor = "#E9EDC9";
-                elements.sideNav.style.backgroundColor = "#CCD5AE";
-                elements.container.style.backgroundColor = "#E9EDC9";
-                elements.roomItem.style.backgroundColor = "#FEFAE0";
-                elements.roomItem.style.border = "1px solid #FF9494";
-                elements.chatRoomsH2.style.color = "#FF9494";
-                elements.addRoom.style.color = "#FFB4B4";
-                elements.message.style.backgroundColor = "#FEFAE0";
-                elements.messageUser.style.backgroundColo = "#FFB4B4";
-                elements.messageSent.style.backgroundColor = "#FF9494";
-                elements.inputArea.style.backgroundColor = "#FEFAE0";
-            }
-
-        }
-
-        const savedTheme = localStorage.getItem('theme')
+            const themeStyles = themes[theme];
+            if (!themeStyles) return;
+        
+            Object.keys(themeStyles).forEach((key) => {
+                if (elements[key]) {
+                    Object.assign(elements[key].style, themeStyles[key]);
+                }
+            });
+        };
+        
+        const savedTheme = localStorage.getItem('theme') || 'default';
         applyTheme(savedTheme);
         themeSelect.value = savedTheme;
-
+        
         themeSelect.addEventListener('change', (e) => {
             const selectedTheme = e.target.value;
             localStorage.setItem('theme', selectedTheme);
-            applyTheme(selectedTheme)
-
+            applyTheme(selectedTheme);
         });
 
 
@@ -676,7 +665,7 @@ function deleteNotification(notificationId) {
                     chatSocket.send(JSON.stringify({
                         'type': 'stopped_typing',
                     }));
-                }, 1000);
+                }, 2000);
             } catch (error) {
                 console.error('Error sending typing indicator:', error);
             }
