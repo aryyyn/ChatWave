@@ -71,48 +71,53 @@ def RegisterLogic(request):
     return render(request, "register/registerbase.html")
 
 
-
 def forgotPassword(request):
     if request.method == "POST":
-        
         email = request.POST.get("email")
         user = CustomUser.objects.filter(email=email).first()
-        
-        if (user):
+
+        if user:
             user.verification_code = random.randint(100000, 999999)
             user.save()
             email_logic(user, email)
-            return render(request, "forgot_password/new_password.html")
+            return redirect("new_password")
+        else:
+            messages.error(request, "Email Does Not Exist.")
+            return render(request, "forgot_password/forgot_password.html")
 
     return render(request, "forgot_password/forgot_password.html")
 
 
 def newPassword(request):
     if request.method == "POST":
-            email = request.POST.get("email")
-            user = CustomUser.objects.filter(email=email).first()
+        email = request.POST.get("email")
+        user = CustomUser.objects.filter(email=email).first()
 
-            user_code = "".join([request.POST.get(f"code-{i}") for i in range(1, 7)])
+        if not user:
+            messages.error(request, "Incorrect Email!")
+            return render(request, "forgot_password/new_password.html")
 
-            newPassword = request.POST.get("new-password")
-            confirmPassword = request.POST.get("confirm-password")
+        user_code = "".join([request.POST.get(f"code-{i}", "") for i in range(1, 7)])
 
+        newPassword = request.POST.get("new-password")
+        confirmPassword = request.POST.get("confirm-password")
 
-            code_in_db = str(user.verification_code)
-            if (user_code == code_in_db and newPassword == confirmPassword):
-                hashed_password = make_password(newPassword)
-                user.password = hashed_password
+        code_in_db = str(user.verification_code)
+
+        if user_code == code_in_db:
+            if newPassword == confirmPassword:
+                user.password = make_password(newPassword)
                 user.save()
                 login(request, user)
-                return redirect('homeChatViewLogic')
+                return redirect("homeChatViewLogic")
             else:
-                print("wrong code")
-            
-
-   
+                messages.error(request, "Passwords Do Not Match!")
+                return render(request, "forgot_password/new_password.html")
+        else:
+            messages.error(request, "Invalid Verification Code!")
+            return render(request, "forgot_password/new_password.html")
 
     return render(request, "forgot_password/new_password.html")
-
 
 def email_logic(user, email):
     sender_email = os.getenv('SENDER_EMAIL')
@@ -175,7 +180,6 @@ def logoutLogic(request):
 def verificationLogic(request):
 
     if request.user.is_authenticated and not request.user.is_verified:
-    
         if request.method == "GET":
             return render(request, "verification/verification.html")
         if request.method == "POST":
@@ -189,7 +193,9 @@ def verificationLogic(request):
                 return redirect('homeChatViewLogic')
             
             else:
-                return redirect('verification_logic')
+                messages.error(request, "Invalid Verification Code")
+                return render(request, "verification/verification.html")
+                # return redirect('verification_logic')
         #compare this code with the code that was sent to the email, and if the code is correct, then change the verification status and redirect them to the homepage
         
         

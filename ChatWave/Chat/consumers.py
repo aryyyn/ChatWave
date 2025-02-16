@@ -188,6 +188,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # print(bad_words_message)
                 words = message.split(" ")
                 filtered_message = []
+                filtered_words = []
                 for w in words:
                     if w.startswith("@"):
                         tobeMentioned = w.split("@")[1]
@@ -210,8 +211,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     if w in bad_words_message and bad_words_message[w] == "bad":
                         lettercount = len(w)
                         filtered_message.append("*" * lettercount)
+                        filtered_words.append(w)
                     else:
                         filtered_message.append(w)
+
+                
 
                 message = " ".join(filtered_message)
 
@@ -311,7 +315,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         )
                 else:
 
-                    messageObject = await self.save_message(message)
+                    messageObject = await self.save_message(message, filtered_words)
 
                     # send the message to a specific group (chat_message is automatically called)
                     await self.channel_layer.group_send(
@@ -463,7 +467,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # save_message function that can be called to save the message to the database
     @database_sync_to_async
-    def save_message(self, message):
+    def save_message(self, message,filtered_words):
 
         #for encryption alogrithm
         # global _key_cache
@@ -479,6 +483,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             room=room,
             sender=self.scope["user"],
             message=message,
+            filteredWords = filtered_words
             # created = datetime.datetime.now() #not needed since models.py already handles it
         )
         return MessageObject

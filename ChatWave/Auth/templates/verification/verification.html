@@ -183,6 +183,25 @@
             margin-bottom: 1rem;
         }
 
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+    
+        .messages p {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+    
+        .messages .error {
+            background-color: var(--error-color);
+        }
+    
+        .messages .success {
+            background-color: var(--success-color);
+        }
+
         .verify-btn:hover {
             background-color: var(--primary-dark);
             transform: translateY(-1px);
@@ -236,6 +255,13 @@
                 <div class="verification-wrapper">
                     <div class="verification-icon">✉️</div>
                     <h2>Verify Your Email</h2>
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p class="{{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                     <p class="description">We've sent a verification code to your email address. Please enter the code below to verify your account.</p>
                     <form method="POST">
                         {% csrf_token %}
