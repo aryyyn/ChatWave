@@ -145,7 +145,6 @@
 
         <input type="text" class="input-chat-box" placeholder="Start typing...">
         <div class="input-actions">
-            <button>➡️</button>
             <button>🎥</button>
             <button>📸</button>
         </div>
@@ -235,7 +234,7 @@
                 <h4>Theme Selection</h4>
                 <select id="themeSelect"
                     style="background: #1f1f1f; color: #fff; padding: 5px; border: 1px solid #ff336633; border-radius: 4px;">
-                    <option value="default">Default</option>
+                    <option value="default" selected>Default</option>
                     <option value="blue_pink">Serene Skies</option>
                     <option value="darkcharcoal_yellow">Midnight Spark</option>
                     <option value="lightred_yellow">Sunset Glow</option>
@@ -376,7 +375,7 @@
             settingsModal.classList.remove('active');
         });
 
-        const gifButton = document.querySelector(".input-actions button:nth-child(2)");
+        const gifButton = document.querySelector(".input-actions button:nth-child(1)");
         const gifModal = document.getElementById('gifModal');
         const closeGifButton = document.querySelector(".gif-modal-close")
         gifButton.addEventListener('click', (e) => {
@@ -408,10 +407,6 @@
         //     }
         // });
 
-        const sendButton = document.querySelector(".input-actions button:first-child");
-        sendButton.addEventListener('click', () => {
-            sendMessage()
-        });
 
         const profileBtn = document.querySelector('.profile-button');
         profileBtn.addEventListener('click', () => {
@@ -1092,7 +1087,7 @@
             }
         });
 
-        const attachmentBtn = document.querySelector('.input-actions button:nth-child(3)');
+        const attachmentBtn = document.querySelector('.input-actions button:nth-child(2)');
         const fileUpload = document.getElementById('fileUpload');
 
         attachmentBtn.addEventListener('click', () => {

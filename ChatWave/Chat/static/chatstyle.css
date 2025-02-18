@@ -16,14 +16,6 @@
     font-family: 'Inter', sans-serif;
 }
 
-:root {
-    --h1-size: clamp(1.5rem, 3vw, 2rem);
-    --h2-size: clamp(1rem, 2vw, 1.25rem);
-    --h3-size: clamp(0.875rem, 1.5vw, 1rem);
-    --body-size: clamp(0.875rem, 1.2vw, 1rem);
-    --small-size: clamp(0.75rem, 1vw, 0.875rem);
-}
-
 body {
     background-color: var(--bg-dark);
     color: #fff;
@@ -1102,13 +1094,20 @@ audio {
 
 
 @media screen and (max-width: 1200px) {
+    .side-nav {
+        display: none;
+        
+    }
     .container {
-        grid-template-columns: minmax(70px, auto) minmax(200px, 250px) 1fr;
+        grid-template-columns: minmax(70px, auto) minmax(200px, auto) 1fr;
     }
 
-    .users-section {
-        display: none;
+    .users-section{
+        grid-template-columns: minmax(70px, auto) 1fr;
+    
     }
+
+   
 }
 
 @media screen and (max-width: 900px) {
@@ -1119,10 +1118,11 @@ audio {
     .chat-rooms {
         display: none;
     }
+
+    .users-section {
+        display: none;
+    }
 }
-
-
-
 
 @media (prefers-reduced-motion: reduce) {
     * {
@@ -1133,7 +1133,6 @@ audio {
     }
 }
 
-/* Dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-dark: #0a0a0a;
