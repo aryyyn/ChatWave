@@ -3,7 +3,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,8 +78,6 @@
                     {% endif %}
                     {% endif %}
                     {% endfor %}
-
-
                 </div>
 
             </div>
@@ -97,10 +94,7 @@
                 </div>
             </div>
             <div class="chat-messages">
-
-
                 {% for message in chat_messages %}
-                
                 {% if not message.isDeleted%}
                 {% if message.sender.username != request.user.username%}
 
@@ -138,20 +132,15 @@
         <h3 class="text-message"> {{ message.message }} </h3>
     </div>
     {%endif%}
-
     </div>
-
     {%endif%}
     {% endif %}
     {% endfor %}
     </div>
     <div class="type-indicator-area">
-
     </div>
     <div class="commands-display-area">
-
     </div>
-
     <div class="input-area">
 
         <input type="text" class="input-chat-box" placeholder="Start typing...">
@@ -159,7 +148,6 @@
             <button>➡️</button>
             <button>🎥</button>
             <button>📸</button>
-
         </div>
     </div>
     </div>
@@ -191,11 +179,7 @@
                 <button class="randomSongNo">Okay!</button>
             </div>
 
-
-
             {%endif%}
-
-
             {% else %}
 
             <img src="https://i.pinimg.com/736x/9c/1d/df/9c1ddfa2bc9e17d4dbf4799f73622f23.jpg" alt="Album Art"
@@ -205,7 +189,6 @@
             </div>
 
             {% endif %}
-
             {% if not songPlaying%}
 
             <div class="player-controls">
@@ -216,18 +199,11 @@
                 <button type="submit" id="like-song" name="action" value="like-song" disabled>❤️</button>
 
             </div>
-
-
             {%else%}
 
             <div class="player-controls">
-
-
                 <button type="submit" id="next-song" class="next-song" name="action" value="next-song">➤</button>
-
                 <button type="submit" id="like-song" name="action" value="like-song">❤️</button>
-
-
             </div>
             {%endif%}
 
@@ -267,9 +243,6 @@
                     <option value="forestgreen_mossgreen">Woodland Whisper</option>
                     <option value="pastelolivegreen_salmonpink">Peachy Meadow</option>
                 </select>
-
-
-
             </div>
         </div>
     </div>
@@ -334,26 +307,14 @@
 </head>
 
 <script>
+    const roomName = "{{ chat_room.room_name }}";
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
 
-function deleteNotification(notificationId) {
-    const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
-    if (notificationElement) {
-        
-        notificationElement.remove();
-        
-        const notiArea = document.querySelector('.noti-area');
-        if (notiArea.querySelectorAll('.notification').length === 0) {
-            notiArea.innerHTML = `
-                <div class="notification">
-                    <div class="notification-message">
-                        No New Notifications.
-                    </div>
-                </div>
-            `;
-        }
-    }
-}
+
     document.addEventListener('DOMContentLoaded', () => {
+
 
         const gifSearchButton = document.getElementById("gifSearchButton");
         const gifInput = document.getElementById("gifInput")
@@ -402,9 +363,6 @@ function deleteNotification(notificationId) {
                 .catch(error => console.error("Error fetching data:", error));
         });
 
-
-
-
         //for theme selection
         const settingsBtn = document.querySelector('.side-nav button:nth-child(2)');
         const settingsModal = document.getElementById('settingsModal');
@@ -430,7 +388,6 @@ function deleteNotification(notificationId) {
             gifModal.classList.remove('active');
         });
 
-
         const notiButton = document.querySelector(".chat-header-actions button:first-child");
         const notiModal = document.getElementById("notiModal");
         const closeNotiModal = document.querySelector(".noti-modal-close");
@@ -451,7 +408,6 @@ function deleteNotification(notificationId) {
         //     }
         // });
 
-
         const sendButton = document.querySelector(".input-actions button:first-child");
         sendButton.addEventListener('click', () => {
             sendMessage()
@@ -464,8 +420,6 @@ function deleteNotification(notificationId) {
 
             window.location.href = window.location.origin + "/account/" + username;
         });
-
-
 
         const themeSelect = document.getElementById('themeSelect');
 
@@ -606,12 +560,6 @@ function deleteNotification(notificationId) {
             applyTheme(selectedTheme);
         });
 
-
-
-        const roomName = "{{ chat_room.room_name }}";
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-        );
 
         const likeSong = document.getElementById("like-song");
         likeSong.addEventListener("click", () => {
@@ -765,17 +713,13 @@ function deleteNotification(notificationId) {
                 };
             }
         });
-        
-        
+      
 
         modal.addEventListener("click", (event) => {
             if (event.target === modal) {
                 modal.classList.remove("active");
             }
         });
-
-
-
 
         function sendMessage(msg) {
             var message = messageInput.value.trim();
@@ -794,7 +738,6 @@ function deleteNotification(notificationId) {
                 messageInput.value = '';
             }
         }
-
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
@@ -861,15 +804,10 @@ function deleteNotification(notificationId) {
 
                 }
             }
-
-
-
             else if (data.type == "add_update") {
                 addUserResult = data.addUserResult
                 alert(addUserResult)
-              
-                
-
+               
             }
             else if (data.type == "remove_chatroom")
             {
@@ -907,16 +845,9 @@ function deleteNotification(notificationId) {
                     }
                 }) 
             }
-
-
-
-
-
             else if (data.type === "delete_message") {
 
-
                 const messageID = data.message_id;
-
                 const messageToDelete = document.getElementById(messageID);
                 if (messageToDelete) {
                     const messageDelete = messageToDelete.parentNode
@@ -930,16 +861,12 @@ function deleteNotification(notificationId) {
                         }
                     }
                 }
-
-
             }
-
-
             else if (data.type === "online_count") {
                 document.getElementById('online-count').textContent = data.online_count + " active";
-                if (data.identifier === 'joined') {
+                 /* if (data.identifier === 'joined') {
                     userJoinLeaveMessage(`Welcome to the ChatRoom, ${data.recently_joined}`)
-                }
+                } */
 
                 const onlineUserList = document.querySelector(".users-list");
                 onlineUserList.innerHTML = '';
@@ -967,24 +894,75 @@ function deleteNotification(notificationId) {
 
             else {
 
-                const { message, username, profilePicture, messageID } = data;
+                const { message, username, profilePicture, messageID, notification_info } = data;
                 const currentUser = "{{ request.user.username }}";
-
-
-
-
+                
+                if (notification_info.is_notification && currentUser == notification_info.mentionedUser) {
+                    const notiArea = document.querySelector('.noti-area');
+                    const firstNotification = notiArea.querySelector('.notification');
+                
+                    
+                    const newNotification = `
+                        <div class="notification" data-notification-id="${notification_info.notification_id}">
+                            <div class="notification-message">
+                                ${notification_info.notification_text}
+                            </div>
+                            <button class="notification-delete">&times;</button>
+                        </div>
+                    `;
+                
+         
+                    if (firstNotification && firstNotification.querySelector('.notification-message').textContent.trim() === "No New Notifications.") {
+                        notiArea.innerHTML = newNotification;
+                    } else {
+                      
+                        notiArea.innerHTML += newNotification;
+                    }
+                }
+                
+         
+                document.querySelector('.noti-area').addEventListener('click', function (event) {
+                    if (event.target.classList.contains('notification-delete')) {
+                        const notification = event.target.closest('.notification');
+                        const notificationId = notification.dataset.notificationId;
+                
+                       
+                        deleteNotification(notificationId);
+                    }
+                });
+                
+                function deleteNotification(notificationId) {
+                    const notificationElement = document.querySelector(`.notification[data-notification-id="${notificationId}"]`);
+                    console.log(notificationElement);
+                    if (notificationElement) {
+                        notificationElement.remove();
+                
+                        chatSocket.send(JSON.stringify({
+                            'type': 'delete_notification',
+                            'notification_id': notificationId
+                        }));
+                
+                        const notiArea = document.querySelector('.noti-area');
+                        if (notiArea.querySelectorAll('.notification').length === 0) {
+                            notiArea.innerHTML = `
+                                <div class="notification">
+                                    <div class="notification-message">
+                                        No New Notifications.
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
                 if (username !== currentUser) {
                     const chatMessages = document.querySelector('.chat-messages');
                     const newMessage = document.createElement('div');
                     newMessage.className = 'message';
 
-
-
                     const time = new Date().toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-
 
                     const imgElement = document.createElement('img');
                     imgElement.src = profilePicture;
@@ -1019,8 +997,6 @@ function deleteNotification(notificationId) {
                         newMessage.appendChild(userDiv);
 
                     }
-
-
                     else {
                         const messageHeading = document.createElement('h3');
                         messageHeading.textContent = escapeHTML(message);
@@ -1032,14 +1008,10 @@ function deleteNotification(notificationId) {
 
                         newMessage.appendChild(imgElement);
                         newMessage.appendChild(userDiv);
-
-
-
                     }
                     chatMessages.appendChild(newMessage);
                     scrollToBottom();
                 }
-
                 else {
 
                     const messageInput = document.querySelector('.input-area input');
@@ -1063,8 +1035,6 @@ function deleteNotification(notificationId) {
                                 `;
                         }
 
-
-
                         else {
                             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                             const sanitizedMessage = escapeHTML(message);
@@ -1077,17 +1047,12 @@ function deleteNotification(notificationId) {
                                 </div>
                             `;
                         }
-
                         chatMessages.appendChild(newMessage);
                         scrollToBottom();
-
                     }
-
                 }
-
             }
         };
-
 
         async function deleteMessageFunc(messageid) {
             try {
@@ -1100,11 +1065,8 @@ function deleteNotification(notificationId) {
                         'X-CSRFToken': csrftoken,
 
                     },
-
                 });
-
                 if (response.ok) {
-
                     chatSocket.send(JSON.stringify({
                         type: 'delete_message',
                         message_id: messageid,
@@ -1173,8 +1135,6 @@ function deleteNotification(notificationId) {
                 sendMessage(Imageurl['secure_url']);
             }
         });
-
-
     });
 
 </script>

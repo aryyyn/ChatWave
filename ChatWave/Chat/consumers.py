@@ -126,6 +126,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     },
                 )
 
+            elif message_type == "delete_notification":
+                notification_id = text_data_json.get("notification_id")
+                await self.delete_notification(notification_id)
+
             elif message_type == "stopped_typing":
 
                 await self.channel_layer.group_send(
@@ -169,6 +173,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 message = text_data_json["message"]
                 ChatRoomName = text_data_json["ChatRoom"]
+                notification_info = {}
 
                 doc = self.nlp(message)
                 filtered_message = " ".join(
@@ -195,15 +200,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         userMentioned = await self.getMentionedUser(tobeMentioned)
 
                         print(userMentioned)
-
+                        
                         if userMentioned:
                             # Check if the user mentioned in this message is the same as the user who sent it.
                             messageUsername = self.scope["user"].username
                             if not (tobeMentioned == messageUsername):
                                 notification_text = f"You were mentioned by {messageUsername} in ChatRoom {ChatRoomName}"
-                                await self.createNotification(
+                                notification_id = await self.createNotification(
                                     notification_text, userMentioned
                                 )
+                                notification_info['is_notification'] = True  
+                                notification_info['mentionedUser'] = userMentioned.username
+                                notification_info['notification_text'] = notification_text
+                                notification_info['notification_id'] = notification_id
+                               
+
+                              
+
                             # add notifications to the users who were pinged
                             else:
                                 print("no user found with that username")
@@ -263,7 +276,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     
 
 
-                if chat_room.category == "Other" and message.startswith("/add"):
+                elif chat_room.category == "Other" and message.startswith("/add"):
 
                     chatRoomOwnerUsername = ChatRoomName.split("_")[0]
                     toAddUsername = message.split(" ")[1]
@@ -326,6 +339,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             "username": self.scope["user"].username,
                             "profilePicture": self.scope["user"].profilePicture,
                             "messageID": messageObject.id,
+                            "notification_info": notification_info
                         },
                     )
         except Exception as err:
@@ -389,9 +403,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def createNotification(self, notification_text, userMentioned):
-        Notification.objects.create(
+        notification = Notification.objects.create(
             notification_text=notification_text, user=userMentioned
         )
+        return notification.id
 
     @database_sync_to_async
     def usernames_in_chatroom(self, chat_room):
@@ -412,6 +427,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return "User Added"
         else:
             return "No User Found"
+        
+
+    @database_sync_to_async
+    def delete_notification(self, notification_id):
+       test = Notification.objects.get(id = notification_id)
+       test.delete()
         
     @database_sync_to_async
     def remove_chat_room(self, chat_room):
@@ -452,6 +473,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = event["username"]
         profilePicture = event["profilePicture"]
         messageID = event["messageID"]
+        notification_info = event['notification_info']
 
         # send the message via websocket to the frontend
         await self.send(
@@ -461,6 +483,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "username": username,
                     "profilePicture": profilePicture,
                     "messageID": messageID,
+                    "notification_info":notification_info
                 }
             )
         )
