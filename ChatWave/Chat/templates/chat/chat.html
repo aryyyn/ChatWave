@@ -163,7 +163,7 @@
 
             <div class="track-info">
 
-                <h3>{{ songs.title }}</h3>
+                <h3 id="song-title">{{ songs.title }}</h3>
                 <p>{{ songs.artist }}</p>
             </div>
             <audio controls autoplay>
@@ -559,13 +559,17 @@
 
 
         const likeSong = document.getElementById("like-song");
+
         likeSong.addEventListener("click", () => {
-            const songs = "{{ songs.title|escapejs }}";
+
+            const songTitle = document.getElementById("song-title").innerText;  
+        
             chatSocket.send(JSON.stringify({
                 'type': 'song',
-                'song': songs
+                'song': songTitle
             }));
         });
+        
 
         const inputChatBox = document.querySelector(".input-chat-box")
         const commandsDisplayArea = document.querySelector(".commands-display-area");
