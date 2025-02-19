@@ -26,6 +26,10 @@ from cryptography.fernet import Fernet
 
 _key_cache = None 
 
+if _key_cache is None:
+    with open("../Cryptography/chatwave.key", "rb") as key_file:
+        _key_cache = key_file.read()
+
 
 @login_required
 def deleteMessage(request, chatroom, messageid):
@@ -49,34 +53,48 @@ def deleteMessage(request, chatroom, messageid):
 
 def isEligibleMethod(user, chatroom) -> bool:
     try:
-        messages = (
-            ChatRoomMessages.objects.filter(sender=user, room=chatroom)
-            .annotate(message_length=Length("message"))
-            .filter(message_length__gte=10)
-        )
-        unique_messages = messages.values("message").distinct()
-        totalMessages = unique_messages.count()
+        cipher = Fernet(_key_cache)
 
-        if totalMessages > 5:
-            return True
-        else:
-            return False
+        encrypted_messages = ChatRoomMessages.objects.filter(sender=user, room=chatroom).values("message")
+
+        decrypted_messages = set()
+        for em in encrypted_messages:
+            decrypted_msg = cipher.decrypt(em["message"].encode()).decode()
+            if len(decrypted_msg) >= 10:  
+                decrypted_messages.add(decrypted_msg)
+
+        return len(decrypted_messages) > 5
+
     except Exception as err:
-        print(err)
+        print(f"Error in isEligibleMethod: {err}")
+        return False
 
 
 def getMessages(user, chatroom):
-    messages = (
-        ChatRoomMessages.objects.filter(sender=user, room=chatroom)
-        .annotate(message_length=Length("message"))
-        .filter(message_length__gte=10)
-        .exclude(Q(message__icontains="http://") | Q(message__icontains="https://"))
-        .order_by("-created")
-    )
+    try:
+        cipher = Fernet(_key_cache)
 
-    unique_messages = messages.values("message").distinct()[:5]
+        encrypted_messages = ChatRoomMessages.objects.filter(sender=user, room=chatroom).order_by("-created").values("message")
 
-    return unique_messages
+        decrypted_messages = []
+        seen_messages = set()
+
+        for em in encrypted_messages:
+            decrypted_msg = cipher.decrypt(em["message"].encode()).decode()
+
+            if len(decrypted_msg) >= 10 and "http://" not in decrypted_msg and "https://" not in decrypted_msg:
+                if decrypted_msg not in seen_messages:
+                    seen_messages.add(decrypted_msg)
+                    decrypted_messages.append(decrypted_msg)
+
+            if len(decrypted_messages) >= 5:
+                break
+
+        return decrypted_messages
+
+    except Exception as err:
+        print(f"Error in getMessages: {err}")
+        return []
 
 
 def genreTest(sentiments):
@@ -167,12 +185,11 @@ def modelTest(messages):
         finalResult = []
         for message in messages:
             try:
-                text = message.get("message", "")
-                if not text:
+                if not message:
                     print(f"Warning: Empty message found in input")
                     continue
 
-                cleaned_text = textcleaning(text)
+                cleaned_text = textcleaning(message)
 
                 sequences = tokenizer1.texts_to_sequences([cleaned_text])
                 padded_sequences = pad_sequences(sequences, padding="post", maxlen=50)
@@ -180,6 +197,7 @@ def modelTest(messages):
                 predictions = new_model.predict(padded_sequences, verbose=0)
                 sentiment = get_sentiment(predictions[0])
 
+                print(message,sentiment)
                 finalResult.append(sentiment)
 
             except Exception as e:
@@ -207,15 +225,13 @@ def chatView(request, chatroom):
 
     chat_messages = chat_room.chat_messages.all().order_by("created")
 
-    # global _key_cache
-    # if _key_cache is None:
-    #     with open("../Cryptography/chatwave.key", "rb") as key_file:
-    #         _key_cache = key_file.read()
 
-    # cipher = Fernet(_key_cache)
+
+    cipher = Fernet(_key_cache)
     # decrypted_chat_messages = []
-    # for cm in chat_messages:
-    #     decrypted_chat_messages.append(cipher.decrypt(str(cm.message).encode()).decode())
+    for cm in chat_messages:
+        cm.message = (cipher.decrypt(str(cm.message).encode()).decode())
+        
 
     ChatRoomOther = ChatRoom.objects.filter(category="Other")
     action = request.POST.get("action")

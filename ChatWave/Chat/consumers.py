@@ -493,14 +493,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, message,filtered_words):
 
         #for encryption alogrithm
-        # global _key_cache
-        # if _key_cache is None:
+        global _key_cache
+        if _key_cache is None:
             
-        #     with open("../Cryptography/chatwave.key", "rb") as key_file:
-        #         _key_cache = key_file.read()
+            with open("../Cryptography/chatwave.key", "rb") as key_file:
+                _key_cache = key_file.read()
 
-        # cipher = Fernet(_key_cache)
-        # message = cipher.encrypt(message.encode()).decode()
+        cipher = Fernet(_key_cache)
+        message = cipher.encrypt(message.encode()).decode()
+        
         room = ChatRoom.objects.get(room_name=self.room_name)
         MessageObject = ChatRoomMessages.objects.create(
             room=room,

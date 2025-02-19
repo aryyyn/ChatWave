@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ChatWave | Chat</title>
     <link rel="stylesheet" href="{% static 'chatstyle.css' %}">
 </head>
@@ -170,6 +171,8 @@
                 Your browser does not support the audio element.
             </audio>
 
+            
+
             {%else%}
             <img src="https://i.pinimg.com/736x/ec/e9/01/ece901e3b7a2de83e379215e778d8fb8.jpg" alt="Album Art"
                 class="album-art">
@@ -209,9 +212,9 @@
         </div>
         <div class="users-section">
             <div class="online-count">
-                <h3>Online Users</h3>
-                <span id='online-count'> {{ chat_room.online_count}} active</span>
 
+                <h3>Online Users</h3>
+                <span id="online-count"> {{ chat_room.online_count}} active</span>
             </div>
             <ul class="users-list">
                 {%for user in chat_room.online_users%}
@@ -239,7 +242,6 @@
                     <option value="darkcharcoal_yellow">Midnight Spark</option>
                     <option value="lightred_yellow">Sunset Glow</option>
                     <option value="darkblue_lightgreen">Blue Horizon</option>
-                    <option value="forestgreen_mossgreen">Woodland Whisper</option>
                     <option value="pastelolivegreen_salmonpink">Peachy Meadow</option>
                 </select>
             </div>
@@ -740,10 +742,25 @@
 
             if (data.type === 'songResult') {
                 if (data.songResult == "Present") {
-                    alert("Song already present");
+                    Swal.fire({
+                        title: "Alert",
+                        text: "This song is already in your playlist!",
+                        icon: "warning",
+                        background: "#222",
+                        color: "#fff",
+                        confirmButtonColor: "#ff6347",
+                      });
+                    
                 }
                 else {
-                    alert("song added");
+                    Swal.fire({
+                        title: "Success",
+                        text: "Song successfully added!",
+                        icon: "success",
+                        background: "#222",
+                        color: "#fff",
+                        confirmButtonColor: "#ff6347",
+                      });
 
                 }
             }
@@ -801,19 +818,35 @@
             }
             else if (data.type == "add_update") {
                 addUserResult = data.addUserResult
-                alert(addUserResult)
+                Swal.fire({
+                    title: "Alert",
+                    text: addUserResult,
+                    icon: "info",
+                    background: "#222",
+                    color: "#fff",
+                    confirmButtonColor: "#ff6347",
+                  });
+               
                
             }
             else if (data.type == "remove_chatroom")
             {
                 remove_chatroom_result = data.remove_chatroom_result
-                alert(remove_chatroom_result)
                 window.location.href = window.location.origin + "/home/chat/General_Chat/";
 
+              
             }
             else if (data.type == "remove_update") {
                 removeUserResult = data.removeUserResult
-                alert(removeUserResult)
+                Swal.fire({
+                    title: "Alert",
+                    text: removeUserResult,
+                    icon: "info",
+                    background: "#222",
+                    color: "#fff",
+                    confirmButtonColor: "#ff6347",
+                  });
+                
             }
             
             else if (data.type == "leave_update") {
