@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import ChatRoom, ChatRoomMessages, Music, Notification
+from .models import ChatRoom, ChatRoomMessages, Music, Notification, UserLog
 from Auth.models import *
 from Profile.models import Playlists
 import datetime
@@ -348,7 +348,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def delete_message(self, event):
 
         message_id = event["message_id"]
-
+        await self.save_logs(self.scope["user"], f"Deleted their message")
         await self.send(
             text_data=json.dumps(
                 {
@@ -424,7 +424,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if User:
             chat_room.allowed.append(username)
             chat_room.save()
+            UserLog.objects.create(user=self.scope["user"], action=f"Added {username} to their chatroom at")
+        
             return "User Added"
+        
         else:
             return "No User Found"
         
@@ -438,7 +441,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def remove_chat_room(self, chat_room):
         deleted_count, _ = chat_room.delete()
         if (deleted_count > 0):
+            UserLog.objects.create(user=self.scope["user"], action=f"Removed their chatroom")
             return ("Chat Room has been deleted.")
+        
         else:
             return ("Chat Room can not be deleted.")
         
@@ -458,7 +463,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if username in chat_room.allowed:
                 chat_room.allowed.remove(username)
                 chat_room.save()
+                UserLog.objects.create(user=self.scope["user"], action=f"Removed {username} from their chatroom")
                 return "User Removed"
+            
             else:
                 return "User Doesn't Have Access"
 
@@ -467,6 +474,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # check if the user actually exists
         # add the user to the chatroom
+
+    @database_sync_to_async
+    def save_logs(self, user, message):
+        UserLog.objects.create(user=user, action=message)
+        
 
     async def chat_message(self, event):
         message = event["message"]
@@ -503,6 +515,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = cipher.encrypt(message.encode()).decode()
         
         room = ChatRoom.objects.get(room_name=self.room_name)
+        UserLog.objects.create(user=self.scope["user"], action=f"Sent a message to room {room} at")
         MessageObject = ChatRoomMessages.objects.create(
             room=room,
             sender=self.scope["user"],

@@ -4,6 +4,7 @@ from .models import *
 
 admin.site.register(ChatRoom)
 admin.site.register(Notification)
+admin.site.register(UserLog)
 
 
 
