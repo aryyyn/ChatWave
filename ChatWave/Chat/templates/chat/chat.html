@@ -174,7 +174,7 @@
             
 
             {%else%}
-            <img src="https://i.pinimg.com/736x/ec/e9/01/ece901e3b7a2de83e379215e778d8fb8.jpg" alt="Album Art"
+            <img src="https://i.pinimg.com/736x/b8/b8/2c/b8b82c9fe92f0418353d5629b6f4c7e4.jpg" alt="Album Art"
                 class="album-art">
             <div class="track-info">
                 <h3>Chat more to unlock mood-based music!</h3>
@@ -184,7 +184,7 @@
             {%endif%}
             {% else %}
 
-            <img src="https://i.pinimg.com/736x/9c/1d/df/9c1ddfa2bc9e17d4dbf4799f73622f23.jpg" alt="Album Art"
+            <img src="https://i.pinimg.com/736x/b8/b8/2c/b8b82c9fe92f0418353d5629b6f4c7e4.jpg" alt="Album Art"
                 class="album-art">
             <div class="track-info">
                 <h3>Press on the '➕' icon to start listening to music!</h3>
@@ -583,7 +583,8 @@
                     Commands: <br>
                     /add (username) - Add users to chatroom <br>
                     /remove (username) - Remove users from chatroom <br>
-                    /delete - Delete chatroom
+                    /delete - Delete chatroom <br>
+                    /leave - Leave chatroom
                 `;
             } else if (input_value.startsWith("/add")) {
                 commandsDisplayArea.innerHTML = "Usage: /add (username) - Add users to chatroom";
@@ -591,7 +592,9 @@
                 commandsDisplayArea.innerHTML = "Usage: /remove (username) - Remove users from chatroom";
             } else if (input_value === "/delete") {
                 commandsDisplayArea.innerHTML = "Usage: /delete - Delete chatroom";
-            } else {
+            } else if (input_value === "/leave") {
+                commandsDisplayArea.innerHTML = "Usage: /leave - Leave chatroom";
+            }else {
                 commandsDisplayArea.innerHTML = "";  
             }
 

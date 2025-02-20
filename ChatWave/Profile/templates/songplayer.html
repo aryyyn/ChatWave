@@ -38,6 +38,8 @@
                 <h3>No Songs Yet</h3>
                 <p>Your favorite songs will appear here once you start liking them during your chat.</p>
             </div>
+            
+
         {% endif %}
     </aside>
 
@@ -83,6 +85,19 @@
             <div id="lyrics-container"></div>
         </section>
     </main>
+    {% else %}
+
+    <main class="main-player">
+        <section class="now-playing">
+            <img src="https://i.pinimg.com/736x/e6/cc/01/e6cc017308008137f895d12e042cb1e1.jpg" alt="No song selected" class="current-artwork">
+            <div class="song-info">
+                <h2>No song selected</h2>
+                <p>Choose one to start playing.</p>
+            </div>
+        </section>
+    </main>
+    
+
     {% endif %}
 
     <script>

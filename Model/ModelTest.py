@@ -65,7 +65,7 @@ def modelTest(message):
 
         finalResult = []
         try:
-            cleaned_text = textcleaning(title)
+            cleaned_text = textcleaning(message)
 
             sequences = tokenizer1.texts_to_sequences([cleaned_text])
             padded_sequences = pad_sequences(sequences, padding="post", maxlen=50)
@@ -87,4 +87,4 @@ def modelTest(message):
         return None
     
 
-print(modelTest("Nice goal my messi. what a header!!!"))
+print(modelTest("Bad goal my messi. what a disappointment!!!"))
