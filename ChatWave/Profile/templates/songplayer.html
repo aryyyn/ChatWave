@@ -113,6 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const lyricsContainer = document.getElementById('lyrics-container');
     const lyrics = {{ clickedsong.lyrics|safe }};
 
+
+    if (audioPlayer) {
+        audioPlayer.volume = 0.5; 
+        }
+  
+
     let currentLyricIndex = -1;
 
     function formatTime(seconds) {
