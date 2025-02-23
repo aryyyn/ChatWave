@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 import random
 from django.contrib.auth.hashers import make_password
-
+import re
 load_dotenv()
 
 
@@ -38,6 +38,19 @@ def RegisterLogic(request):
 
         elif password != confirmpassword:
             messages.error(request, "Passwords do not match.")
+
+
+        elif not re.search(r'[A-Z]', password):
+            messages.error(request, "Password must contain at least one uppercase letter.")
+
+        elif not re.search(r'[a-z]', password):
+            messages.error(request, "Password must contain at least one lowercase letter.")
+
+        elif not re.search(r'\d', password):
+            messages.error(request, "Password must contain at least one digit.")
+
+        elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            messages.error(request, "Password must contain at least one special character.")
         
 
         elif CustomUser.objects.filter(username=username).exists():
@@ -88,6 +101,13 @@ def forgotPassword(request):
     return render(request, "forgot_password/forgot_password.html")
 
 
+import re
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login
+
+
 def newPassword(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -98,26 +118,48 @@ def newPassword(request):
             return render(request, "forgot_password/new_password.html")
 
         user_code = "".join([request.POST.get(f"code-{i}", "") for i in range(1, 7)])
-
         newPassword = request.POST.get("new-password")
         confirmPassword = request.POST.get("confirm-password")
 
-        code_in_db = str(user.verification_code)
+        code_in_db = str(user.verification_code) if user.verification_code else ""
 
         if user_code == code_in_db:
-            if newPassword == confirmPassword:
-                user.password = make_password(newPassword)
-                user.save()
-                login(request, user)
-                return redirect("homeChatViewLogic")
-            else:
-                messages.error(request, "Passwords Do Not Match!")
+            if newPassword != confirmPassword:
+                messages.error(request, "Passwords do not match!")
                 return render(request, "forgot_password/new_password.html")
+
+            elif len(newPassword) < 8:
+                messages.error(request, "Password must be at least 8 characters long.")
+                return render(request, "forgot_password/new_password.html")
+
+            elif not re.search(r'[A-Z]', newPassword):
+                messages.error(request, "Password must contain at least one uppercase letter.")
+                return render(request, "forgot_password/new_password.html")
+
+            elif not re.search(r'[a-z]', newPassword):
+                messages.error(request, "Password must contain at least one lowercase letter.")
+                return render(request, "forgot_password/new_password.html")
+
+            elif not re.search(r'\d', newPassword):
+                messages.error(request, "Password must contain at least one digit.")
+                return render(request, "forgot_password/new_password.html")
+
+            elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', newPassword):
+                messages.error(request, "Password must contain at least one special character.")
+                return render(request, "forgot_password/new_password.html")
+            
+            user.set_password(newPassword) 
+            user.save()
+
+            login(request, user) 
+            return redirect("homeChatViewLogic") 
+
         else:
             messages.error(request, "Invalid Verification Code!")
             return render(request, "forgot_password/new_password.html")
 
     return render(request, "forgot_password/new_password.html")
+
 
 def email_logic(user, email):
     sender_email = os.getenv('SENDER_EMAIL')
