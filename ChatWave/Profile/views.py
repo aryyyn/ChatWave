@@ -51,6 +51,18 @@ def profileHome(request, username):
         elif not newPassword or not currentPassword or not newConfirmPassword:
             messages.error(request, "Invalid Fields")
 
+        elif not re.search(r'[A-Z]', newPassword):
+            messages.error(request, "Password must contain at least one uppercase letter.")
+
+        elif not re.search(r'[a-z]', newPassword):
+            messages.error(request, "Password must contain at least one lowercase letter.")
+
+        elif not re.search(r'\d', newPassword):
+            messages.error(request, "Password must contain at least one digit.")
+
+        elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', newPassword):
+            messages.error(request, "Password must contain at least one special character.")
+
 
         else:
             request.user.set_password(newPassword)
