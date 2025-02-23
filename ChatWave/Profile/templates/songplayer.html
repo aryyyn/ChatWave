@@ -166,6 +166,20 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLyricIndex = newLyricIndex;
         }
     }
+    document.addEventListener("keydown", function(event) {
+        if (event.key === " ") {
+            event.preventDefault(); // Prevent spacebar from scrolling
+            
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>'; 
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>'; 
+            }
+        }
+    });
+    
 
     function setProgress(e) {
         const totalWidth = progressBar.clientWidth;

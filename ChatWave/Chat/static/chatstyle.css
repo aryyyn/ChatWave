@@ -196,8 +196,8 @@ h3 {
     padding-right: 10px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 5px;
+    margin-bottom: 10px;
     scroll-behavior: auto;
 }
 
@@ -796,7 +796,7 @@ audio {
     color: #555;
     padding: 10px 15px;
     border-radius: 8px;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: left;
     width: fit-content;
     display: inline-block;
@@ -983,10 +983,11 @@ audio {
 
 .gif-image {
     width: clamp(120px, 30vw, 200px) !important;
-    height: clamp(120px, 30vw, 200px) !important;
-    border-radius: 10px !important;
+    height: auto !important;
+    border-radius: 0 !important;
     margin-top: 10px !important;
-    object-fit: cover;
+    display: block !important;
+    max-width: 100% !important;
 }
 
 .sent-image {
