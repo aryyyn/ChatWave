@@ -51,7 +51,7 @@ class Music(models.Model):
     def save(self, *args, **kwargs):
         if not self.lyrics:
             try:
-                query = self.title
+                query = self.title + " " + self.artist
                 lrc = syncedlyrics.search(query)
 
                 lines = lrc.split("\n")
